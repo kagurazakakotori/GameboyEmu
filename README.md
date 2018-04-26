@@ -25,9 +25,10 @@ More sadly, even nothing works partially.
 * Friendly GUI Interface
 * and more...
 
-### References
+## References
 
 * [GameBoy CPU Manual](http://marc.rawer.de/Gameboy/Docs/GBCPUman.pdf)
+* [Z80 CPU User Manual](http://www.zilog.com/manage_directlink.php?filepath=docs/z80/um0080&extn=.pdf)
 * [How to make a (GameBoy) emulator?](https://www.cl.cam.ac.uk/~pv273/slides/emulation.pdf)
 * [GameBoy Emulation in JavaScript](http://imrannazar.com/GameBoy-Emulation-in-JavaScript%3a-The-CPU)
 * [Two9A/jsGB on GitHub](https://github.com/Two9A/jsGB)
