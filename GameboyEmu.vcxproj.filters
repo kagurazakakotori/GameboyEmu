@@ -21,12 +21,18 @@
     <ClCompile Include="cpu.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Memory.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DataType.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="CPU.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Memory.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

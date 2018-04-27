@@ -1,11 +1,18 @@
 #include <iostream>
 #include "CPU.h"
+#include "Memory.h"
 
-hw_cpu cpu;
+HW_CPU cpu;
+HW_Memory memory;
 
 int main()
 {
 	cpu.init();
+	
+	//Testing memory;
+	memory.writeByte(0xc602, 0xFF);
+	memory.dump();
+
     return 0;
 }
 

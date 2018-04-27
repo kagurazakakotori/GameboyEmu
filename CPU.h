@@ -1,7 +1,7 @@
 #pragma once
 #include "DataType.h"
 
-struct hw_reg
+struct HW_Reg
 {
 	BYTE a = 0;
 	BYTE f = 0;
@@ -15,10 +15,10 @@ struct hw_reg
 	WORD pc = 0;
 };
 
-class hw_cpu
+class HW_CPU
 {
 public:
 	void init();
 private:
-	hw_reg reg;
+	HW_Reg reg;
 };

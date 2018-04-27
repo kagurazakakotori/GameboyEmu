@@ -1,6 +1,6 @@
 #include "CPU.h"
 
-void hw_cpu::init()
+void HW_CPU::init()
 {
 	// Initialize registers
 	reg.a = 0x01;			// Gameboy CPU Manual 2.7.1
