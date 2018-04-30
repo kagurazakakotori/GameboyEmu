@@ -2,7 +2,7 @@
 
 Another Gameboy Emulator
 
-Object Oriented Programming Course Project, SSE, Tongji University, 2018.
+<!-- Object Oriented Programming Course Project, SSE, Tongji University, 2018. -->
 
 ## Development Progress
 

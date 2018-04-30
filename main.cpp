@@ -2,8 +2,8 @@
 #include "CPU.h"
 #include "Memory.h"
 
-HW_CPU cpu;
-HW_Memory memory;
+Gameboy::CPU cpu;
+Gameboy::Memory memory;
 
 int main()
 {

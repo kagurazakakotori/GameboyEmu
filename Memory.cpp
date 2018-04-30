@@ -2,7 +2,7 @@
 #include <iostream>
 #include <fstream>
 
-void HW_Memory::dump()
+void Gameboy::Memory::dump()
 {
 	using namespace std;
 	ofstream dumpfile("memory_dump.bin",ofstream::binary);
@@ -10,7 +10,7 @@ void HW_Memory::dump()
 	dumpfile.close();
 }
 
-BYTE HW_Memory::readByte(WORD address)
+BYTE Gameboy::Memory::readByte(WORD address)
 {
 	if (address >= 0xe000 && address < 0xfe00) {
 		return mem[address - 0xe000 + 0xc000];			// Echo area
@@ -21,7 +21,7 @@ BYTE HW_Memory::readByte(WORD address)
 	// TODO: I/O Memory
 }
 
-void HW_Memory::writeByte(WORD address, BYTE value)
+void Gameboy::Memory::writeByte(WORD address, BYTE value)
 {
 	// TEST ONLY
 	if (address >= 0xc000 && address < 0xce00) {
