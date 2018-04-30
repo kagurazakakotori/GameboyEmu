@@ -5,30 +5,76 @@
 void Gameboy::Memory::dump()
 {
 	using namespace std;
+	std::array<byte, 0x60> tempArr = { '\0' };
 	ofstream dumpfile("memory_dump.bin",ofstream::binary);
-	dumpfile.write(reinterpret_cast<const char*>(&mem), 65536);
+	dumpfile.write(reinterpret_cast<const char*>(&rom), 0x8000);
+	dumpfile.write(reinterpret_cast<const char*>(&vram), 0x2000);
+	dumpfile.write(reinterpret_cast<const char*>(&sram), 0x2000);
+	dumpfile.write(reinterpret_cast<const char*>(&wram), 0x2000);
+	dumpfile.write(reinterpret_cast<const char*>(&wram), 0x1e00);
+	dumpfile.write(reinterpret_cast<const char*>(&oam), 0xa0);
+	dumpfile.write(reinterpret_cast<const char*>(&tempArr), 0x60);
+	dumpfile.write(reinterpret_cast<const char*>(&io), 0x80);
+	dumpfile.write(reinterpret_cast<const char*>(&hram), 0x7f);
+	dumpfile.write(reinterpret_cast<const char*>(&interrupt), 1);
 	dumpfile.close();
 }
 
 byte Gameboy::Memory::readByte(word address)
 {
-	if (address >= 0xe000 && address < 0xfe00) {
-		return mem[address - 0xe000 + 0xc000];			// Echo area
+	if (address < 0x8000) {
+		return rom[address];
 	}
-	else {
-		return mem[address];
+	else if (address >= 0x8000 && address < 0xa000) {
+		return vram[address - 0x8000];
 	}
-	// TODO: I/O Memory
+	else if (address >= 0xa000 && address < 0xc000) {
+		return sram[address - 0xa000];
+	}
+	else if (address >= 0xc000 && address < 0xe000) {
+		return wram[address - 0xc000];
+	}
+	else if (address >= 0xe000 && address < 0xfe00) {
+		return wram[address - 0xe000];
+	}
+	else if (address >= 0xfe00 && address < 0xfea0) {
+		return oam[address - 0xfe00];
+	}
+	else if (address >= 0xff00 && address < 0xff80) {
+		return io[address - 0xff00];
+	}
+	else if (address >= 0xff80 && address < 0xffff) {
+		return hram[address - 0xff80];
+	}
+	else if (address = 0xffff) {
+		return interrupt;
+	}
 }
 
 void Gameboy::Memory::writeByte(word address, byte value)
 {
-	// TEST ONLY
-	if (address >= 0xc000 && address < 0xce00) {
-		mem[address] = value;							// Echo area
-		mem[address - 0xc000 + 0xe000] = value;
+	if (address >= 0x8000 && address < 0xa000) {
+		vram[address - 0x8000] = value;
 	}
-	else {
-		mem[address] = value;
+	else if (address >= 0xa000 && address < 0xc000) {
+		sram[address - 0xa000] = value;
+	}
+	else if (address >= 0xc000 && address < 0xe000) {
+		wram[address - 0xc000] = value;
+	}
+	else if (address >= 0xe000 && address < 0xfe00) {
+		wram[address - 0xe000] = value;
+	}
+	else if (address >= 0xfe00 && address < 0xfea0) {
+		oam[address - 0xfe00] = value;
+	}
+	else if (address >= 0xff00 && address < 0xff80) {
+		io[address - 0xff00] = value;
+	}
+	else if (address >= 0xff80 && address < 0xffff) {
+		hram[address - 0xff80] = value;
+	}
+	else if (address = 0xffff) {
+		interrupt = value;
 	}
 }
