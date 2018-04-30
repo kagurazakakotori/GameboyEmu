@@ -10,7 +10,7 @@ int main()
 	cpu.init();
 	
 	//Testing memory;
-	memory.writeByte(0xc602, 0xFF);
+	memory.writeWord(0xc602, 0xcccc);
 	memory.dump();
 
     return 0;

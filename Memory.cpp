@@ -51,6 +51,11 @@ byte Gameboy::Memory::readByte(word address)
 	}
 }
 
+word Gameboy::Memory::readWord(word address)
+{
+	return readByte(address + 1) << 8 | readByte(address);
+}
+
 void Gameboy::Memory::writeByte(word address, byte value)
 {
 	if (address >= 0x8000 && address < 0xa000) {
@@ -77,4 +82,10 @@ void Gameboy::Memory::writeByte(word address, byte value)
 	else if (address = 0xffff) {
 		interrupt = value;
 	}
+}
+
+void Gameboy::Memory::writeWord(word address, word value)
+{
+	writeByte(address, value & 0x00FF);
+	writeByte(address + 1, (value & 0xFF00) >> 8);
 }
