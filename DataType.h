@@ -1,5 +1,5 @@
 #pragma once
 #include <cstdint>
 
-using BYTE = uint8_t;
-using WORD = uint16_t;
+using byte = uint8_t;
+using word = uint16_t;

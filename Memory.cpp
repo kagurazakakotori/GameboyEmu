@@ -10,7 +10,7 @@ void Gameboy::Memory::dump()
 	dumpfile.close();
 }
 
-BYTE Gameboy::Memory::readByte(WORD address)
+byte Gameboy::Memory::readByte(word address)
 {
 	if (address >= 0xe000 && address < 0xfe00) {
 		return mem[address - 0xe000 + 0xc000];			// Echo area
@@ -21,7 +21,7 @@ BYTE Gameboy::Memory::readByte(WORD address)
 	// TODO: I/O Memory
 }
 
-void Gameboy::Memory::writeByte(WORD address, BYTE value)
+void Gameboy::Memory::writeByte(word address, byte value)
 {
 	// TEST ONLY
 	if (address >= 0xc000 && address < 0xce00) {
