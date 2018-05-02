@@ -20,6 +20,7 @@ More sadly, even nothing works partially.
 
 * Z80 CPU Emulation
 * Memory Emulation
+* Memory Bank Controllers support
 * Clock Emulation
 * Graphics
 * Input mapping
@@ -32,7 +33,7 @@ More sadly, even nothing works partially.
 ### Hardware
 
 * [GameBoy CPU Manual (Many mistakes found, but still useful)](http://marc.rawer.de/Gameboy/Docs/GBCPUman.pdf)
-* [Z80 CPU User Manual](http://www.zilog.com/manage_directlink.php?filepath=docs/z80/um0080&extn=.pdf)
+* [Gameboy Development Wiki](http://gbdev.gg8.se/wiki/articles/Main_Page)
 * [GameBoy Memory Map](http://gameboy.mongenel.com/dmg/asmmemmap.html)
 
 ### Tutorials
