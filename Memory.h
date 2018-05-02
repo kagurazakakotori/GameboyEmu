@@ -1,5 +1,6 @@
 #pragma once
 #include <array>
+#include <vector>
 #include "DataType.h"
 
 namespace Gameboy {
@@ -19,14 +20,16 @@ public:
 	void init();
 
 private:
-	std::array<byte, 0x8000> rom;		// (0x0000~0x7fff) 32k rom
-	std::array<byte, 0x2000> vram;		// (0x8000~0x9fff) 8k video ram
-	std::array<byte, 0x2000> sram;		// (0xa000~0xbfff) 8k switchable ram
-	std::array<byte, 0x2000> wram;		// (0xc000~0xdfff) 8k working/internal ram
-	std::array<byte, 0xa0> oam;			// (0xfe00~0xfe9f) oam for sprites
-	std::array<byte, 0x80> io;			// (0xff00~0xff7f) io registers
-	std::array<byte, 0x7f> hram;		// (0xff80~0xfffe) high ram
-	byte interrupt = 0;
+	std::array<byte, 0x100> bios;
+	std::vector<byte> rom;				// Fixed ROM bank
+	std::vector<byte> srom;				// Switchable ROM bank
+	std::vector<byte> vram;				// Video RAM
+	std::vector<byte> sram;				// Switchable RAM
+	std::vector<byte> wram;				// Working RAM ( 8k internal RAM since it is not GameBoy Color )
+	std::vector<byte> oam;				// OAM for sprites
+	std::vector<byte> io;				// I/O registers
+	std::vector<byte> hram;				// High ram
+	byte interruptEnable;				// Interrupts Enable Register at 0xfff
 };
 
 }
