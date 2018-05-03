@@ -152,6 +152,7 @@
     <ClCompile Include="Memory.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Cartridge.h" />
     <ClInclude Include="CPU.h" />
     <ClInclude Include="DataType.h" />
     <ClInclude Include="Memory.h" />

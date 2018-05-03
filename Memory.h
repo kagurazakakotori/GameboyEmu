@@ -6,8 +6,6 @@
 
 namespace Gameboy {
 
-extern Cartridge cart;
-
 class Memory
 {
 public:
@@ -23,7 +21,8 @@ public:
 	void init();
 
 private:
-	std::array<byte, 0x100> bios;
+	Cartridge cart;
+
 	std::vector<byte> rom;				// Fixed ROM bank
 	std::vector<byte> srom;				// Switchable ROM bank
 	std::vector<byte> vram;				// Video RAM
@@ -32,7 +31,7 @@ private:
 	std::vector<byte> oam;				// OAM for sprites
 	std::vector<byte> io;				// I/O registers
 	std::vector<byte> hram;				// High ram
-	byte interruptEnable;				// Interrupts Enable Register at 0xfff
+	byte interruptEnable;				// Interrupts Enable Register at 0xffff
 };
 
 }

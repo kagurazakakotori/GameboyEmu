@@ -35,5 +35,8 @@
     <ClInclude Include="Memory.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Cartridge.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
