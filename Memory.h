@@ -1,9 +1,12 @@
 #pragma once
 #include <array>
 #include <vector>
+#include "Cartridge.h"
 #include "DataType.h"
 
 namespace Gameboy {
+
+extern Cartridge cart;
 
 class Memory
 {
