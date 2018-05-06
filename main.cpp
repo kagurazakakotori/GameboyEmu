@@ -7,8 +7,7 @@ Gameboy::Memory memory;
 
 int main()
 {
-	cpu.init();
+    cpu.init();
 
     return 0;
 }
-
