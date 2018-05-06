@@ -8,6 +8,8 @@ namespace Gameboy {
 class Memory
 {
 public:
+	Memory();
+
 	void dump();
 
 	byte readByte(word address);
@@ -27,7 +29,7 @@ private:
 	std::vector<byte> sram;				// Switchable RAM
 	std::vector<byte> wram;				// Working RAM ( 8k internal RAM since it is not GameBoy Color )
 	std::vector<byte> oam;				// OAM for sprites
-	std::vector<byte> io;				// I/O registers
+	std::vector<byte> io;				// Memory-mapped I/O registers
 	std::vector<byte> hram;				// High ram
 	byte interruptEnable;				// Interrupts Enable Register at 0xffff
 

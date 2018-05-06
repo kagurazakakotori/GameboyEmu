@@ -1,6 +1,16 @@
 #include "Memory.h"
 #include <iostream>
-#include <fstream>
+
+Gameboy::Memory::Memory()
+{
+	vram.assign(0x2000, 0x00);		// 8K VRAM
+	sram.assign(0x20000, 0x00);		// Maxmium 128K External RAM (MBC5)
+	wram.assign(0x2000, 0x00);		// 8K Internal RAM
+	oam.assign(0x100, 0x00);		// 256B OAM
+	io.assign(0x80, 0x00);			// MMIO
+	hram.assign(0x7f, 0x00);		// 127B HRAM
+	interruptEnable = 0x00;
+}
 
 void Gameboy::Memory::init()
 {
