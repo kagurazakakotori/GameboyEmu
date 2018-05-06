@@ -1,5 +1,4 @@
 #pragma once
-#include <array>
 #include <vector>
 #include "Cartridge.h"
 #include "DataType.h"
@@ -23,8 +22,7 @@ public:
 private:
 	Cartridge cart;
 
-	std::vector<byte> rom;				// Fixed ROM bank
-	std::vector<byte> srom;				// Switchable ROM bank
+	std::vector<byte> rom;				// ROM
 	std::vector<byte> vram;				// Video RAM
 	std::vector<byte> sram;				// Switchable RAM
 	std::vector<byte> wram;				// Working RAM ( 8k internal RAM since it is not GameBoy Color )
@@ -32,6 +30,10 @@ private:
 	std::vector<byte> io;				// I/O registers
 	std::vector<byte> hram;				// High ram
 	byte interruptEnable;				// Interrupts Enable Register at 0xffff
+
+	bool romLoaded = false;
+
+	void boot();
 };
 
 }
