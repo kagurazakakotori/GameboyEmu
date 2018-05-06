@@ -147,15 +147,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="cpu.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="Memory.cpp" />
+    <ClCompile Include="source\cpu.cpp" />
+    <ClCompile Include="source\main.cpp" />
+    <ClCompile Include="source\Memory.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Cartridge.h" />
-    <ClInclude Include="CPU.h" />
-    <ClInclude Include="DataType.h" />
-    <ClInclude Include="Memory.h" />
+    <ClInclude Include="source\Cartridge.h" />
+    <ClInclude Include="source\CPU.h" />
+    <ClInclude Include="source\DataType.h" />
+    <ClInclude Include="source\Memory.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
