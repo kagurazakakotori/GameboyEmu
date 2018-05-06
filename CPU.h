@@ -8,6 +8,7 @@ class CPU
 {
 public:
     void init();
+
 private:
     struct Reg
     {
@@ -23,5 +24,4 @@ private:
         word pc = 0;
     } reg;
 };
-
 }

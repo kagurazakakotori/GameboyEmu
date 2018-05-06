@@ -36,5 +36,4 @@ struct Cartridge
         byte dayH = 0;
     } rtc;
 };
-
 }
