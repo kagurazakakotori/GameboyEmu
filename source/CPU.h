@@ -10,18 +10,50 @@ public:
     void init();
 
 private:
-    struct Reg
+    struct Register
     {
-        byte a = 0;
-        byte f = 0;
-        byte b = 0;
-        byte c = 0;
-        byte d = 0;
-        byte e = 0;
-        byte h = 0;
-        byte l = 0;
-        word sp = 0;
-        word pc = 0;
+        union
+        {
+            struct
+            {
+                byte f;
+                byte a;
+            };
+            word af;
+        };
+
+        union
+        {
+            struct
+            {
+                byte c;
+                byte b;
+            };
+            word bc;
+        };
+
+        union
+        {
+            struct
+            {
+                byte e;
+                byte d;
+            };
+            word de;
+        };
+
+        union
+        {
+            struct
+            {
+                byte l;
+                byte h;
+            };
+            word hl;
+        };
+        
+        word sp;
+        word pc;
     } reg;
 };
 }
