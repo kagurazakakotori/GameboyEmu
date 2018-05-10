@@ -262,3 +262,12 @@ __pycache__/
 
 # Binary dumps
 *.bin
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# VSCode
+.vscode/
+backend/config.php
