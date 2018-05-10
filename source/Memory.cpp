@@ -14,7 +14,126 @@ Gameboy::Memory::Memory()
 
 void Gameboy::Memory::init()
 {
+    // Emulate BIOS operations on boot
     boot();
+
+    // Read cartridge type from ROM header
+    switch (rom[0x0147]) {
+        case 0x00:  // ROM ONLY
+            break;
+        case 0x01:  // MBC1
+            cart.mbc1 = true;
+            break;
+        case 0x02:  // MBC1+RAM
+            cart.mbc1 = true;
+            cart.ram  = true;
+            break;
+        case 0x03:  // MBC1+RAM+BATTERY
+            cart.mbc1    = true;
+            cart.ram     = true;
+            cart.battery = true;
+            break;
+        case 0x05:  // MBC2
+            cart.mbc2 = true;
+            break;
+        case 0x06:  // MBC2+BATTERY
+            cart.mbc2    = true;
+            cart.battery = true;
+            break;
+        case 0x08:  // ROM+RAM
+            cart.ram = true;
+            break;
+        case 0x09:  // ROM+RAM+BATTERY
+            cart.ram     = true;
+            cart.battery = true;
+            break;
+        case 0x0b:  // MMM01
+            cart.mmm01 = true;
+            break;
+        case 0x0c:  // MMM01+RAM
+            cart.mmm01 = true;
+            cart.ram   = true;
+            break;
+        case 0x0d:  // MMM01+RAM+BATTERY
+            cart.mmm01   = true;
+            cart.ram     = true;
+            cart.battery = true;
+            break;
+        case 0x0f:  // MBC3+TIMER+BATTERY
+            cart.mbc3    = true;
+            cart.timer   = true;
+            cart.battery = true;
+            break;
+        case 0x10:  // MBC3+TIMER+RAM+BATTERY
+            cart.mbc3    = true;
+            cart.timer   = true;
+            cart.ram     = true;
+            cart.battery = true;
+            break;
+        case 0x11:  // MBC3
+            cart.mbc3 = true;
+            break;
+        case 0x12:  // MBC3+RAM
+            cart.mbc3 = true;
+            cart.ram  = true;
+            break;
+        case 0x13:  // MBC3+RAM+BATTERY
+            cart.mbc3    = true;
+            cart.ram     = true;
+            cart.battery = true;
+            break;
+        case 0x19:  // MBC5
+            cart.mbc5 = true;
+            break;
+        case 0x1a:  // MBC5+RAM
+            cart.mbc5 = true;
+            cart.ram  = true;
+            break;
+        case 0x1b:  // MBC5+RAM+BATTERY
+            cart.mbc5    = true;
+            cart.ram     = true;
+            cart.battery = true;
+            break;
+        case 0x1c:  // MBC5+RUMBLE
+            cart.mbc5   = true;
+            cart.rumble = true;
+            break;
+        case 0x1d:  // MBC5+RUMBLE+RAM
+            cart.mbc5   = true;
+            cart.rumble = true;
+            cart.ram    = true;
+            break;
+        case 0x1e:  // MBC5+RUMBLE+RAM+BATTERY
+            cart.mbc5    = true;
+            cart.rumble  = true;
+            cart.ram     = true;
+            cart.battery = true;
+            break;
+        case 0x20:  // MBC6
+            cart.mbc6 = true;
+            break;
+        case 0x22:  // MBC7+SENSOR+RUMBLE+RAM+BATTERY
+            cart.mbc7    = true;
+            cart.sensor  = true;
+            cart.rumble  = true;
+            cart.ram     = true;
+            cart.battery = true;
+            break;
+        case 0xfc:  // POCKET CAMERA
+            cart.camera = true;
+            break;
+        case 0xfd:  // BANDAI TAMA5
+            cart.tama5 = true;
+            break;
+        case 0xfe:  // HuC3
+            cart.huc3 = true;
+            break;
+        case 0xff:  //HuC1+RAM+BATTERY
+            cart.huc1    = true;
+            cart.ram     = true;
+            cart.battery = true;
+            break;
+    }
 }
 
 void Gameboy::Memory::boot()
@@ -50,5 +169,5 @@ void Gameboy::Memory::boot()
     io[0xff49 & 0xff] = 0xff;  // OBP1
     io[0xff4a & 0xff] = 0x00;  // WY
     io[0xff4b & 0xff] = 0x00;  // WX
-    interruptEnable = 0x00;    // IE
+    interruptEnable   = 0x00;  // IE
 }

@@ -9,7 +9,7 @@ struct Cartridge
     // Cartridge type (Default ROM only)
     bool mbc1  = false;
     bool mbc2  = false;
-    bool mmc01 = false;
+    bool mmm01 = false;
     bool mbc3  = false;
     bool mbc5  = false;
     bool mbc6  = false;
