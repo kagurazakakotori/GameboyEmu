@@ -26,7 +26,21 @@ struct Cartridge
     bool sensor  = false;
     bool camera  = false;
 
-    // Clock counter registers
+    // ROM banking
+    unsigned int romBank   = 1;  // Current ROM bank
+    unsigned int romSize   = 2;
+    unsigned int romOffset = 0x4000;
+
+    // RAM banking
+    unsigned int ramBank   = 0;  // Current RAM bank
+    unsigned int ramSize   = 0;
+    unsigned int ramOffset = 0x0000;
+    bool         ramEnable = false;
+
+    // ROM/RAM Banking Mode Select for MBC1
+    bool mbc1_mode = false;  // false for ROM, true for RAM
+
+    // Clock counter registers for MBC3
     struct RTC
     {
         byte second = 0;

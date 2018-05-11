@@ -134,6 +134,67 @@ void Gameboy::Memory::init()
             cart.battery = true;
             break;
     }
+
+    // Get ROM bank numbers (16KB per bank)
+    switch (rom[0x0148]) {
+        case 0x00:
+            break;
+        case 0x01:
+            cart.romSize = 4;
+            break;
+        case 0x02:
+            cart.romSize = 8;
+            break;
+        case 0x03:
+            cart.romSize = 16;
+            break;
+        case 0x04:
+            cart.romSize = 32;
+            break;
+        case 0x05:
+            cart.romSize = 64;
+            break;
+        case 0x06:
+            cart.romSize = 128;
+            break;
+        case 0x07:
+            cart.romSize = 256;
+            break;
+        case 0x08:
+            cart.romSize = 512;
+            break;
+        case 0x52:
+            cart.romSize = 72;
+            break;
+        case 0x53:
+            cart.romSize = 80;
+            break;
+        case 0x54:
+            cart.romSize = 96;
+            break;
+    }
+
+    // Get RAM bank numbers (8KB per bank)
+    switch (rom[0x0149]) {
+        case 0x00:            // None
+            if (cart.mbc2) {  // MBC2 has a built-in 512*4bit RAM
+                cart.ramSize = 1;
+            }
+            break;
+        case 0x01:  // 2KB
+        case 0x02:  // 8KB
+            cart.ramSize = 1;
+            break;
+        case 0x03:  // 32KB
+            cart.ramSize = 4;
+            break;
+        case 0x04:  // 128KB
+            cart.ramSize = 16;
+            break;
+        case 0x05:  // 64KB
+            cart.ramSize = 8;
+            break;
+    }
 }
 
 void Gameboy::Memory::boot()
