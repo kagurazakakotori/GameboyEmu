@@ -1,7 +1,10 @@
 #include "Memory.h"
 #include <iostream>
 
-Gameboy::Memory::Memory()
+namespace Gameboy
+{
+
+Memory::Memory()
 {
     vram.assign(0x2000, 0x00);  // 8K VRAM
     ram.assign(0x2000, 0x00);   // 8K Internal RAM
@@ -11,7 +14,7 @@ Gameboy::Memory::Memory()
     interruptEnable = 0x00;
 }
 
-void Gameboy::Memory::init()
+void Memory::init()
 {
     // Emulate BIOS operations on boot
     boot();
@@ -29,7 +32,145 @@ void Gameboy::Memory::init()
     cart.getTitle();
 }
 
-void Gameboy::Memory::boot()
+byte Memory::readByte(const word& address)
+{
+    // WARNING: This implementation do NOT support I/O and MBC !
+    // TODO: Add I/O support
+    // TODO: Add MBC support
+    switch (address & 0xf000) {
+        case 0x0000:
+        case 0x1000:
+        case 0x2000:
+        case 0x3000:
+            return cart.rom[address];
+        case 0x4000:
+        case 0x5000:
+        case 0x6000:
+        case 0x7000:
+            return cart.rom[(address & 0x3fff) + cart.romOffset];
+        case 0x8000:
+        case 0x9000:
+            return vram[address & 0x1fff];
+        case 0xa000:
+        case 0xb000:
+            return cart.ram[address & 0x1fff];
+        case 0xc000:
+        case 0xd000:
+        case 0xe000:
+            return ram[address & 0x1fff];
+        case 0xf000:
+            switch (address & 0x0f00) {
+                case 0x000:
+                case 0x100:
+                case 0x200:
+                case 0x300:
+                case 0x400:
+                case 0x500:
+                case 0x600:
+                case 0x700:
+                case 0x800:
+                case 0x900:
+                case 0xa00:
+                case 0xb00:
+                case 0xc00:
+                case 0xd00:
+                    return ram[address & 0x1fff];
+                case 0xe00:
+                    return oam[address & 0x00ff];
+                case 0xf00:
+                    if (address == 0xffff) {
+                        return interruptEnable;
+                    }
+                    else if (address >= 0xff80) {
+                        return hram[address & 0x007f];
+                    }
+                    else {
+                        return io[address & 0x00ff];
+                        // TODO: I/O handling
+                    }
+            }
+    }
+}
+
+word Memory::readWord(const word& address)
+{
+    return readByte(address) + (readByte(address + 1) << 8);
+}
+
+void Memory::writeByte(const word& address, const byte value)
+{
+    // WARNING: This implementation do NOT support I/O and MBC !
+    // TODO: Add I/O support
+    // TODO: Add MBC support
+    switch (address & 0xf000) {
+        case 0x0000:
+        case 0x1000:
+        case 0x2000:
+        case 0x3000:
+        case 0x4000:
+        case 0x5000:
+        case 0x6000:
+        case 0x7000:
+            return;
+        case 0x8000:
+        case 0x9000:
+            vram[address & 0x1fff] = value;
+            return;
+        case 0xa000:
+        case 0xb000:
+            cart.ram[address & 0x1fff] = value;
+            return;
+        case 0xc000:
+        case 0xd000:
+        case 0xe000:
+            ram[address & 0x1fff] = value;
+            return;
+        case 0xf000:
+            switch (address & 0x0f00) {
+                case 0x000:
+                case 0x100:
+                case 0x200:
+                case 0x300:
+                case 0x400:
+                case 0x500:
+                case 0x600:
+                case 0x700:
+                case 0x800:
+                case 0x900:
+                case 0xa00:
+                case 0xb00:
+                case 0xc00:
+                case 0xd00:
+                    ram[address & 0x1fff] = value;
+                    return;
+                case 0xe00:
+                    oam[address & 0x00ff] = value;
+                    return;
+                case 0xf00:
+                    if (address == 0xffff) {
+                        interruptEnable = value;
+                        return;
+                    }
+                    else if (address >= 0xff80) {
+                        hram[address & 0x007f] = value;
+                        return;
+                    }
+                    else {
+                        io[address & 0x00ff] = value;
+                        return;
+                        // TODO: I/O handling
+                    }
+            }
+    }
+}
+
+void Memory::writeWord(const word& address, const word value)
+{
+    writeByte(address, value & 0x00ff);
+    writeByte(address + 1, (value & 0xff00) >> 8);
+}
+
+void Memory::boot()
 {
     io[0xff00 & 0xff] = 0x00;  // Leaving all keys unpressed
     io[0xff05 & 0xff] = 0x00;  // TIMA
@@ -64,3 +205,5 @@ void Gameboy::Memory::boot()
     io[0xff4b & 0xff] = 0x00;  // WX
     interruptEnable   = 0x00;  // IE
 }
+
+}  // namespace Gameboy

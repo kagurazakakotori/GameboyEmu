@@ -13,11 +13,11 @@ public:
 
     void dump();
 
-    byte readByte(word address);
-    word readWord(word address);
+    byte readByte(const word& address);
+    word readWord(const word& address);
 
-    void writeByte(word address, byte value);
-    void writeWord(word address, word value);
+    void writeByte(const word& address, const byte value);
+    void writeWord(const word& address, const word value);
 
     void loadRom();
     void init();
