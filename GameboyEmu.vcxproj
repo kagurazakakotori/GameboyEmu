@@ -147,6 +147,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="source\Cartridge.cpp" />
     <ClCompile Include="source\cpu.cpp" />
     <ClCompile Include="source\main.cpp" />
     <ClCompile Include="source\Memory.cpp" />

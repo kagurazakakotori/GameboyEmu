@@ -1,15 +1,26 @@
 #pragma once
 #include "DataType.h"
+#include <vector>
 
 namespace Gameboy
 {
 
-struct Cartridge
+class Cartridge
 {
+    friend class Memory;
+
+public:
+    Cartridge();
+    
+private:
+    std::vector<byte> rom;  // ROM
+    std::vector<byte> ram;  // External RAM in cartridge
+
     // Cartridge type (Default ROM only)
     bool mbc1  = false;
     bool mbc2  = false;
     bool mmm01 = false;
+
     bool mbc3  = false;
     bool mbc5  = false;
     bool mbc6  = false;
@@ -19,7 +30,7 @@ struct Cartridge
     bool huc1  = false;
 
     // External hardware
-    bool ram     = false;
+    bool sram    = false;
     bool battery = false;
     bool timer   = false;
     bool rumble  = false;
@@ -49,5 +60,9 @@ struct Cartridge
         byte dayL   = 0;
         byte dayH   = 0;
     } rtc;
+
+    void getType();
+    void getRomSize();
+    void getRamSize();
 };
 }  // namespace Gameboy

@@ -3,12 +3,11 @@
 
 Gameboy::Memory::Memory()
 {
-    vram.assign(0x2000, 0x00);   // 8K VRAM
-    sram.assign(0x20000, 0x00);  // Maxmium 128K External RAM (MBC5)
-    wram.assign(0x2000, 0x00);   // 8K Internal RAM
-    oam.assign(0x100, 0x00);     // 256B OAM
-    io.assign(0x80, 0x00);       // MMIO
-    hram.assign(0x7f, 0x00);     // 127B HRAM
+    vram.assign(0x2000, 0x00);  // 8K VRAM
+    ram.assign(0x2000, 0x00);   // 8K Internal RAM
+    oam.assign(0x100, 0x00);    // 256B OAM
+    io.assign(0x80, 0x00);      // MMIO
+    hram.assign(0x7f, 0x00);    // 127B HRAM
     interruptEnable = 0x00;
 }
 
@@ -18,183 +17,13 @@ void Gameboy::Memory::init()
     boot();
 
     // Read cartridge type from ROM header
-    switch (rom[0x0147]) {
-        case 0x00:  // ROM ONLY
-            break;
-        case 0x01:  // MBC1
-            cart.mbc1 = true;
-            break;
-        case 0x02:  // MBC1+RAM
-            cart.mbc1 = true;
-            cart.ram  = true;
-            break;
-        case 0x03:  // MBC1+RAM+BATTERY
-            cart.mbc1    = true;
-            cart.ram     = true;
-            cart.battery = true;
-            break;
-        case 0x05:  // MBC2
-            cart.mbc2 = true;
-            break;
-        case 0x06:  // MBC2+BATTERY
-            cart.mbc2    = true;
-            cart.battery = true;
-            break;
-        case 0x08:  // ROM+RAM
-            cart.ram = true;
-            break;
-        case 0x09:  // ROM+RAM+BATTERY
-            cart.ram     = true;
-            cart.battery = true;
-            break;
-        case 0x0b:  // MMM01
-            cart.mmm01 = true;
-            break;
-        case 0x0c:  // MMM01+RAM
-            cart.mmm01 = true;
-            cart.ram   = true;
-            break;
-        case 0x0d:  // MMM01+RAM+BATTERY
-            cart.mmm01   = true;
-            cart.ram     = true;
-            cart.battery = true;
-            break;
-        case 0x0f:  // MBC3+TIMER+BATTERY
-            cart.mbc3    = true;
-            cart.timer   = true;
-            cart.battery = true;
-            break;
-        case 0x10:  // MBC3+TIMER+RAM+BATTERY
-            cart.mbc3    = true;
-            cart.timer   = true;
-            cart.ram     = true;
-            cart.battery = true;
-            break;
-        case 0x11:  // MBC3
-            cart.mbc3 = true;
-            break;
-        case 0x12:  // MBC3+RAM
-            cart.mbc3 = true;
-            cart.ram  = true;
-            break;
-        case 0x13:  // MBC3+RAM+BATTERY
-            cart.mbc3    = true;
-            cart.ram     = true;
-            cart.battery = true;
-            break;
-        case 0x19:  // MBC5
-            cart.mbc5 = true;
-            break;
-        case 0x1a:  // MBC5+RAM
-            cart.mbc5 = true;
-            cart.ram  = true;
-            break;
-        case 0x1b:  // MBC5+RAM+BATTERY
-            cart.mbc5    = true;
-            cart.ram     = true;
-            cart.battery = true;
-            break;
-        case 0x1c:  // MBC5+RUMBLE
-            cart.mbc5   = true;
-            cart.rumble = true;
-            break;
-        case 0x1d:  // MBC5+RUMBLE+RAM
-            cart.mbc5   = true;
-            cart.rumble = true;
-            cart.ram    = true;
-            break;
-        case 0x1e:  // MBC5+RUMBLE+RAM+BATTERY
-            cart.mbc5    = true;
-            cart.rumble  = true;
-            cart.ram     = true;
-            cart.battery = true;
-            break;
-        case 0x20:  // MBC6
-            cart.mbc6 = true;
-            break;
-        case 0x22:  // MBC7+SENSOR+RUMBLE+RAM+BATTERY
-            cart.mbc7    = true;
-            cart.sensor  = true;
-            cart.rumble  = true;
-            cart.ram     = true;
-            cart.battery = true;
-            break;
-        case 0xfc:  // POCKET CAMERA
-            cart.camera = true;
-            break;
-        case 0xfd:  // BANDAI TAMA5
-            cart.tama5 = true;
-            break;
-        case 0xfe:  // HuC3
-            cart.huc3 = true;
-            break;
-        case 0xff:  //HuC1+RAM+BATTERY
-            cart.huc1    = true;
-            cart.ram     = true;
-            cart.battery = true;
-            break;
-    }
+    cart.getType();
 
     // Get ROM bank numbers (16KB per bank)
-    switch (rom[0x0148]) {
-        case 0x00:
-            break;
-        case 0x01:
-            cart.romSize = 4;
-            break;
-        case 0x02:
-            cart.romSize = 8;
-            break;
-        case 0x03:
-            cart.romSize = 16;
-            break;
-        case 0x04:
-            cart.romSize = 32;
-            break;
-        case 0x05:
-            cart.romSize = 64;
-            break;
-        case 0x06:
-            cart.romSize = 128;
-            break;
-        case 0x07:
-            cart.romSize = 256;
-            break;
-        case 0x08:
-            cart.romSize = 512;
-            break;
-        case 0x52:
-            cart.romSize = 72;
-            break;
-        case 0x53:
-            cart.romSize = 80;
-            break;
-        case 0x54:
-            cart.romSize = 96;
-            break;
-    }
+    cart.getRomSize();
 
     // Get RAM bank numbers (8KB per bank)
-    switch (rom[0x0149]) {
-        case 0x00:            // None
-            if (cart.mbc2) {  // MBC2 has a built-in 512*4bit RAM
-                cart.ramSize = 1;
-            }
-            break;
-        case 0x01:  // 2KB
-        case 0x02:  // 8KB
-            cart.ramSize = 1;
-            break;
-        case 0x03:  // 32KB
-            cart.ramSize = 4;
-            break;
-        case 0x04:  // 128KB
-            cart.ramSize = 16;
-            break;
-        case 0x05:  // 64KB
-            cart.ramSize = 8;
-            break;
-    }
+    cart.getRamSize();
 }
 
 void Gameboy::Memory::boot()
