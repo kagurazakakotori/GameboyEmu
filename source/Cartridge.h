@@ -1,5 +1,6 @@
 #pragma once
 #include "DataType.h"
+#include <string>
 #include <vector>
 
 namespace Gameboy
@@ -11,7 +12,9 @@ class Cartridge
 
 public:
     Cartridge();
-    
+
+    std::string title() const { return _title; }
+
 private:
     std::vector<byte> rom;  // ROM
     std::vector<byte> ram;  // External RAM in cartridge
@@ -61,8 +64,11 @@ private:
         byte dayH   = 0;
     } rtc;
 
+    std::string _title;
+
     void getType();
     void getRomSize();
     void getRamSize();
+    void getTitle();
 };
 }  // namespace Gameboy

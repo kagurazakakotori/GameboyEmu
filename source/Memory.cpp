@@ -24,6 +24,9 @@ void Gameboy::Memory::init()
 
     // Get RAM bank numbers (8KB per bank)
     cart.getRamSize();
+
+    // Get game title
+    cart.getTitle();
 }
 
 void Gameboy::Memory::boot()

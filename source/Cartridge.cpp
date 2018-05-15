@@ -193,4 +193,14 @@ void Cartridge::getRamSize()
     }
 }
 
+void Cartridge::getTitle()
+{
+    for(int i = 0x0134 ; i < 0x0143; i++)
+    {
+       if(rom[i] != 0x00){
+           _title += rom[i];
+       }
+    }
+}
+
 }  // namespace Gameboy
