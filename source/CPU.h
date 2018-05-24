@@ -1,8 +1,12 @@
 #pragma once
+#include <array>
+#include <functional>
 #include "DataType.h"
+#include "Memory.h"
 
 namespace Gameboy
 {
+extern Memory memory;
 
 class CPU
 {
@@ -51,9 +55,16 @@ private:
             };
             word hl;
         };
-        
+
         word sp;
         word pc;
     } reg;
+
+    std::array<std::function<int()>, 0x100> opcode;  // Instructions set
+    std::array<std::function<int()>, 0x100> cbcode;  // CB-prefix instructions set
+
+    void loadOpcode();
+    void loadCbcode();
 };
-}
+
+}  // namespace Gameboy
