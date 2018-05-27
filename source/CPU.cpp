@@ -15,6 +15,16 @@ void CPU::init()
     reg.sp = 0xfffe;  // Gameboy CPU Manual 3.2.4
 }
 
+bool CPU::getFlag(int bit)
+{
+    return (reg.f >> bit) & 1u;
+}
+
+void CPU::setFlag(int bit, bool value)
+{
+    reg.f ^= (-value ^ reg.f) & (1u << bit);
+}
+
 void CPU::loadOpcode()
 {
     // Opcode returns the clock cycles of a command
@@ -141,7 +151,17 @@ void CPU::loadOpcode()
 
     // LD SP,HL
     opcode[0xf9] = [&]() -> int { reg.sp = reg.hl; return 8; };
-    opcode[0xf8] = [&]() -> int { return 12; };  // TODO
+
+    // LD HL,SP+e(signed int8)
+    opcode[0xf8] = [&]() -> int { 
+        int8_t e = memory.readByte(reg.pc);
+        reg.pc++;
+        reg.hl = reg.sp + e;
+        setFlag(FLAG_Z, 0);
+        setFlag(FLAG_N, 0);
+        setFlag(FLAG_H, (((reg.sp & 0xfff) + (e & 0xfff)) & 0x1000));
+        setFlag(FLAG_C, (((reg.sp & 0xffff) + (e & 0xffff)) & 0x10000));
+        return 12; };
 
     // LD (nn),SP
     opcode[0x08] = [&]() -> int { memory.writeWord(reg.pc, reg.sp); reg.pc += 2; return 20; };
