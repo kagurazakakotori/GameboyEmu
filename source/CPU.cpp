@@ -177,6 +177,210 @@ void CPU::loadOpcode()
     opcode[0xc1] = [&]() -> int { reg.c = memory.readByte(reg.sp); reg.sp++; reg.b = memory.readByte(reg.sp); reg.sp++; return 12; };
     opcode[0xd1] = [&]() -> int { reg.e = memory.readByte(reg.sp); reg.sp++; reg.d = memory.readByte(reg.sp); reg.sp++; return 12; };
     opcode[0xe1] = [&]() -> int { reg.l = memory.readByte(reg.sp); reg.sp++; reg.h = memory.readByte(reg.sp); reg.sp++; return 12; };
+
+    // ADD A,n
+    opcode[0x87] = [&]() -> int { _add(reg.a); return 4; };
+    opcode[0x80] = [&]() -> int { _add(reg.b); return 4; };
+    opcode[0x81] = [&]() -> int { _add(reg.c); return 4; };
+    opcode[0x82] = [&]() -> int { _add(reg.d); return 4; };
+    opcode[0x83] = [&]() -> int { _add(reg.e); return 4; };
+    opcode[0x84] = [&]() -> int { _add(reg.h); return 4; };
+    opcode[0x85] = [&]() -> int { _add(reg.l); return 4; };
+    opcode[0x86] = [&]() -> int { _add(memory.readByte(reg.hl)); return 8; };
+    opcode[0xc6] = [&]() -> int { _add(memory.readByte(reg.pc)); reg.pc++; return 8; };
+
+    // ADC A,n
+    opcode[0x8f] = [&]() -> int { _adc(reg.a); return 4; };
+    opcode[0x88] = [&]() -> int { _adc(reg.b); return 4; };
+    opcode[0x89] = [&]() -> int { _adc(reg.c); return 4; };
+    opcode[0x8a] = [&]() -> int { _adc(reg.d); return 4; };
+    opcode[0x8b] = [&]() -> int { _adc(reg.e); return 4; };
+    opcode[0x8c] = [&]() -> int { _adc(reg.h); return 4; };
+    opcode[0x8d] = [&]() -> int { _adc(reg.l); return 4; };
+    opcode[0x8e] = [&]() -> int { _adc(memory.readByte(reg.hl)); return 8; };
+    opcode[0xce] = [&]() -> int { _adc(memory.readByte(reg.pc)); reg.pc++; return 8; };
+
+    // SUB A,n
+    opcode[0x97] = [&]() -> int { _sub(reg.a); return 4; };
+    opcode[0x90] = [&]() -> int { _sub(reg.b); return 4; };
+    opcode[0x91] = [&]() -> int { _sub(reg.c); return 4; };
+    opcode[0x92] = [&]() -> int { _sub(reg.d); return 4; };
+    opcode[0x93] = [&]() -> int { _sub(reg.e); return 4; };
+    opcode[0x94] = [&]() -> int { _sub(reg.h); return 4; };
+    opcode[0x95] = [&]() -> int { _sub(reg.l); return 4; };
+    opcode[0x96] = [&]() -> int { _sub(memory.readByte(reg.hl)); return 8; };
+    opcode[0xd6] = [&]() -> int { _sub(memory.readByte(reg.pc)); reg.pc++; return 8; };
+
+    // AND n
+    opcode[0xa7] = [&]() -> int { _and(reg.a); return 4; };
+    opcode[0xa0] = [&]() -> int { _and(reg.b); return 4; };
+    opcode[0xa1] = [&]() -> int { _and(reg.c); return 4; };
+    opcode[0xa2] = [&]() -> int { _and(reg.d); return 4; };
+    opcode[0xa3] = [&]() -> int { _and(reg.e); return 4; };
+    opcode[0xa4] = [&]() -> int { _and(reg.h); return 4; };
+    opcode[0xa5] = [&]() -> int { _and(reg.l); return 4; };
+    opcode[0xa6] = [&]() -> int { _and(memory.readByte(reg.hl)); return 8; };
+    opcode[0xe6] = [&]() -> int { _and(memory.readByte(reg.pc)); reg.pc++; return 8; };
+
+    // OR n
+    opcode[0xb7] = [&]() -> int { _or(reg.a); return 4; };
+    opcode[0xb0] = [&]() -> int { _or(reg.b); return 4; };
+    opcode[0xb1] = [&]() -> int { _or(reg.c); return 4; };
+    opcode[0xb2] = [&]() -> int { _or(reg.d); return 4; };
+    opcode[0xb3] = [&]() -> int { _or(reg.e); return 4; };
+    opcode[0xb4] = [&]() -> int { _or(reg.h); return 4; };
+    opcode[0xb5] = [&]() -> int { _or(reg.l); return 4; };
+    opcode[0xb6] = [&]() -> int { _or(memory.readByte(reg.hl)); return 8; };
+    opcode[0xf6] = [&]() -> int { _or(memory.readByte(reg.pc)); reg.pc++; return 8; };
+
+    // XOR n
+    opcode[0xaf] = [&]() -> int { _xor(reg.a); return 4; };
+    opcode[0xa8] = [&]() -> int { _xor(reg.b); return 4; };
+    opcode[0xa9] = [&]() -> int { _xor(reg.c); return 4; };
+    opcode[0xaa] = [&]() -> int { _xor(reg.d); return 4; };
+    opcode[0xab] = [&]() -> int { _xor(reg.e); return 4; };
+    opcode[0xac] = [&]() -> int { _xor(reg.h); return 4; };
+    opcode[0xad] = [&]() -> int { _xor(reg.l); return 4; };
+    opcode[0xae] = [&]() -> int { _xor(memory.readByte(reg.hl)); return 8; };
+    opcode[0xee] = [&]() -> int { _xor(memory.readByte(reg.pc)); reg.pc++; return 8; };
+
+    // CP n
+    opcode[0xbf] = [&]() -> int { _cp(reg.a); return 4; };
+    opcode[0xb8] = [&]() -> int { _cp(reg.b); return 4; };
+    opcode[0xb9] = [&]() -> int { _cp(reg.c); return 4; };
+    opcode[0xba] = [&]() -> int { _cp(reg.d); return 4; };
+    opcode[0xbb] = [&]() -> int { _cp(reg.e); return 4; };
+    opcode[0xbc] = [&]() -> int { _cp(reg.h); return 4; };
+    opcode[0xbd] = [&]() -> int { _cp(reg.l); return 4; };
+    opcode[0xbe] = [&]() -> int { _cp(memory.readByte(reg.hl)); return 8; };
+    opcode[0xfe] = [&]() -> int { _cp(memory.readByte(reg.pc)); reg.pc++; return 8; };
+
+    // INC n
+    opcode[0x3c] = [&]() -> int { _inc(reg.a); return 4; };
+    opcode[0x04] = [&]() -> int { _inc(reg.b); return 4; };
+    opcode[0x0c] = [&]() -> int { _inc(reg.c); return 4; };
+    opcode[0x14] = [&]() -> int { _inc(reg.d); return 4; };
+    opcode[0x1c] = [&]() -> int { _inc(reg.e); return 4; };
+    opcode[0x24] = [&]() -> int { _inc(reg.h); return 4; };
+    opcode[0x2c] = [&]() -> int { _inc(reg.l); return 4; };
+    opcode[0x34] = [&]() -> int { byte value = memory.readByte(reg.hl); _inc(value); memory.writeByte(reg.hl, value); return 12; };
+
+    // DEC n
+    opcode[0x3d] = [&]() -> int { _dec(reg.a); return 4; };
+    opcode[0x05] = [&]() -> int { _dec(reg.b); return 4; };
+    opcode[0x0d] = [&]() -> int { _dec(reg.c); return 4; };
+    opcode[0x15] = [&]() -> int { _dec(reg.d); return 4; };
+    opcode[0x1d] = [&]() -> int { _dec(reg.e); return 4; };
+    opcode[0x25] = [&]() -> int { _dec(reg.h); return 4; };
+    opcode[0x2d] = [&]() -> int { _dec(reg.l); return 4; };
+    opcode[0x35] = [&]() -> int { byte value = memory.readByte(reg.hl); _dec(value); memory.writeByte(reg.hl, value); return 12; };
 }
+
+#pragma region opcodeAssist
+
+void CPU::_add(const byte& value)
+{
+    byte result = reg.a + value;
+    setFlag(FLAG_Z, (result == 0));
+    setFlag(FLAG_N, 0);
+    setFlag(FLAG_H, (((reg.a & 0xf) + (value & 0xf)) & 0x10));
+    setFlag(FLAG_C, (result > 0xff));
+    reg.a = result;
+}
+
+void CPU::_adc(const byte& value)
+{
+    // _add(value + getFlag(FLAG_C));
+    // Considering 1Fh + 1Fh + 1h will not activate half carry
+    // Sentence above should never be used
+
+    byte carry  = getFlag(FLAG_C);
+    byte result = reg.a + value + carry;
+    setFlag(FLAG_Z, (result == 0));
+    setFlag(FLAG_N, 0);
+    setFlag(FLAG_H, (((reg.a & 0xf) + (value & 0xf) + (carry & 0xf)) & 0x10));
+    setFlag(FLAG_C, (result > 0xff));
+    reg.a = result;
+}
+
+void CPU::_sub(const byte& value)
+{
+    byte result = reg.a - value;
+    setFlag(FLAG_Z, (result == 0));
+    setFlag(FLAG_N, 1);
+    setFlag(FLAG_H, (((reg.a & 0xf) - (value & 0xf)) < 0));
+    setFlag(FLAG_C, (result < 0));
+    reg.a = result;
+}
+
+void CPU::_sbc(const byte& value)
+{
+    byte carry  = getFlag(FLAG_C);
+    byte result = reg.a - value - carry;
+    setFlag(FLAG_Z, (result == 0));
+    setFlag(FLAG_N, 1);
+    setFlag(FLAG_H, (((reg.a & 0xf) - (value & 0xf) - (carry & 0xf)) < 0));
+    setFlag(FLAG_C, (result < 0));
+    reg.a = result;
+}
+
+void CPU::_and(const byte& value)
+{
+    byte result = reg.a & value;
+    setFlag(FLAG_Z, (result == 0));
+    setFlag(FLAG_N, 0);
+    setFlag(FLAG_H, 1);
+    setFlag(FLAG_C, 0);
+    reg.a = result;
+}
+
+void CPU::_or(const byte& value)
+{
+    byte result = reg.a | value;
+    setFlag(FLAG_Z, (result == 0));
+    setFlag(FLAG_N, 0);
+    setFlag(FLAG_H, 0);
+    setFlag(FLAG_C, 0);
+    reg.a = result;
+}
+
+void CPU::_xor(const byte& value)
+{
+    byte result = reg.a ^ value;
+    setFlag(FLAG_Z, (result == 0));
+    setFlag(FLAG_N, 0);
+    setFlag(FLAG_H, 0);
+    setFlag(FLAG_C, 0);
+    reg.a = result;
+}
+
+void CPU::_cp(const byte& value)
+{
+    byte result = reg.a - value;
+    setFlag(FLAG_Z, (result == 0));
+    setFlag(FLAG_N, 1);
+    setFlag(FLAG_H, (((reg.a & 0xf) - (value & 0xf)) < 0));
+    setFlag(FLAG_C, (result < 0));
+}
+
+void CPU::_inc(byte& target)
+{
+    byte result = target++;
+    setFlag(FLAG_Z, (result == 0));
+    setFlag(FLAG_N, 0);
+    setFlag(FLAG_H, (((target & 0xf) + 1) & 0x10));
+    target = result;
+}
+
+void CPU::_dec(byte& target)
+{
+    byte result = target--;
+    setFlag(FLAG_Z, (result == 0));
+    setFlag(FLAG_N, 1);
+    setFlag(FLAG_H, (((target & 0xf) - 1) < 0));
+    target = result;
+}
+
+#pragma endregion
 
 }  // namespace Gameboy

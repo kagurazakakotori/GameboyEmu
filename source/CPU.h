@@ -69,6 +69,19 @@ private:
     bool getFlag(int bit);
     void setFlag(int bit, bool value);
 
+    // Opcode interpreter assist functions
+    // using _ prefix to avoid misusing
+    void _add(const byte& value);
+    void _adc(const byte& value);
+    void _sub(const byte& value);
+    void _sbc(const byte& value);
+    void _and(const byte& value);
+    void _or(const byte& value);
+    void _xor(const byte& value);
+    void _cp(const byte& value);
+    void _inc(byte& target);
+    void _dec(byte& target);
+
     std::array<std::function<int()>, 0x100> opcode;  // Instructions set
     std::array<std::function<int()>, 0x100> cbcode;  // CB-prefix instructions set
 
