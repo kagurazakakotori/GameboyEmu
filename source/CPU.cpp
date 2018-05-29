@@ -497,12 +497,12 @@ void CPU::loadCbcode()
 
 void CPU::_add(const byte& value)
 {
-    byte result = reg.a + value;
-    setFlag(FLAG_Z, (result == 0));
+    int result = reg.a + value;
+    setFlag(FLAG_Z, ((result & 0xff) == 0));
     setFlag(FLAG_N, 0);
     setFlag(FLAG_H, (((reg.a & 0xf) + (value & 0xf)) & 0x10));
     setFlag(FLAG_C, (result > 0xff));
-    reg.a = result;
+    reg.a = (result & 0xff);
 }
 
 void CPU::_adc(const byte& value)
@@ -512,33 +512,33 @@ void CPU::_adc(const byte& value)
     // Sentence above should never be used
 
     byte carry  = getFlag(FLAG_C);
-    byte result = reg.a + value + carry;
-    setFlag(FLAG_Z, (result == 0));
+    int  result = reg.a + value + carry;
+    setFlag(FLAG_Z, ((result & 0xff) == 0));
     setFlag(FLAG_N, 0);
     setFlag(FLAG_H, (((reg.a & 0xf) + (value & 0xf) + (carry & 0xf)) & 0x10));
     setFlag(FLAG_C, (result > 0xff));
-    reg.a = result;
+    reg.a = (result & 0xff);
 }
 
 void CPU::_sub(const byte& value)
 {
-    byte result = reg.a - value;
-    setFlag(FLAG_Z, (result == 0));
+    int result = reg.a - value;
+    setFlag(FLAG_Z, ((result & 0xff) == 0));
     setFlag(FLAG_N, 1);
     setFlag(FLAG_H, (((reg.a & 0xf) - (value & 0xf)) < 0));
     setFlag(FLAG_C, (result < 0));
-    reg.a = result;
+    reg.a = (result & 0xff);
 }
 
 void CPU::_sbc(const byte& value)
 {
     byte carry  = getFlag(FLAG_C);
-    byte result = reg.a - value - carry;
-    setFlag(FLAG_Z, (result == 0));
+    int  result = reg.a - value - carry;
+    setFlag(FLAG_Z, ((result & 0xff) == 0));
     setFlag(FLAG_N, 1);
     setFlag(FLAG_H, (((reg.a & 0xf) - (value & 0xf) - (carry & 0xf)) < 0));
     setFlag(FLAG_C, (result < 0));
-    reg.a = result;
+    reg.a = (result & 0xff);
 }
 
 void CPU::_and(const byte& value)
@@ -573,8 +573,8 @@ void CPU::_xor(const byte& value)
 
 void CPU::_cp(const byte& value)
 {
-    byte result = reg.a - value;
-    setFlag(FLAG_Z, (result == 0));
+    int result = reg.a - value;
+    setFlag(FLAG_Z, ((result & 0xff) == 0));
     setFlag(FLAG_N, 1);
     setFlag(FLAG_H, (((reg.a & 0xf) - (value & 0xf)) < 0));
     setFlag(FLAG_C, (result < 0));
@@ -582,29 +582,29 @@ void CPU::_cp(const byte& value)
 
 void CPU::_inc(byte& target)
 {
-    byte result = target++;
-    setFlag(FLAG_Z, (result == 0));
+    int result = target++;
+    setFlag(FLAG_Z, ((result & 0xff) == 0));
     setFlag(FLAG_N, 0);
     setFlag(FLAG_H, (((target & 0xf) + 1) & 0x10));
-    target = result;
+    target = (result & 0xff);
 }
 
 void CPU::_dec(byte& target)
 {
-    byte result = target--;
-    setFlag(FLAG_Z, (result == 0));
+    int result = target--;
+    setFlag(FLAG_Z, ((result & 0xff) == 0));
     setFlag(FLAG_N, 1);
     setFlag(FLAG_H, (((target & 0xf) - 1) < 0));
-    target = result;
+    target = (result & 0xff);
 }
 
 void CPU::_addhl(const word& value)
 {
-    word result = reg.hl + value;
+    int result = reg.hl + value;
     setFlag(FLAG_N, 0);
     setFlag(FLAG_H, (((reg.hl & 0xfff) + (value & 0xfff)) & 0x1000));
     setFlag(FLAG_C, (result > 0xffff));
-    reg.hl = result;
+    reg.hl = (result & 0xffff);
 }
 
 void CPU::_rlc(byte& target)
