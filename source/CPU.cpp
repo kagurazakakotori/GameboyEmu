@@ -156,11 +156,12 @@ void CPU::loadOpcode()
     opcode[0xf8] = [&]() -> int { 
         int8_t e = memory.readByte(reg.pc);
         reg.pc++;
-        reg.hl = reg.sp + e;
+        word result = reg.sp + e;
         setFlag(FLAG_Z, 0);
         setFlag(FLAG_N, 0);
         setFlag(FLAG_H, (((reg.sp & 0xfff) + (e & 0xfff)) & 0x1000));
         setFlag(FLAG_C, (((reg.sp & 0xffff) + (e & 0xffff)) & 0x10000));
+        reg.hl = result;
         return 12; };
 
     // LD (nn),SP
@@ -274,6 +275,36 @@ void CPU::loadOpcode()
     opcode[0x25] = [&]() -> int { _dec(reg.h); return 4; };
     opcode[0x2d] = [&]() -> int { _dec(reg.l); return 4; };
     opcode[0x35] = [&]() -> int { byte value = memory.readByte(reg.hl); _dec(value); memory.writeByte(reg.hl, value); return 12; };
+
+    // ADD HL,n
+    opcode[0x09] = [&]() -> int { _addhl(reg.bc); return 8; };
+    opcode[0x19] = [&]() -> int { _addhl(reg.de); return 8; };
+    opcode[0x29] = [&]() -> int { _addhl(reg.hl); return 8; };
+    opcode[0x39] = [&]() -> int { _addhl(reg.sp); return 8; };
+
+    // ADD SP,e
+    opcode[0xe8] = [&]() -> int {
+        int8_t e = memory.readByte(reg.pc);
+        reg.pc++;
+        word result = reg.sp + e;
+        setFlag(FLAG_Z, 0);
+        setFlag(FLAG_N, 0);
+        setFlag(FLAG_H, (((reg.sp & 0xfff) + (e & 0xfff)) & 0x1000));
+        setFlag(FLAG_C, (((reg.sp & 0xffff) + (e & 0xffff)) & 0x10000));
+        reg.sp = result; 
+        return 16; };
+
+    // INC nn
+    opcode[0x03] = [&]() -> int { reg.bc++; return 8; };
+    opcode[0x13] = [&]() -> int { reg.de++; return 8; };
+    opcode[0x23] = [&]() -> int { reg.hl++; return 8; };
+    opcode[0x33] = [&]() -> int { reg.sp++; return 8; };
+
+    // DEC nn
+    opcode[0x0b] = [&]() -> int { reg.bc--; return 8; };
+    opcode[0x1b] = [&]() -> int { reg.de--; return 8; };
+    opcode[0x2b] = [&]() -> int { reg.hl--; return 8; };
+    opcode[0x3b] = [&]() -> int { reg.sp--; return 8; };
 }
 
 #pragma region opcodeAssist
@@ -379,6 +410,15 @@ void CPU::_dec(byte& target)
     setFlag(FLAG_N, 1);
     setFlag(FLAG_H, (((target & 0xf) - 1) < 0));
     target = result;
+}
+
+void CPU::_addhl(const word& value)
+{
+    word result = reg.hl + value;
+    setFlag(FLAG_N, 0);
+    setFlag(FLAG_H, (((reg.hl & 0xfff) + (value & 0xfff)) & 0x1000));
+    setFlag(FLAG_C, (result > 0xffff));
+    reg.hl = result;
 }
 
 #pragma endregion

@@ -81,6 +81,7 @@ private:
     void _cp(const byte& value);
     void _inc(byte& target);
     void _dec(byte& target);
+    void _addhl(const word& value);
 
     std::array<std::function<int()>, 0x100> opcode;  // Instructions set
     std::array<std::function<int()>, 0x100> cbcode;  // CB-prefix instructions set
