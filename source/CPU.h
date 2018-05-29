@@ -65,6 +65,8 @@ private:
         word pc;
     } reg;
 
+    bool interruptMasterEnable = false;
+
     // Flag register operations
     bool getFlag(int bit);
     void setFlag(int bit, bool value);

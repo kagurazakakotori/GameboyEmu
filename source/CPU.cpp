@@ -341,6 +341,37 @@ void CPU::loadOpcode()
     opcode[0xca] = [&]() -> int { if (getFlag(FLAG_Z) == 1) { reg.pc += static_cast<int8_t>(memory.readByte(reg.pc)); } else { reg.pc += 2; } return 8; };
     opcode[0xd2] = [&]() -> int { if (getFlag(FLAG_C) == 0) { reg.pc += static_cast<int8_t>(memory.readByte(reg.pc)); } else { reg.pc += 2; } return 8; };
     opcode[0xda] = [&]() -> int { if (getFlag(FLAG_C) == 1) { reg.pc += static_cast<int8_t>(memory.readByte(reg.pc)); } else { reg.pc += 2; } return 8; };
+
+    // CALL nn
+    opcode[0xcd] = [&]() -> int { reg.sp -= 2; memory.writeWord(reg.sp, (reg.pc + 2)); reg.pc = memory.readWord(reg.pc); return 12; };
+
+    // CALL nn
+    opcode[0xc4] = [&]() -> int { if (getFlag(FLAG_Z) == 0) { reg.sp -= 2; memory.writeWord(reg.sp, (reg.pc + 2)); reg.pc = memory.readWord(reg.pc); } else { reg.pc += 2; } return 12; };
+    opcode[0xcc] = [&]() -> int { if (getFlag(FLAG_Z) == 1) { reg.sp -= 2; memory.writeWord(reg.sp, (reg.pc + 2)); reg.pc = memory.readWord(reg.pc); } else { reg.pc += 2; } return 12; };
+    opcode[0xd4] = [&]() -> int { if (getFlag(FLAG_C) == 0) { reg.sp -= 2; memory.writeWord(reg.sp, (reg.pc + 2)); reg.pc = memory.readWord(reg.pc); } else { reg.pc += 2; } return 12; };
+    opcode[0xdc] = [&]() -> int { if (getFlag(FLAG_C) == 1) { reg.sp -= 2; memory.writeWord(reg.sp, (reg.pc + 2)); reg.pc = memory.readWord(reg.pc); } else { reg.pc += 2; } return 12; };
+
+    // RET
+    opcode[0xc9] = [&]() -> int { reg.pc = memory.readWord(reg.sp); reg.sp +=2; return 8; };
+
+    // RET cc
+    opcode[0xc0] = [&]() -> int { if (getFlag(FLAG_Z) == 0) { reg.pc = memory.readWord(reg.sp); reg.sp +=2; } return 8; };
+    opcode[0xc8] = [&]() -> int { if (getFlag(FLAG_Z) == 1) { reg.pc = memory.readWord(reg.sp); reg.sp +=2; } return 8; };
+    opcode[0xd0] = [&]() -> int { if (getFlag(FLAG_C) == 0) { reg.pc = memory.readWord(reg.sp); reg.sp +=2; } return 8; };
+    opcode[0xd8] = [&]() -> int { if (getFlag(FLAG_C) == 1) { reg.pc = memory.readWord(reg.sp); reg.sp +=2; } return 8; };
+
+    // RETI
+    opcode[0xd9] = [&]() -> int { reg.pc = memory.readWord(reg.sp); reg.sp +=2; interruptMasterEnable = true; return 8; };
+
+    // RST n
+    opcode[0xc7] = [&]() -> int { reg.sp -= 2; memory.writeWord(reg.sp, reg.pc); reg.pc = 0x00; return 32; };
+    opcode[0xcf] = [&]() -> int { reg.sp -= 2; memory.writeWord(reg.sp, reg.pc); reg.pc = 0x08; return 32; };
+    opcode[0xd7] = [&]() -> int { reg.sp -= 2; memory.writeWord(reg.sp, reg.pc); reg.pc = 0x10; return 32; };
+    opcode[0xdf] = [&]() -> int { reg.sp -= 2; memory.writeWord(reg.sp, reg.pc); reg.pc = 0x18; return 32; };
+    opcode[0xe7] = [&]() -> int { reg.sp -= 2; memory.writeWord(reg.sp, reg.pc); reg.pc = 0x20; return 32; };
+    opcode[0xef] = [&]() -> int { reg.sp -= 2; memory.writeWord(reg.sp, reg.pc); reg.pc = 0x28; return 32; };
+    opcode[0xf7] = [&]() -> int { reg.sp -= 2; memory.writeWord(reg.sp, reg.pc); reg.pc = 0x30; return 32; };
+    opcode[0xff] = [&]() -> int { reg.sp -= 2; memory.writeWord(reg.sp, reg.pc); reg.pc = 0x38; return 32; };
 }
 
 void CPU::loadCbcode()
