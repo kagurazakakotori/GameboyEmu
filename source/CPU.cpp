@@ -372,6 +372,33 @@ void CPU::loadOpcode()
     opcode[0xef] = [&]() -> int { reg.sp -= 2; memory.writeWord(reg.sp, reg.pc); reg.pc = 0x28; return 32; };
     opcode[0xf7] = [&]() -> int { reg.sp -= 2; memory.writeWord(reg.sp, reg.pc); reg.pc = 0x30; return 32; };
     opcode[0xff] = [&]() -> int { reg.sp -= 2; memory.writeWord(reg.sp, reg.pc); reg.pc = 0x38; return 32; };
+
+    // DAA
+    opcode[0x27] = [&]() -> int { _daa(); return 4; };
+
+    // CPL
+    opcode[0x2f] = [&]() -> int { reg.a = ~reg.a; setFlag(FLAG_N, 1); setFlag(FLAG_H, 1); return 4; };
+
+    // NOP
+    opcode[0x00] = [&]() -> int { return 4; };
+
+    // CCF
+    opcode[0x3f] = [&]() -> int { setFlag(FLAG_C, !getFlag(FLAG_C)); setFlag(FLAG_N, 0); setFlag(FLAG_H, 0); return 4; };
+
+    // SCF
+    opcode[0x37] = [&]() -> int { setFlag(FLAG_C, 1); setFlag(FLAG_N, 0); setFlag(FLAG_H, 0); return 4; };
+
+    // DI
+    opcode[0xf3] = [&]() -> int { interruptMasterEnable = false; return 4; };
+
+    // EI
+    opcode[0xfb] = [&]() -> int { interruptMasterEnable = true; return 4; };
+
+    // HALT
+    opcode[0x76] = [&]() -> int { halt = true; return 4; };
+
+    // STOP
+    opcode[0x10] = [&]() -> int { halt = true; return 4; };
 }
 
 void CPU::loadCbcode()
@@ -699,6 +726,40 @@ void CPU::_bit(const int& bit, const byte& target)
     setFlag(FLAG_Z, ((target >> bit) & 0x01) == 0);
     setFlag(FLAG_N, 0);
     setFlag(FLAG_H, 1);
+}
+
+void CPU::_daa()
+{
+    // NOTE: Maybe the document is wrong
+    int  result = reg.a;
+    byte higher = (reg.a & 0xf0) >> 4;
+    byte lower  = (reg.a & 0x0f);
+
+    if (!getFlag(FLAG_N)) {
+        // +06h
+        if ((lower > 0x9) || getFlag(FLAG_H)) {
+            result += 0x06;
+        }
+        // +60h
+        if ((higher > 0x9) || getFlag(FLAG_C)) {
+            result += 0x60;
+        }
+    }
+    else if (getFlag(FLAG_N) && getFlag(FLAG_H)) {
+        result += 0xfa;
+    }
+    else if (getFlag(FLAG_N) && getFlag(FLAG_C)) {
+        result += 0xa0;
+    }
+    else if (getFlag(FLAG_N) && getFlag(FLAG_C) && getFlag(FLAG_H)) {
+        result += 0x9a;
+    }
+
+    setFlag(FLAG_Z, ((result & 0xff) == 0));
+    setFlag(FLAG_N, 0);
+    setFlag(FLAG_C, (result > 0xff));
+
+    reg.a = (result & 0xff);
 }
 
 #pragma endregion

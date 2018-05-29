@@ -66,6 +66,7 @@ private:
     } reg;
 
     bool interruptMasterEnable = false;
+    bool halt                  = false;
 
     // Flag register operations
     bool getFlag(int bit);
@@ -93,6 +94,7 @@ private:
     void _srl(byte& target);
     void _swap(byte& target);
     void _bit(const int& bit, const byte& target);
+    void _daa();
 
     std::array<std::function<int()>, 0x100> opcode;  // Instructions set
     std::array<std::function<int()>, 0x100> cbcode;  // CB-prefix instructions set
