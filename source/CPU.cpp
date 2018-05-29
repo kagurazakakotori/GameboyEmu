@@ -403,6 +403,110 @@ void CPU::loadCbcode()
     cbcode[0x34] = [&]() -> int { _swap(reg.h); return 8; };
     cbcode[0x35] = [&]() -> int { _swap(reg.l); return 8; };
     cbcode[0x36] = [&]() -> int { byte value = memory.readByte(reg.hl); _swap(value); memory.writeByte(reg.hl, value); return 16; };
+
+    // BIT 0,r
+    cbcode[0x47] = [&]() -> int { _bit(0, reg.a); return 8; };
+    cbcode[0x40] = [&]() -> int { _bit(0, reg.b); return 8; };
+    cbcode[0x41] = [&]() -> int { _bit(0, reg.c); return 8; };
+    cbcode[0x42] = [&]() -> int { _bit(0, reg.d); return 8; };
+    cbcode[0x43] = [&]() -> int { _bit(0, reg.e); return 8; };
+    cbcode[0x44] = [&]() -> int { _bit(0, reg.h); return 8; };
+    cbcode[0x45] = [&]() -> int { _bit(0, reg.l); return 8; };
+    cbcode[0x46] = [&]() -> int { _bit(0, memory.readByte(reg.hl)); return 16; };
+
+    // BIT 1,r
+    cbcode[0x4f] = [&]() -> int { _bit(1, reg.a); return 8; };
+    cbcode[0x48] = [&]() -> int { _bit(1, reg.b); return 8; };
+    cbcode[0x49] = [&]() -> int { _bit(1, reg.c); return 8; };
+    cbcode[0x4a] = [&]() -> int { _bit(1, reg.d); return 8; };
+    cbcode[0x4b] = [&]() -> int { _bit(1, reg.e); return 8; };
+    cbcode[0x4c] = [&]() -> int { _bit(1, reg.h); return 8; };
+    cbcode[0x4d] = [&]() -> int { _bit(1, reg.l); return 8; };
+    cbcode[0x4e] = [&]() -> int { _bit(1, memory.readByte(reg.hl)); return 16; };
+
+    // BIT 2,r
+    cbcode[0x57] = [&]() -> int { _bit(2, reg.a); return 8; };
+    cbcode[0x50] = [&]() -> int { _bit(2, reg.b); return 8; };
+    cbcode[0x51] = [&]() -> int { _bit(2, reg.c); return 8; };
+    cbcode[0x52] = [&]() -> int { _bit(2, reg.d); return 8; };
+    cbcode[0x53] = [&]() -> int { _bit(2, reg.e); return 8; };
+    cbcode[0x54] = [&]() -> int { _bit(2, reg.h); return 8; };
+    cbcode[0x55] = [&]() -> int { _bit(2, reg.l); return 8; };
+    cbcode[0x56] = [&]() -> int { _bit(2, memory.readByte(reg.hl)); return 16; };
+
+    // BIT 3,r
+    cbcode[0x5f] = [&]() -> int { _bit(3, reg.a); return 8; };
+    cbcode[0x58] = [&]() -> int { _bit(3, reg.b); return 8; };
+    cbcode[0x59] = [&]() -> int { _bit(3, reg.c); return 8; };
+    cbcode[0x5a] = [&]() -> int { _bit(3, reg.d); return 8; };
+    cbcode[0x5b] = [&]() -> int { _bit(3, reg.e); return 8; };
+    cbcode[0x5c] = [&]() -> int { _bit(3, reg.h); return 8; };
+    cbcode[0x5d] = [&]() -> int { _bit(3, reg.l); return 8; };
+    cbcode[0x5e] = [&]() -> int { _bit(3, memory.readByte(reg.hl)); return 16; };
+
+    // BIT 4,r
+    cbcode[0x67] = [&]() -> int { _bit(4, reg.a); return 8; };
+    cbcode[0x60] = [&]() -> int { _bit(4, reg.b); return 8; };
+    cbcode[0x61] = [&]() -> int { _bit(4, reg.c); return 8; };
+    cbcode[0x62] = [&]() -> int { _bit(4, reg.d); return 8; };
+    cbcode[0x63] = [&]() -> int { _bit(4, reg.e); return 8; };
+    cbcode[0x64] = [&]() -> int { _bit(4, reg.h); return 8; };
+    cbcode[0x65] = [&]() -> int { _bit(4, reg.l); return 8; };
+    cbcode[0x66] = [&]() -> int { _bit(4, memory.readByte(reg.hl)); return 16; };
+
+    // BIT 5,r
+    cbcode[0x6f] = [&]() -> int { _bit(5, reg.a); return 8; };
+    cbcode[0x68] = [&]() -> int { _bit(5, reg.b); return 8; };
+    cbcode[0x69] = [&]() -> int { _bit(5, reg.c); return 8; };
+    cbcode[0x6a] = [&]() -> int { _bit(5, reg.d); return 8; };
+    cbcode[0x6b] = [&]() -> int { _bit(5, reg.e); return 8; };
+    cbcode[0x6c] = [&]() -> int { _bit(5, reg.h); return 8; };
+    cbcode[0x6d] = [&]() -> int { _bit(5, reg.l); return 8; };
+    cbcode[0x6e] = [&]() -> int { _bit(5, memory.readByte(reg.hl)); return 16; };
+
+    // BIT 6,r
+    cbcode[0x77] = [&]() -> int { _bit(6, reg.a); return 8; };
+    cbcode[0x70] = [&]() -> int { _bit(6, reg.b); return 8; };
+    cbcode[0x71] = [&]() -> int { _bit(6, reg.c); return 8; };
+    cbcode[0x72] = [&]() -> int { _bit(6, reg.d); return 8; };
+    cbcode[0x73] = [&]() -> int { _bit(6, reg.e); return 8; };
+    cbcode[0x74] = [&]() -> int { _bit(6, reg.h); return 8; };
+    cbcode[0x75] = [&]() -> int { _bit(6, reg.l); return 8; };
+    cbcode[0x76] = [&]() -> int { _bit(6, memory.readByte(reg.hl)); return 16; };
+
+    // BIT 7,r
+    cbcode[0x7f] = [&]() -> int { _bit(7, reg.a); return 8; };
+    cbcode[0x78] = [&]() -> int { _bit(7, reg.b); return 8; };
+    cbcode[0x79] = [&]() -> int { _bit(7, reg.c); return 8; };
+    cbcode[0x7a] = [&]() -> int { _bit(7, reg.d); return 8; };
+    cbcode[0x7b] = [&]() -> int { _bit(7, reg.e); return 8; };
+    cbcode[0x7c] = [&]() -> int { _bit(7, reg.h); return 8; };
+    cbcode[0x7d] = [&]() -> int { _bit(7, reg.l); return 8; };
+    cbcode[0x7e] = [&]() -> int { _bit(7, memory.readByte(reg.hl)); return 16; };
+
+    // SET b,r
+    for (int i = 0; i < 8; i++) {
+        cbcode[0xc7 + i * 8] = [&]() -> int { reg.a |= 1 << i; return 8; };
+        cbcode[0xc0 + i * 8] = [&]() -> int { reg.b |= 1 << i; return 8; };
+        cbcode[0xc1 + i * 8] = [&]() -> int { reg.c |= 1 << i; return 8; };
+        cbcode[0xc2 + i * 8] = [&]() -> int { reg.d |= 1 << i; return 8; };
+        cbcode[0xc3 + i * 8] = [&]() -> int { reg.e |= 1 << i; return 8; };
+        cbcode[0xc4 + i * 8] = [&]() -> int { reg.h |= 1 << i; return 8; };
+        cbcode[0xc5 + i * 8] = [&]() -> int { reg.l |= 1 << i; return 8; };
+        cbcode[0xc6 + i * 8] = [&]() -> int { byte value = memory.readByte(reg.hl); value |= 1 << i; memory.writeByte(reg.hl, value); return 16; };
+    }
+
+    // RES b,r
+    for (int i = 0; i < 8; i++) {
+        cbcode[0x87 + i * 8] = [&]() -> int { reg.a &= ~(1 << i); return 8; };
+        cbcode[0x80 + i * 8] = [&]() -> int { reg.b &= ~(1 << i); return 8; };
+        cbcode[0x81 + i * 8] = [&]() -> int { reg.c &= ~(1 << i); return 8; };
+        cbcode[0x82 + i * 8] = [&]() -> int { reg.d &= ~(1 << i); return 8; };
+        cbcode[0x83 + i * 8] = [&]() -> int { reg.e &= ~(1 << i); return 8; };
+        cbcode[0x84 + i * 8] = [&]() -> int { reg.h &= ~(1 << i); return 8; };
+        cbcode[0x85 + i * 8] = [&]() -> int { reg.l &= ~(1 << i); return 8; };
+        cbcode[0x86 + i * 8] = [&]() -> int { byte value = memory.readByte(reg.hl); value &= ~(1 << i); memory.writeByte(reg.hl, value); return 16; };
+    }
 }
 
 #pragma region opcodeAssist
@@ -604,6 +708,13 @@ void CPU::_swap(byte& target)
     setFlag(FLAG_H, 0);
     setFlag(FLAG_C, 0);
     target = result;
+}
+
+void CPU::_bit(const int& bit, const byte& target)
+{
+    setFlag(FLAG_Z, ((target >> bit) & 0x01) == 0);
+    setFlag(FLAG_N, 0);
+    setFlag(FLAG_H, 1);
 }
 
 #pragma endregion
