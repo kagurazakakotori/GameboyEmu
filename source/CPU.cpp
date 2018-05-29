@@ -33,6 +33,9 @@ void CPU::loadOpcode()
         i = [&]() -> int { return 4; };
     }
 
+    // CB code mapping
+    opcode[0xcb] = [&]() -> int { uint8_t value = memory.readByte(reg.pc++); return cbcode[value](); };
+
     // Assign Opcode functions
     // LD nn,n
     opcode[0x06] = [&]() -> int { reg.b = memory.readByte(reg.pc); reg.pc++; return 8; };
@@ -305,6 +308,101 @@ void CPU::loadOpcode()
     opcode[0x1b] = [&]() -> int { reg.de--; return 8; };
     opcode[0x2b] = [&]() -> int { reg.hl--; return 8; };
     opcode[0x3b] = [&]() -> int { reg.sp--; return 8; };
+
+    // RLCA
+    opcode[0x07] = [&]() -> int { _rlc(reg.a); return 4; };
+
+    // RLA
+    opcode[0x17] = [&]() -> int { _rl(reg.a); return 4; };
+
+    // RRCA
+    opcode[0x0f] = [&]() -> int { _rrc(reg.a); return 4; };
+
+    // RRA
+    opcode[0x1f] = [&]() -> int { _rr(reg.a); return 4; };
+}
+
+void CPU::loadCbcode()
+{
+    // RLC n
+    cbcode[0x07] = [&]() -> int { _rlc(reg.a); return 8; };
+    cbcode[0x00] = [&]() -> int { _rlc(reg.b); return 8; };
+    cbcode[0x01] = [&]() -> int { _rlc(reg.c); return 8; };
+    cbcode[0x02] = [&]() -> int { _rlc(reg.d); return 8; };
+    cbcode[0x03] = [&]() -> int { _rlc(reg.e); return 8; };
+    cbcode[0x04] = [&]() -> int { _rlc(reg.h); return 8; };
+    cbcode[0x05] = [&]() -> int { _rlc(reg.l); return 8; };
+    cbcode[0x06] = [&]() -> int { byte value = memory.readByte(reg.hl); _rlc(value); memory.writeByte(reg.hl, value); return 16; };
+
+    // RL n
+    cbcode[0x17] = [&]() -> int { _rl(reg.a); return 8; };
+    cbcode[0x10] = [&]() -> int { _rl(reg.b); return 8; };
+    cbcode[0x11] = [&]() -> int { _rl(reg.c); return 8; };
+    cbcode[0x12] = [&]() -> int { _rl(reg.d); return 8; };
+    cbcode[0x13] = [&]() -> int { _rl(reg.e); return 8; };
+    cbcode[0x14] = [&]() -> int { _rl(reg.h); return 8; };
+    cbcode[0x15] = [&]() -> int { _rl(reg.l); return 8; };
+    cbcode[0x16] = [&]() -> int { byte value = memory.readByte(reg.hl); _rl(value); memory.writeByte(reg.hl, value); return 16; };
+
+    // RRC n
+    cbcode[0x0f] = [&]() -> int { _rrc(reg.a); return 8; };
+    cbcode[0x08] = [&]() -> int { _rrc(reg.b); return 8; };
+    cbcode[0x09] = [&]() -> int { _rrc(reg.c); return 8; };
+    cbcode[0x0a] = [&]() -> int { _rrc(reg.d); return 8; };
+    cbcode[0x0b] = [&]() -> int { _rrc(reg.e); return 8; };
+    cbcode[0x0c] = [&]() -> int { _rrc(reg.h); return 8; };
+    cbcode[0x0d] = [&]() -> int { _rrc(reg.l); return 8; };
+    cbcode[0x0e] = [&]() -> int { byte value = memory.readByte(reg.hl); _rrc(value); memory.writeByte(reg.hl, value); return 16; };
+
+    // RR n
+    cbcode[0x1f] = [&]() -> int { _rr(reg.a); return 8; };
+    cbcode[0x18] = [&]() -> int { _rr(reg.b); return 8; };
+    cbcode[0x19] = [&]() -> int { _rr(reg.c); return 8; };
+    cbcode[0x1a] = [&]() -> int { _rr(reg.d); return 8; };
+    cbcode[0x1b] = [&]() -> int { _rr(reg.e); return 8; };
+    cbcode[0x1c] = [&]() -> int { _rr(reg.h); return 8; };
+    cbcode[0x1d] = [&]() -> int { _rr(reg.l); return 8; };
+    cbcode[0x1e] = [&]() -> int { byte value = memory.readByte(reg.hl); _rr(value); memory.writeByte(reg.hl, value); return 16; };
+
+    // SLA n
+    cbcode[0x27] = [&]() -> int { _sla(reg.a); return 8; };
+    cbcode[0x20] = [&]() -> int { _sla(reg.b); return 8; };
+    cbcode[0x21] = [&]() -> int { _sla(reg.c); return 8; };
+    cbcode[0x22] = [&]() -> int { _sla(reg.d); return 8; };
+    cbcode[0x23] = [&]() -> int { _sla(reg.e); return 8; };
+    cbcode[0x24] = [&]() -> int { _sla(reg.h); return 8; };
+    cbcode[0x25] = [&]() -> int { _sla(reg.l); return 8; };
+    cbcode[0x26] = [&]() -> int { byte value = memory.readByte(reg.hl); _sla(value); memory.writeByte(reg.hl, value); return 16; };
+
+    // SRA n
+    cbcode[0x2f] = [&]() -> int { _sra(reg.a); return 8; };
+    cbcode[0x28] = [&]() -> int { _sra(reg.b); return 8; };
+    cbcode[0x29] = [&]() -> int { _sra(reg.c); return 8; };
+    cbcode[0x2a] = [&]() -> int { _sra(reg.d); return 8; };
+    cbcode[0x2b] = [&]() -> int { _sra(reg.e); return 8; };
+    cbcode[0x2c] = [&]() -> int { _sra(reg.h); return 8; };
+    cbcode[0x2d] = [&]() -> int { _sra(reg.l); return 8; };
+    cbcode[0x2e] = [&]() -> int { byte value = memory.readByte(reg.hl); _sra(value); memory.writeByte(reg.hl, value); return 16; };
+
+    // SRL n
+    cbcode[0x3f] = [&]() -> int { _srl(reg.a); return 8; };
+    cbcode[0x38] = [&]() -> int { _srl(reg.b); return 8; };
+    cbcode[0x39] = [&]() -> int { _srl(reg.c); return 8; };
+    cbcode[0x3a] = [&]() -> int { _srl(reg.d); return 8; };
+    cbcode[0x3b] = [&]() -> int { _srl(reg.e); return 8; };
+    cbcode[0x3c] = [&]() -> int { _srl(reg.h); return 8; };
+    cbcode[0x3d] = [&]() -> int { _srl(reg.l); return 8; };
+    cbcode[0x3e] = [&]() -> int { byte value = memory.readByte(reg.hl); _srl(value); memory.writeByte(reg.hl, value); return 16; };
+
+    // SWAP n
+    cbcode[0x37] = [&]() -> int { _swap(reg.a); return 8; };
+    cbcode[0x30] = [&]() -> int { _swap(reg.b); return 8; };
+    cbcode[0x31] = [&]() -> int { _swap(reg.c); return 8; };
+    cbcode[0x32] = [&]() -> int { _swap(reg.d); return 8; };
+    cbcode[0x33] = [&]() -> int { _swap(reg.e); return 8; };
+    cbcode[0x34] = [&]() -> int { _swap(reg.h); return 8; };
+    cbcode[0x35] = [&]() -> int { _swap(reg.l); return 8; };
+    cbcode[0x36] = [&]() -> int { byte value = memory.readByte(reg.hl); _swap(value); memory.writeByte(reg.hl, value); return 16; };
 }
 
 #pragma region opcodeAssist
@@ -419,6 +517,93 @@ void CPU::_addhl(const word& value)
     setFlag(FLAG_H, (((reg.hl & 0xfff) + (value & 0xfff)) & 0x1000));
     setFlag(FLAG_C, (result > 0xffff));
     reg.hl = result;
+}
+
+void CPU::_rlc(byte& target)
+{
+    byte bit    = (target & 0x80) >> 7;
+    byte result = (target << 1) | bit;
+    setFlag(FLAG_Z, (result == 0));
+    setFlag(FLAG_N, 0);
+    setFlag(FLAG_H, 0);
+    setFlag(FLAG_C, bit);
+    target = result;
+}
+
+void CPU::_rl(byte& target)
+{
+    byte bit    = getFlag(FLAG_C);
+    byte result = (target << 1) | bit;
+    setFlag(FLAG_Z, (result == 0));
+    setFlag(FLAG_N, 0);
+    setFlag(FLAG_H, 0);
+    setFlag(FLAG_C, ((target & 0x80) >> 7));
+    target = result;
+}
+
+void CPU::_rrc(byte& target)
+{
+    byte bit    = (target & 0x01);
+    byte result = (target >> 1) | (bit << 7);
+    setFlag(FLAG_Z, (result == 0));
+    setFlag(FLAG_N, 0);
+    setFlag(FLAG_H, 0);
+    setFlag(FLAG_C, bit);
+    target = result;
+}
+
+void CPU::_rr(byte& target)
+{
+    byte bit    = getFlag(FLAG_C);
+    byte result = (target >> 1) | (bit << 7);
+    setFlag(FLAG_Z, (result == 0));
+    setFlag(FLAG_N, 0);
+    setFlag(FLAG_H, 0);
+    setFlag(FLAG_C, (target & 0x01));
+    target = result;
+}
+
+void CPU::_sla(byte& target)
+{
+    byte result = (target << 1);
+    setFlag(FLAG_Z, (result == 0));
+    setFlag(FLAG_N, 0);
+    setFlag(FLAG_H, 0);
+    setFlag(FLAG_C, (target & 0x80));
+    target = result;
+}
+
+void CPU::_sra(byte& target)
+{
+    byte bit    = (target & 0x80);
+    byte result = (target >> 1) | bit;
+    setFlag(FLAG_Z, (result == 0));
+    setFlag(FLAG_N, 0);
+    setFlag(FLAG_H, 0);
+    setFlag(FLAG_C, (target & 0x01));
+    target = result;
+}
+
+void CPU::_srl(byte& target)
+{
+    byte result = (target >> 1);
+    setFlag(FLAG_Z, (result == 0));
+    setFlag(FLAG_N, 0);
+    setFlag(FLAG_H, 0);
+    setFlag(FLAG_C, (target & 0x01));
+    target = result;
+}
+
+void CPU::_swap(byte& target)
+{
+    byte higher = (target & 0xf0);
+    byte lower  = (target & 0x0f);
+    byte result = (higher >> 4) | (lower << 4);
+    setFlag(FLAG_Z, (result == 0));
+    setFlag(FLAG_N, 0);
+    setFlag(FLAG_H, 0);
+    setFlag(FLAG_C, 0);
+    target = result;
 }
 
 #pragma endregion

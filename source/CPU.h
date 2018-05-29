@@ -82,6 +82,14 @@ private:
     void _inc(byte& target);
     void _dec(byte& target);
     void _addhl(const word& value);
+    void _rlc(byte& target);
+    void _rl(byte& target);
+    void _rrc(byte& target);
+    void _rr(byte& target);
+    void _sla(byte& target);
+    void _sra(byte& target);
+    void _srl(byte& target);
+    void _swap(byte& target);
 
     std::array<std::function<int()>, 0x100> opcode;  // Instructions set
     std::array<std::function<int()>, 0x100> cbcode;  // CB-prefix instructions set
