@@ -1,7 +1,19 @@
 #include "CPU.h"
 
+#ifdef DEBUG_MODE
+#include <ios>
+#include <iostream>
+#endif
+
 namespace Gameboy
 {
+
+CPU::CPU()
+{
+    // Load instruction codes
+    loadOpcode();
+    loadCbcode();
+}
 
 void CPU::init()
 {
@@ -13,6 +25,21 @@ void CPU::init()
     reg.hl = 0x014d;
     reg.pc = 0x0100;  // Gameboy CPU Manual 3.2.3
     reg.sp = 0xfffe;  // Gameboy CPU Manual 3.2.4
+    clock  = 0;
+}
+
+void CPU::exec()
+{
+    // TODO: implement interrupt
+    byte value = memory.readByte(reg.pc++);
+    clock += opcode[value]();
+
+#ifdef DEBUG_MODE
+    std::cout << "[INFO] Executing " << std::hex << value << std::endl;
+    std::cout << "[INFO] Registers " << std::hex
+              << "AF: " << reg.af << "BC: " << reg.bc << "DE: " << reg.de
+              << "HL: " << reg.hl << "SP: " << reg.sp << "PC: " << reg.pc << std::endl;
+#endif
 }
 
 bool CPU::getFlag(int bit)

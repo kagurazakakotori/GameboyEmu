@@ -11,7 +11,10 @@ extern Memory memory;
 class CPU
 {
 public:
+    CPU();
+
     void init();
+    void exec();
 
 private:
     static const int FLAG_Z = 7;  // Zero Flag
@@ -64,6 +67,8 @@ private:
         word sp;
         word pc;
     } reg;
+
+    uint64_t clock;
 
     bool interruptMasterEnable = false;
     bool halt                  = false;
