@@ -4,9 +4,10 @@
 #include "DataType.h"
 #include "Memory.h"
 
+extern Gameboy::Memory memory;
+
 namespace Gameboy
 {
-extern Memory memory;
 
 class CPU
 {
