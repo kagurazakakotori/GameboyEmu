@@ -1,5 +1,4 @@
 #include "Memory.h"
-#include <iostream>
 
 namespace Gameboy
 {
@@ -12,6 +11,20 @@ Memory::Memory()
     io.assign(0x80, 0x00);      // MMIO
     hram.assign(0x7f, 0x00);    // 127B HRAM
     interruptEnable = 0x00;
+}
+
+void Memory::loadRom(std::string romPath)
+{
+    std::ifstream file(romPath, std::ios::in | std::ios::binary);
+
+    char b;
+    int  i = 0;
+    while (file.get(b)) {
+        cart.rom[i] = static_cast<byte>(b);
+        i++;
+    }
+
+    std::cout << "[INFO] ROM loaded successfully" << std::endl;
 }
 
 void Memory::init()

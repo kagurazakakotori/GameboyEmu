@@ -1,4 +1,8 @@
 #pragma once
+#include <fstream>
+#include <ios>
+#include <iostream>
+#include <string>
 #include <vector>
 #include "Cartridge.h"
 #include "Common.h"
@@ -19,7 +23,7 @@ public:
     void writeByte(const word& address, const byte value);
     void writeWord(const word& address, const word value);
 
-    void loadRom();
+    void loadRom(std::string path);
     void init();
 
 private:
@@ -30,10 +34,12 @@ private:
     std::vector<byte> oam;   // OAM for sprites
     std::vector<byte> io;    // Memory-mapped I/O registers
     std::vector<byte> hram;  // High ram
-    byte interruptEnable;    // Interrupts Enable Register at 0xffff
+
+    byte interruptEnable;  // Interrupts Enable Register at 0xffff
 
     bool romLoaded = false;
 
     void boot();
 };
-}
+
+}  // namespace Gameboy
