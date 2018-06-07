@@ -1,7 +1,7 @@
 #pragma once
 #include <array>
 #include <functional>
-#include "DataType.h"
+#include "Common.h"
 #include "Memory.h"
 
 extern Gameboy::Memory memory;
@@ -75,8 +75,8 @@ private:
     bool halt                  = false;
 
     // Flag register operations
-    bool getFlag(int bit);
-    void setFlag(int bit, bool value);
+    inline bool getFlag(int bit);
+    inline void setFlag(int bit, bool value);
 
     // Opcode interpreter assist functions
     // using _ prefix to avoid misusing

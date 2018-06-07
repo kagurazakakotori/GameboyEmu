@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 #include "Cartridge.h"
-#include "DataType.h"
+#include "Common.h"
 
 namespace Gameboy
 {

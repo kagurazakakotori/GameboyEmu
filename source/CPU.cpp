@@ -42,14 +42,14 @@ void CPU::exec()
 #endif
 }
 
-bool CPU::getFlag(int bit)
+inline bool CPU::getFlag(int bit)
 {
-    return (reg.f >> bit) & 1u;
+    return getBit(reg.f, bit);
 }
 
-void CPU::setFlag(int bit, bool value)
+inline void CPU::setFlag(int bit, bool value)
 {
-    reg.f ^= (-value ^ reg.f) & (1u << bit);
+    setBit(reg.f, bit, value);
 }
 
 void CPU::loadOpcode()

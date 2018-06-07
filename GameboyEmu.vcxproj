@@ -15,7 +15,7 @@
     <ProjectGuid>{6607C235-CD40-4235-A165-4071D67EA9F3}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>GameboyEmu</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -89,14 +89,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="source\Cartridge.cpp" />
+    <ClCompile Include="source\Common.cpp" />
     <ClCompile Include="source\CPU.cpp" />
     <ClCompile Include="source\main.cpp" />
     <ClCompile Include="source\Memory.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\Cartridge.h" />
+    <ClInclude Include="source\Common.h" />
     <ClInclude Include="source\CPU.h" />
-    <ClInclude Include="source\DataType.h" />
     <ClInclude Include="source\Memory.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

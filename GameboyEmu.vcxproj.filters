@@ -27,11 +27,11 @@
     <ClCompile Include="source\Cartridge.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="source\Common.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="source\DataType.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="source\CPU.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -39,6 +39,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="source\Cartridge.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Common.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
