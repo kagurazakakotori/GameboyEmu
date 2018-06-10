@@ -4,9 +4,9 @@
 #include "Common.h"
 #include "Memory.h"
 
-extern Gameboy::Memory memory;
+extern gb::Memory memory;
 
-namespace Gameboy
+namespace gb
 {
 
 class Display
@@ -22,8 +22,8 @@ private:
     static const word SCX_ADDR  = 0xff43;
     static const word SCY_ADDR  = 0xff42;
     static const word BGP_ADDR  = 0xff47;
-    static const word WX_ADDR  = 0xff4b;
-    static const word WY_ADDR  = 0xff4a;
+    static const word WX_ADDR   = 0xff4b;
+    static const word WY_ADDR   = 0xff4a;
 
     sf::RenderWindow mainWindow;
 
@@ -40,4 +40,4 @@ private:
     sf::Color getColor(int bit, byte higher, byte lower, byte palette);
 };
 
-}  // namespace Gameboy
+}  // namespace gb

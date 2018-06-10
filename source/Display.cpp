@@ -1,6 +1,6 @@
 #include "Display.h"
 
-namespace Gameboy
+namespace gb
 {
 
 Display::Display()
@@ -164,4 +164,4 @@ sf::Color Display::getColor(int bit, byte higher, byte lower, byte palette)
     }
 }
 
-}  // namespace Gameboy
+}  // namespace gb

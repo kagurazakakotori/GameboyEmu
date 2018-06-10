@@ -7,7 +7,7 @@
 #include "Cartridge.h"
 #include "Common.h"
 
-namespace Gameboy
+namespace gb
 {
 
 class Memory
@@ -40,4 +40,4 @@ private:
     void boot();
 };
 
-}  // namespace Gameboy
+}  // namespace gb

@@ -3,8 +3,8 @@
 #include "CPU.h"
 #include "Memory.h"
 
-Gameboy::CPU cpu;
-Gameboy::Memory memory;
+gb::CPU cpu;
+gb::Memory memory;
 
 int main()
 {

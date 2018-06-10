@@ -4,9 +4,9 @@
 #include "Common.h"
 #include "Memory.h"
 
-extern Gameboy::Memory memory;
+extern gb::Memory memory;
 
-namespace Gameboy
+namespace gb
 {
 
 class CPU
@@ -109,4 +109,4 @@ private:
     void loadCbcode();
 };
 
-}  // namespace Gameboy
+}  // namespace gb

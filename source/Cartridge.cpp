@@ -1,6 +1,6 @@
 #include "Cartridge.h"
 
-namespace Gameboy
+namespace gb
 {
 
 Cartridge::Cartridge()
@@ -203,4 +203,4 @@ void Cartridge::getTitle()
     }
 }
 
-}  // namespace Gameboy
+}  // namespace gb

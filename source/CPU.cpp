@@ -5,7 +5,7 @@
 #include <iostream>
 #endif
 
-namespace Gameboy
+namespace gb
 {
 
 CPU::CPU()
@@ -791,4 +791,4 @@ void CPU::_daa()
 
 #pragma endregion
 
-}  // namespace Gameboy
+}  // namespace gb

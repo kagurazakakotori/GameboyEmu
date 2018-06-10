@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 
-namespace Gameboy
+namespace gb
 {
 
 class Cartridge
@@ -71,4 +71,4 @@ private:
     void getRamSize();
     void getTitle();
 };
-}  // namespace Gameboy
+}  // namespace gb
