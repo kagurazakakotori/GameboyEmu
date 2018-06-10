@@ -22,6 +22,8 @@ private:
     static const word SCX_ADDR  = 0xff43;
     static const word SCY_ADDR  = 0xff42;
     static const word BGP_ADDR  = 0xff47;
+    static const word WX_ADDR  = 0xff4b;
+    static const word WY_ADDR  = 0xff4a;
 
     sf::RenderWindow mainWindow;
 

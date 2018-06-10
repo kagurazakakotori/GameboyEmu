@@ -91,6 +91,58 @@ void Display::drawBackground(const int& scanline, const byte& lcdc)
     }
 }
 
+void Display::drawWindow(const int& scanline, const byte& lcdc)
+{
+    // Get window code area
+    bool windowCodeAreaFlag = getBit(lcdc, 6);
+    word tileMapAddr        = (windowCodeAreaFlag) ? 0x9c00 : 0x9800;
+
+    // Read register info
+    byte windowX = memory.readByte(WX_ADDR);
+    byte windowY = memory.readByte(WY_ADDR);
+    byte palette = memory.readByte(BGP_ADDR);
+
+    int screenY = scanline;
+    for (int screenX = 0; screenX < 160; screenX++) {
+        if (scanline < static_cast<int>(windowY)) {
+            window.setPixel(screenX, screenY, sf::Color::Transparent);
+        }
+        else {
+            int mapX = screenX + windowX - 7;
+            int mapY = screenY + windowY;
+
+            // Get character code
+            int  blockCol  = mapX / 8;
+            int  blockRow  = mapY / 8;
+            int  block     = (blockRow * 32) + blockCol;
+            word blockAddr = tileMapAddr + block;
+            byte chrCode   = memory.readByte(blockAddr);
+
+            // Get pixel position in tile
+            int tileX = screenX % 8;  // X always comes with 0, and its stored in reverse
+            int tileY = screenY % 8;
+
+            // Get BG character area
+            bool bgCharDataFlag = getBit(lcdc, 4);
+            byte bgCharDataAddr;
+            if (bgCharDataFlag) {
+                bgCharDataAddr = 0x8000 + (chrCode * 16);
+            }
+            else {
+                bgCharDataAddr = 0x9000 + (static_cast<int8_t>(chrCode) * 16);
+            }
+
+            // Get tile data
+            byte higher = memory.readByte(bgCharDataAddr + (tileY * 2) + 1);
+            byte lower  = memory.readByte(bgCharDataAddr + (tileY * 2));
+
+            // draw!
+            sf::Color color = getColor(7 - tileX, higher, lower, palette);
+            background.setPixel(screenX, screenY, color);
+        }
+    }
+}
+
 sf::Color Display::getColor(int bit, byte higher, byte lower, byte palette)
 {
     int color0 = palette & 0x03;
