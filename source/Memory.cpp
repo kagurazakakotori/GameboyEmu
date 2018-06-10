@@ -9,8 +9,7 @@ Memory::Memory()
     ram.assign(0x2000, 0x00);   // 8K Internal RAM
     oam.assign(0x100, 0x00);    // 256B OAM
     io.assign(0x80, 0x00);      // MMIO
-    hram.assign(0x7f, 0x00);    // 127B HRAM
-    interruptEnable = 0x00;
+    hram.assign(0x80, 0x00);    // 127B HRAM + IE at 0xffff
 }
 
 void Memory::loadRom(std::string romPath)
@@ -91,10 +90,7 @@ byte Memory::readByte(const word& address)
                 case 0xe00:
                     return oam[address & 0x00ff];
                 case 0xf00:
-                    if (address == 0xffff) {
-                        return interruptEnable;
-                    }
-                    else if (address >= 0xff80) {
+                    if (address >= 0xff80) {
                         return hram[address & 0x007f];
                     }
                     else {
@@ -160,11 +156,7 @@ void Memory::writeByte(const word& address, const byte value)
                     oam[address & 0x00ff] = value;
                     return;
                 case 0xf00:
-                    if (address == 0xffff) {
-                        interruptEnable = value;
-                        return;
-                    }
-                    else if (address >= 0xff80) {
+                    if (address >= 0xff80) {
                         hram[address & 0x007f] = value;
                         return;
                     }
@@ -216,7 +208,7 @@ void Memory::boot()
     io[0xff49 & 0xff] = 0xff;  // OBP1
     io[0xff4a & 0xff] = 0x00;  // WY
     io[0xff4b & 0xff] = 0x00;  // WX
-    interruptEnable   = 0x00;  // IE
+    hram[0xffff & 0x7f]   = 0x00;  // IE
 }
 
 }  // namespace Gameboy

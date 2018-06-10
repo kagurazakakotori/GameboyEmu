@@ -35,8 +35,6 @@ private:
     std::vector<byte> io;    // Memory-mapped I/O registers
     std::vector<byte> hram;  // High ram
 
-    byte interruptEnable;  // Interrupts Enable Register at 0xffff
-
     bool romLoaded = false;
 
     void boot();
