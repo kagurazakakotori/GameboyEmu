@@ -5,6 +5,7 @@ namespace gb
 
 Cartridge::Cartridge()
 {
+    rom.assign(0x800000, 0x00);	// Maxmium 8MB ROM
     ram.assign(0x20000, 0x00);  // Maxmium 128K External RAM (MBC5)
 }
 
@@ -201,6 +202,8 @@ void Cartridge::getTitle()
            _title += rom[i];
        }
     }
+
+	std::cout << "[INFO] Cartridge title: " << _title << std::endl;
 }
 
 }  // namespace gb
