@@ -92,6 +92,7 @@
     <ClCompile Include="source\Common.cpp" />
     <ClCompile Include="source\CPU.cpp" />
     <ClCompile Include="source\Display.cpp" />
+    <ClCompile Include="source\Gamepad.cpp" />
     <ClCompile Include="source\main.cpp" />
     <ClCompile Include="source\Memory.cpp" />
   </ItemGroup>
@@ -100,6 +101,7 @@
     <ClInclude Include="source\Common.h" />
     <ClInclude Include="source\CPU.h" />
     <ClInclude Include="source\Display.h" />
+    <ClInclude Include="source\Gamepad.h" />
     <ClInclude Include="source\Memory.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -93,6 +93,9 @@ byte Memory::readByte(const word& address)
                     if (address >= 0xff80) {
                         return hram[address & 0x007f];
                     }
+                    else if (address == 0xff00) {  // Joypad
+                        return gamepad.readByte();
+                    }
                     else {
                         return io[address & 0x00ff];
                         // TODO: I/O handling
@@ -160,6 +163,10 @@ void Memory::writeByte(const word& address, const byte value)
                         hram[address & 0x007f] = value;
                         return;
                     }
+                    else if (address == 0xff00) {  // Joypad
+                        gamepad.writeByte(value);
+                        return;
+                    }
                     else {
                         io[address & 0x00ff] = value;
                         return;
@@ -177,7 +184,6 @@ void Memory::writeWord(const word& address, const word value)
 
 void Memory::boot()
 {
-    io[0xff00 & 0xff]   = 0x00;  // Leaving all keys unpressed
     io[0xff05 & 0xff]   = 0x00;  // TIMA
     io[0xff06 & 0xff]   = 0x00;  // TMA
     io[0xff07 & 0xff]   = 0x00;  // TAC

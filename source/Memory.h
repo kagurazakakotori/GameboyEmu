@@ -6,6 +6,9 @@
 #include <vector>
 #include "Cartridge.h"
 #include "Common.h"
+#include "Gamepad.h"
+
+extern gb::Gamepad gamepad;
 
 namespace gb
 {
