@@ -3,7 +3,7 @@
 namespace gb
 {
 
-Display::Display()
+Display::Display(Memory& _memory) : memory(_memory)
 {
     // initialize colorset
     colorSet[0] = sf::Color(255, 255, 255);
@@ -16,6 +16,8 @@ Display::Display()
     background.create(160, 144, sf::Color::Transparent);
     window.create(160, 144, sf::Color::Transparent);
     sprite.create(160, 144, sf::Color::Transparent);
+
+    std::cout << "[INFO] Display module initialized" << std::endl;
 }
 
 void Display::renderScanline(byte scanline)

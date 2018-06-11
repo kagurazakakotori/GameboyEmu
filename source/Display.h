@@ -1,10 +1,9 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <array>
+#include <iostream>
 #include "Common.h"
 #include "Memory.h"
-
-extern gb::Memory memory;
 
 namespace gb
 {
@@ -12,7 +11,7 @@ namespace gb
 class Display
 {
 public:
-    Display();
+    Display(Memory& _memory);
 
     void render();
     void renderScanline(byte scanline);
@@ -24,6 +23,8 @@ private:
     static const word BGP_ADDR  = 0xff47;
     static const word WX_ADDR   = 0xff4b;
     static const word WY_ADDR   = 0xff4a;
+
+    Memory& memory;
 
     sf::RenderWindow mainWindow;
 

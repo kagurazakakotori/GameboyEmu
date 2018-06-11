@@ -1,3 +1,4 @@
+#pragma once 
 #include <SFML/Window.hpp>
 #include <array>
 #include <iostream>

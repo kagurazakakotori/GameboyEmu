@@ -8,15 +8,13 @@
 #include "Common.h"
 #include "Gamepad.h"
 
-extern gb::Gamepad gamepad;
-
 namespace gb
 {
 
 class Memory
 {
 public:
-    Memory();
+    Memory(Gamepad& _gamepad);
 
     void dump();
 
@@ -31,6 +29,7 @@ public:
 
 private:
     Cartridge cart;
+    Gamepad& gamepad;
 
     std::vector<byte> vram;  // Video RAM
     std::vector<byte> ram;   // Working RAM ( 8k internal RAM since it is not GameBoy Color )

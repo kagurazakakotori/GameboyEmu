@@ -1,14 +1,10 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
-#include "CPU.h"
-#include "Memory.h"
-
-gb::CPU cpu;
-gb::Memory memory;
+#include "Gameboy.h"
 
 int main()
 {
-    cpu.init();
+    gb::Gameboy();
 
     // A simple SFML test
     sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");

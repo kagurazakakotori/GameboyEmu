@@ -1,10 +1,10 @@
 #pragma once
 #include <array>
 #include <functional>
+#include <ios>
+#include <iostream>
 #include "Common.h"
 #include "Memory.h"
-
-extern gb::Memory memory;
 
 namespace gb
 {
@@ -12,7 +12,7 @@ namespace gb
 class CPU
 {
 public:
-    CPU();
+    CPU(Memory& _memory);
 
     void init();
     void exec();
@@ -22,6 +22,8 @@ private:
     static const int FLAG_N = 6;  // Add/Sub-Flag
     static const int FLAG_H = 5;  // Half Carry Flag
     static const int FLAG_C = 4;  // Carry
+
+    Memory& memory;
 
     struct Register
     {

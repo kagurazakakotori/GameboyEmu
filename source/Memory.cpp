@@ -3,13 +3,15 @@
 namespace gb
 {
 
-Memory::Memory()
+Memory::Memory(Gamepad& _gamepad) : gamepad(_gamepad)
 {
     vram.assign(0x2000, 0x00);  // 8K VRAM
     ram.assign(0x2000, 0x00);   // 8K Internal RAM
     oam.assign(0x100, 0x00);    // 256B OAM
     io.assign(0x80, 0x00);      // MMIO
     hram.assign(0x80, 0x00);    // 127B HRAM + IE at 0xffff
+
+    std::cout << "[INFO] MMU initialized" << std::endl;
 }
 
 void Memory::loadRom(std::string romPath)
