@@ -16,6 +16,7 @@ public:
     void renderFrame();
     void renderScanline(byte scanline);
 
+    sf::RenderWindow screen;
 private:
     static const word LCDC_ADDR = 0xff40;
     static const word SCX_ADDR  = 0xff43;
@@ -25,8 +26,6 @@ private:
     static const word WY_ADDR   = 0xff4a;
 
     Memory& memory;
-
-    sf::RenderWindow screen;
 
     sf::Image background;
     sf::Image window;

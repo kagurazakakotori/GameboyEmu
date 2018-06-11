@@ -22,7 +22,7 @@ Display::Display(Memory& _memory) : memory(_memory)
 
 void Display::renderFrame()
 {
-    bool isLcdcOn = getBit(memory.readByte, 7);
+    bool isLcdcOn = getBit(memory.readByte(LCDC_ADDR), 7);
     if(!isLcdcOn){
         return;
     }
