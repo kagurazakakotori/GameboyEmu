@@ -13,7 +13,7 @@ class Display
 public:
     Display(Memory& _memory);
 
-    void render();
+    void renderFrame();
     void renderScanline(byte scanline);
 
 private:
@@ -26,7 +26,7 @@ private:
 
     Memory& memory;
 
-    sf::RenderWindow mainWindow;
+    sf::RenderWindow screen;
 
     sf::Image background;
     sf::Image window;

@@ -11,13 +11,40 @@ Display::Display(Memory& _memory) : memory(_memory)
     colorSet[2] = sf::Color(96, 96, 96);
     colorSet[3] = sf::Color(0, 0, 0);
 
-    mainWindow.create(sf::VideoMode(160, 144), "screen0");
+    screen.create(sf::VideoMode(160, 144), "screen");
 
     background.create(160, 144, sf::Color::Transparent);
     window.create(160, 144, sf::Color::Transparent);
     sprite.create(160, 144, sf::Color::Transparent);
 
     std::cout << "[INFO] Display module initialized" << std::endl;
+}
+
+void Display::renderFrame()
+{
+    bool isLcdcOn = getBit(memory.readByte, 7);
+    if(!isLcdcOn){
+        return;
+    }
+    screen.clear();
+
+    sf::Texture backgroundTexture;
+    sf::Texture windowTexture;
+    sf::Texture spriteTexture;
+
+    backgroundTexture.loadFromImage(background);
+    windowTexture.loadFromImage(window);
+    spriteTexture.loadFromImage(sprite);
+
+    sf::Sprite backgroundSprite(backgroundTexture);
+    sf::Sprite windowSprite(windowTexture);
+    sf::Sprite spriteSprite(spriteTexture);
+
+    screen.draw(backgroundSprite);
+    screen.draw(windowSprite);
+    screen.draw(spriteSprite);
+
+    screen.display();
 }
 
 void Display::renderScanline(byte scanline)
@@ -140,7 +167,7 @@ void Display::drawWindow(const int& scanline, const byte& lcdc)
 
             // draw!
             sf::Color color = getColor(7 - tileX, higher, lower, palette);
-            background.setPixel(screenX, screenY, color);
+            window.setPixel(screenX, screenY, color);
         }
     }
 }
