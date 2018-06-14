@@ -5,7 +5,7 @@ namespace gb
 
 /* Note: In gamepad, 0 is pressed! */
 
-Gamepad::Gamepad()
+Gamepad::Gamepad(Memory& _memory) : memory(_memory)
 {
     col = 0x00;
     row.fill(0x0f);
@@ -39,6 +39,8 @@ void Gamepad::writeByte(const byte& value)
 
 void Gamepad::keyDown(sf::Keyboard::Key key)
 {
+    requestInterrupt();
+    
     switch (key) {
         case sf::Keyboard::D:  // P14+P10 RIGHT
             row[0] &= 0b1110;
@@ -95,6 +97,12 @@ void Gamepad::keyUp(sf::Keyboard::Key key)
             row[1] |= 0b1000;
             return;
     }
+}
+
+void Gamepad::requestInterrupt(){
+    byte interruptFlag = memory.readByte(IF_ADDR);
+    setBit(interruptFlag, 4, 1);
+    memory.writeByte(IF_ADDR, interruptFlag);
 }
 
 }  // namespace gb
