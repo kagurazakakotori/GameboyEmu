@@ -4,14 +4,14 @@ namespace gb
 {
 
 Gameboy::Gameboy()
-    : gamepad(memory), memory(gamepad), cpu(memory), display(memory)
+    : memory(), cpu(memory), display(memory), gamepad(memory)
 {
     std::cout << "[INFO] Gameboy Running!" << std::endl;
 }
 
 void Gameboy::init(){
     cpu.init();
-    memory.init();
+    memory.init(&gamepad);
 }
 
 void Gameboy::run()

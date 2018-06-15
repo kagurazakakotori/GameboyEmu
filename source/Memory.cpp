@@ -3,7 +3,7 @@
 namespace gb
 {
 
-Memory::Memory(Gamepad& _gamepad) : gamepad(_gamepad)
+Memory::Memory()
 {
     vram.assign(0x2000, 0x00);  // 8K VRAM
     ram.assign(0x2000, 0x00);   // 8K Internal RAM
@@ -21,15 +21,15 @@ void Memory::loadRom(std::string romPath)
     char b;
     int  i = 0;
     while (file.get(b)) {
-        cart.rom[i] = static_cast<byte>(b);
-        i++;
+        cart.rom.push_back(static_cast<byte>(b));
     }
 
     std::cout << "[INFO] ROM loaded successfully" << std::endl;
 }
 
-void Memory::init()
+void Memory::init(Gamepad* _gamepad)
 {
+    gamepad = _gamepad;
     // Emulate BIOS operations on boot
     boot();
 
@@ -96,7 +96,7 @@ byte Memory::readByte(const word& address)
                         return hram[address & 0x007f];
                     }
                     else if (address == 0xff00) {  // Joypad
-                        return gamepad.readByte();
+                        return gamepad->readByte();
                     }
                     else {
                         return io[address & 0x00ff];
@@ -166,7 +166,7 @@ void Memory::writeByte(const word& address, const byte value)
                         return;
                     }
                     else if (address == 0xff00) {  // Joypad
-                        gamepad.writeByte(value);
+                        gamepad->writeByte(value);
                         return;
                     }
                     else {

@@ -21,10 +21,10 @@ public:
     void run();
 
 private:
-    Gamepad gamepad;
     Memory  memory;
     CPU     cpu;
     Display display;
+    Gamepad gamepad;
 
     bool romloaded   = false;
     bool initialized = false;

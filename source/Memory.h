@@ -11,10 +11,12 @@
 namespace gb
 {
 
+class Gamepad;
+
 class Memory
 {
 public:
-    Memory(Gamepad& _gamepad);
+    Memory();
 
     void dump();
 
@@ -25,11 +27,11 @@ public:
     void writeWord(const word& address, const word value);
 
     void loadRom(std::string path);
-    void init();
+    void init(Gamepad* _gamepad);
 
 private:
     Cartridge cart;
-    Gamepad& gamepad;
+    Gamepad* gamepad;
 
     std::vector<byte> vram;  // Video RAM
     std::vector<byte> ram;   // Working RAM ( 8k internal RAM since it is not GameBoy Color )
