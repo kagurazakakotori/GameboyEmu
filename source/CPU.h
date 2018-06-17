@@ -71,7 +71,7 @@ private:
         word pc;
     } reg;
 
-    uint64_t clock;
+    int cycle;
 
     bool interruptMasterEnable = false;
     bool halt                  = false;

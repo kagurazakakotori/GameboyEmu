@@ -96,6 +96,7 @@
     <ClCompile Include="source\Gamepad.cpp" />
     <ClCompile Include="source\main.cpp" />
     <ClCompile Include="source\Memory.cpp" />
+    <ClCompile Include="source\Opcode.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\Cartridge.h" />
