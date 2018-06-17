@@ -23,7 +23,7 @@ Display::Display(Memory& _memory) : memory(_memory)
 void Display::renderFrame()
 {
     bool isLcdcOn = getBit(memory.readByte(LCDC_ADDR), 7);
-    if(!isLcdcOn){
+    if (!isLcdcOn) {
         return;
     }
     screen.clear();
@@ -47,7 +47,7 @@ void Display::renderFrame()
     screen.display();
 }
 
-void Display::renderScanline(byte scanline)
+void Display::renderScanline(const int& scanline)
 {
     byte lcdc = memory.readByte(LCDC_ADDR);
 
@@ -64,6 +64,8 @@ void Display::renderScanline(byte scanline)
 
     // TODO: Sprite
     //drawSprite(scanline);
+
+    scanlineRendered++;
 }
 
 void Display::drawBackground(const int& scanline, const byte& lcdc)
@@ -191,6 +193,79 @@ sf::Color Display::getColor(int bit, byte higher, byte lower, byte palette)
         case 3:
             return colorSet[color3];
     }
+}
+
+void Display::updateStat()
+{
+    byte stat        = memory.readByte(STAT_ADDR);
+    byte scanline    = memory.readByte(LY_ADDR);  // LY
+    int  modeCurrent = stat & 0x03;
+    int  modeToSet;
+    bool requestInterruptFlag;
+
+    int oamThreshold  = 456 - 80;        // One line - Scanline(OAM)
+    int vramThreshold = 456 - 80 - 172;  // One line - Scanline(OAM) - Scanline(VRAM)
+
+    if (scanline >= 144) {  // V-Blank
+        modeToSet = 1;
+        setMode(stat, 0, 1);
+        requestInterruptFlag = getBit(stat, 4);
+    }
+    else {
+        if (scanlineCount >= oamThreshold) {  // OAM
+            modeToSet = 2;
+            setMode(stat, 1, 0);
+            requestInterruptFlag = getBit(stat, 5);
+        }
+        else if (scanlineCount >= vramThreshold) {  // VRAM
+            modeToSet = 3;
+            setMode(stat, 1, 1);
+        }
+        else {  // H-Blank
+            modeToSet = 0;
+            // If first time for H-blank, update scanline
+            if (modeToSet != modeCurrent) {
+                if (scanline < 144 && scanlineRendered <= 144) {
+                    renderScanline(scanline);
+                }
+            }
+            setMode(stat, 0, 0);
+            requestInterruptFlag = getBit(stat, 3);
+        }
+    }
+
+    // If enter new mode, request STAT interrupt
+    if (requestInterruptFlag && (modeToSet != modeCurrent)) {
+        requestInterrupt(1);
+    }
+
+    // Update LYC status
+    if (scanline == memory.readByte(LYC_ADDR)) {
+        setBit(stat, 2, 1);
+        if (getBit(stat, 6)) {
+            requestInterrupt(1);
+        }
+    }
+    else {
+        setBit(stat, 2, 0);
+    }
+
+    memory.writeByte(STAT_ADDR, stat);
+}
+
+void Display::setMode(byte& stat, const bool& bit1, const bool& bit0)
+{
+    setBit(stat, 1, bit1);
+    setBit(stat, 0, bit0);
+}
+
+void Display::requestInterrupt(const int& interruptType)
+{
+    // 0: V-Blank Interrupt
+    // 1: LCD STAT Interrupt
+    byte interruptFlag = memory.readByte(IF_ADDR);
+    setBit(interruptFlag, interruptType, 1);
+    memory.writeByte(IF_ADDR, interruptFlag);
 }
 
 }  // namespace gb
