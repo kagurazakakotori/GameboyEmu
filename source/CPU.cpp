@@ -38,4 +38,58 @@ void CPU::exec()
 #endif
 }
 
+void CPU::handleInterrupt()
+{
+    byte interruptFlag   = memory.readByte(IF_ADDR);
+    byte interruptEnable = memory.readByte(IE_ADDR);
+    byte interruptFired  = interruptFlag & interruptEnable;
+
+    if (interruptFlag && interruptEnable) {
+        // Handle the HALT bug
+        if (halt) {
+            halt = false;
+            reg.pc++;
+        }
+
+        // Service interrupt
+        for (int i = 0; i < 5; i++) {
+            if (getBit(interruptFired, i) && interruptMasterEnable) {
+                serviceInterrupt(i);
+            }
+        }
+    }
+}
+
+void CPU::serviceInterrupt(const int& interruptType)
+{
+    byte interruptFlag = memory.readByte(IF_ADDR);
+    setBit(interruptFlag, interruptType, 0);
+    memory.writeByte(IF_ADDR, interruptFlag);
+
+    interruptMasterEnable = false;
+
+    // Push current PC onto stack
+    memory.writeByte(--reg.sp, ((reg.pc & 0xf0) >> 8));
+    memory.writeByte(--reg.sp, (reg.pc & 0x0f));
+
+    // Set PC
+    switch (interruptType) {
+        case INTERRUPT_VBLANK:
+            reg.pc = 0x40;
+            return;
+        case INTERRUPT_STAT:
+            reg.pc = 0x48;
+            return;
+        case INTERRUPT_TIMER:
+            reg.pc = 0x50;
+            return;
+        case INTERRUPT_SERIAL:
+            reg.pc = 0x58;
+            return;
+        case INTERRUPT_JOYPAD:
+            reg.pc = 0x60;
+            return;
+    }
+}
+
 }  // namespace gb

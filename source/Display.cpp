@@ -236,14 +236,14 @@ void Display::updateStat()
 
     // If enter new mode, request STAT interrupt
     if (requestInterruptFlag && (modeToSet != modeCurrent)) {
-        requestInterrupt(1);
+        requestInterrupt(INTERRUPT_STAT);
     }
 
     // Update LYC status
     if (scanline == memory.readByte(LYC_ADDR)) {
         setBit(stat, 2, 1);
         if (getBit(stat, 6)) {
-            requestInterrupt(1);
+            requestInterrupt(INTERRUPT_STAT);
         }
     }
     else {
@@ -261,8 +261,6 @@ void Display::setMode(byte& stat, const bool& bit1, const bool& bit0)
 
 void Display::requestInterrupt(const int& interruptType)
 {
-    // 0: V-Blank Interrupt
-    // 1: LCD STAT Interrupt
     byte interruptFlag = memory.readByte(IF_ADDR);
     setBit(interruptFlag, interruptType, 1);
     memory.writeByte(IF_ADDR, interruptFlag);

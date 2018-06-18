@@ -17,6 +17,8 @@ public:
     void init();
     void exec();
 
+    void handleInterrupt();
+
 private:
     static const int FLAG_Z = 7;  // Zero Flag
     static const int FLAG_N = 6;  // Add/Sub-Flag
@@ -75,6 +77,8 @@ private:
 
     bool interruptMasterEnable = false;
     bool halt                  = false;
+
+    void serviceInterrupt(const int& interruptType);
 
     // Flag register operations
     inline bool getFlag(int bit);
