@@ -21,6 +21,10 @@ public:
     void run();
 
 private:
+    static const int FREQUENCY = 4194304;
+    static const int CYCLE_PER_FRAME = 69905;
+    static const sf::Int64 FRAME_INTERVAL = 16667;
+
     Memory  memory;
     CPU     cpu;
     Display display;

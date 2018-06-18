@@ -12,6 +12,8 @@ namespace gb
 class CPU
 {
 public:
+    int cycle;
+
     CPU(Memory& _memory);
 
     void init();
@@ -72,8 +74,6 @@ private:
         word sp;
         word pc;
     } reg;
-
-    int cycle;
 
     bool interruptMasterEnable = false;
     bool halt                  = false;

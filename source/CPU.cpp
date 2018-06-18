@@ -30,12 +30,10 @@ void CPU::exec()
     byte value = memory.readByte(reg.pc++);
     cycle += opcode[value]();
 
-#ifdef DEBUG_MODE
-    std::cout << "[INFO] Executing " << std::hex << value << std::endl;
-    std::cout << "[INFO] Registers " << std::hex
-              << "AF: " << reg.af << "BC: " << reg.bc << "DE: " << reg.de
-              << "HL: " << reg.hl << "SP: " << reg.sp << "PC: " << reg.pc << std::endl;
-#endif
+    //std::cout << "[INFO] Executing " << std::hex << value << std::endl;
+    //std::cout << "[INFO] Registers " << std::hex
+    //          << "AF: " << reg.af << "   BC: " << reg.bc << "   DE: " << reg.de
+    //          << "   HL: " << reg.hl << "   SP: " << reg.sp << "   PC: " << reg.pc << std::endl;
 }
 
 void CPU::handleInterrupt()

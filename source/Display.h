@@ -11,10 +11,11 @@ namespace gb
 class Display
 {
 public:
+    int scanlineRendered = 0;
+
     Display(Memory& _memory);
 
-    void renderFrame();
-    void renderScanline(const int& scanline);
+    void refresh(const int& cycle);
 
     sf::RenderWindow screen;
 
@@ -37,9 +38,10 @@ private:
 
     std::array<sf::Color, 4> colorSet;
 
-    int scanlineCount;
-    int scanlineRendered;
+    int scanlineCount = 456;
 
+    void renderFrame();
+    void renderScanline(const int& scanline);
     void drawBackground(const int& scanline, const byte& lcdc);
     void drawWindow(const int& scanline, const byte& lcdc);
     void drawSprite(const int& scanline, const byte& lcdc);

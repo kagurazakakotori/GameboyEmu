@@ -20,6 +20,34 @@ Display::Display(Memory& _memory) : memory(_memory)
     std::cout << "[INFO] Display module initialized" << std::endl;
 }
 
+void Display::refresh(const int& cycle)
+{
+    scanlineCount -= cycle;
+    updateStat();
+
+    if (memory.readByte(LY_ADDR) > 153) {
+        memory.writeByte(LY_ADDR, 0);
+    }
+
+    if (scanlineCount <= 0) {
+        byte currentScanline = memory.readByte(LY_ADDR);
+        currentScanline++;
+        memory.writeByte(LY_ADDR, currentScanline);
+        scanlineCount = 456;  // Reset counter
+
+        // Handle V-Blank
+        if (currentScanline == 144) {
+            requestInterrupt(INTERRUPT_VBLANK);
+            if (scanlineRendered <= 144) {
+                renderFrame();
+            }
+        }
+        else if (currentScanline > 153) {
+            memory.writeByte(LY_ADDR, 0);
+        }
+    }
+}
+
 void Display::renderFrame()
 {
     bool isLcdcOn = getBit(memory.readByte(LCDC_ADDR), 7);
@@ -201,7 +229,7 @@ void Display::updateStat()
     byte scanline    = memory.readByte(LY_ADDR);  // LY
     int  modeCurrent = stat & 0x03;
     int  modeToSet;
-    bool requestInterruptFlag;
+    bool requestInterruptFlag = 0;
 
     int oamThreshold  = 456 - 80;        // One line - Scanline(OAM)
     int vramThreshold = 456 - 80 - 172;  // One line - Scanline(OAM) - Scanline(VRAM)
