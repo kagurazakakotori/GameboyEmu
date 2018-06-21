@@ -325,15 +325,15 @@ void CPU::loadOpcode()
     opcode[0x18] = [&]() -> int { reg.pc += (static_cast<int8_t>(memory.readByte(reg.pc)) + 1); return 8; };
 
     // JR CC
-    opcode[0x20] = [&]() -> int { if (getFlag(FLAG_Z) == 0) { reg.pc += (static_cast<int8_t>(memory.readByte(reg.pc)) + 1); return 12; } else { reg.pc += 2; return 8; } };
-    opcode[0x28] = [&]() -> int { if (getFlag(FLAG_Z) == 1) { reg.pc += (static_cast<int8_t>(memory.readByte(reg.pc)) + 1); return 12; } else { reg.pc += 2; return 8; } };
-    opcode[0x30] = [&]() -> int { if (getFlag(FLAG_C) == 0) { reg.pc += (static_cast<int8_t>(memory.readByte(reg.pc)) + 1); return 12; } else { reg.pc += 2; return 8; } };
-    opcode[0x38] = [&]() -> int { if (getFlag(FLAG_C) == 1) { reg.pc += (static_cast<int8_t>(memory.readByte(reg.pc)) + 1); return 12; } else { reg.pc += 2; return 8; } };
+    opcode[0x20] = [&]() -> int { if (getFlag(FLAG_Z) == 0) { reg.pc += (static_cast<int8_t>(memory.readByte(reg.pc)) + 1); return 12; } else { reg.pc++ ; return 8; } };
+    opcode[0x28] = [&]() -> int { if (getFlag(FLAG_Z) == 1) { reg.pc += (static_cast<int8_t>(memory.readByte(reg.pc)) + 1); return 12; } else { reg.pc++ ; return 8; } };
+    opcode[0x30] = [&]() -> int { if (getFlag(FLAG_C) == 0) { reg.pc += (static_cast<int8_t>(memory.readByte(reg.pc)) + 1); return 12; } else { reg.pc++ ; return 8; } };
+    opcode[0x38] = [&]() -> int { if (getFlag(FLAG_C) == 1) { reg.pc += (static_cast<int8_t>(memory.readByte(reg.pc)) + 1); return 12; } else { reg.pc++ ; return 8; } };
 
     // CALL nn
     opcode[0xcd] = [&]() -> int { reg.sp -= 2; memory.writeWord(reg.sp, (reg.pc + 2)); reg.pc = memory.readWord(reg.pc); return 24; };
 
-    // CALL nn
+    // CALL cc,nn
     opcode[0xc4] = [&]() -> int { if (getFlag(FLAG_Z) == 0) { reg.sp -= 2; memory.writeWord(reg.sp, (reg.pc + 2)); reg.pc = memory.readWord(reg.pc); return 24; } else { reg.pc += 2; return 12; } };
     opcode[0xcc] = [&]() -> int { if (getFlag(FLAG_Z) == 1) { reg.sp -= 2; memory.writeWord(reg.sp, (reg.pc + 2)); reg.pc = memory.readWord(reg.pc); return 24; } else { reg.pc += 2; return 12; } };
     opcode[0xd4] = [&]() -> int { if (getFlag(FLAG_C) == 0) { reg.sp -= 2; memory.writeWord(reg.sp, (reg.pc + 2)); reg.pc = memory.readWord(reg.pc); return 24; } else { reg.pc += 2; return 12; } };
@@ -595,7 +595,7 @@ void CPU::_cp(const byte& value)
 
 void CPU::_inc(byte& target)
 {
-    int result = target++;
+    int result = target + 1;
     setFlag(FLAG_Z, ((result & 0xff) == 0));
     setFlag(FLAG_N, 0);
     setFlag(FLAG_H, (((target & 0xf) + 1) & 0x10));
@@ -604,7 +604,7 @@ void CPU::_inc(byte& target)
 
 void CPU::_dec(byte& target)
 {
-    int result = target--;
+    int result = target - 1;
     setFlag(FLAG_Z, ((result & 0xff) == 0));
     setFlag(FLAG_N, 1);
     setFlag(FLAG_H, (((target & 0xf) - 1) < 0));
