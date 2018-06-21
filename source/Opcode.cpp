@@ -145,7 +145,7 @@ void CPU::loadOpcode()
 
     // LD HL,SP+e(signed int8)
     opcode[0xf8] = [&]() -> int { 
-        int8_t e = memory.readByte(reg.pc);
+        int16_t e = static_cast<int8_t>(memory.readByte(reg.pc));
         reg.pc++;
         word result = reg.sp + e;
         setFlag(FLAG_Z, 0);
@@ -275,7 +275,7 @@ void CPU::loadOpcode()
 
     // ADD SP,e
     opcode[0xe8] = [&]() -> int {
-        int8_t e = memory.readByte(reg.pc);
+        int16_t e = static_cast<int8_t>(memory.readByte(reg.pc));
         reg.pc++;
         word result = reg.sp + e;
         setFlag(FLAG_Z, 0);
@@ -310,25 +310,25 @@ void CPU::loadOpcode()
     opcode[0x1f] = [&]() -> int { _rr(reg.a); return 4; };
 
     // JP, nn
-    opcode[0xc3] = [&]() -> int { reg.pc = memory.readWord(reg.pc); return 12; };
+    opcode[0xc3] = [&]() -> int { reg.pc = memory.readWord(reg.pc); return 16; };
 
     // JP cc,nn
-    opcode[0xc2] = [&]() -> int { if (getFlag(FLAG_Z) == 0) { reg.pc = memory.readWord(reg.pc); } else { reg.pc += 2; } return 12; };
-    opcode[0xca] = [&]() -> int { if (getFlag(FLAG_Z) == 1) { reg.pc = memory.readWord(reg.pc); } else { reg.pc += 2; } return 12; };
-    opcode[0xd2] = [&]() -> int { if (getFlag(FLAG_C) == 0) { reg.pc = memory.readWord(reg.pc); } else { reg.pc += 2; } return 12; };
-    opcode[0xda] = [&]() -> int { if (getFlag(FLAG_C) == 1) { reg.pc = memory.readWord(reg.pc); } else { reg.pc += 2; } return 12; };
+    opcode[0xc2] = [&]() -> int { if (getFlag(FLAG_Z) == 0) { reg.pc = memory.readWord(reg.pc); return 16; } else { reg.pc += 2; return 12; } };
+    opcode[0xca] = [&]() -> int { if (getFlag(FLAG_Z) == 1) { reg.pc = memory.readWord(reg.pc); return 16; } else { reg.pc += 2; return 12; } };
+    opcode[0xd2] = [&]() -> int { if (getFlag(FLAG_C) == 0) { reg.pc = memory.readWord(reg.pc); return 16; } else { reg.pc += 2; return 12; } };
+    opcode[0xda] = [&]() -> int { if (getFlag(FLAG_C) == 1) { reg.pc = memory.readWord(reg.pc); return 16; } else { reg.pc += 2; return 12; } };
 
     // JP (HL)
     opcode[0xe9] = [&]() -> int { reg.pc = reg.hl; return 4; };
 
     // JR n
-    opcode[0x18] = [&]() -> int { reg.pc += static_cast<int8_t>(memory.readByte(reg.pc)); return 8; };
+    opcode[0x18] = [&]() -> int { reg.pc += (static_cast<int8_t>(memory.readByte(reg.pc)) + 1); return 8; };
 
     // JR CC
-    opcode[0xc2] = [&]() -> int { if (getFlag(FLAG_Z) == 0) { reg.pc += static_cast<int8_t>(memory.readByte(reg.pc)); } else { reg.pc += 2; } return 8; };
-    opcode[0xca] = [&]() -> int { if (getFlag(FLAG_Z) == 1) { reg.pc += static_cast<int8_t>(memory.readByte(reg.pc)); } else { reg.pc += 2; } return 8; };
-    opcode[0xd2] = [&]() -> int { if (getFlag(FLAG_C) == 0) { reg.pc += static_cast<int8_t>(memory.readByte(reg.pc)); } else { reg.pc += 2; } return 8; };
-    opcode[0xda] = [&]() -> int { if (getFlag(FLAG_C) == 1) { reg.pc += static_cast<int8_t>(memory.readByte(reg.pc)); } else { reg.pc += 2; } return 8; };
+    opcode[0x20] = [&]() -> int { if (getFlag(FLAG_Z) == 0) { reg.pc += (static_cast<int8_t>(memory.readByte(reg.pc)) + 1); return 12; } else { reg.pc += 2; return 8; } };
+    opcode[0x28] = [&]() -> int { if (getFlag(FLAG_Z) == 1) { reg.pc += (static_cast<int8_t>(memory.readByte(reg.pc)) + 1); return 12; } else { reg.pc += 2; return 8; } };
+    opcode[0x30] = [&]() -> int { if (getFlag(FLAG_C) == 0) { reg.pc += (static_cast<int8_t>(memory.readByte(reg.pc)) + 1); return 12; } else { reg.pc += 2; return 8; } };
+    opcode[0x38] = [&]() -> int { if (getFlag(FLAG_C) == 1) { reg.pc += (static_cast<int8_t>(memory.readByte(reg.pc)) + 1); return 12; } else { reg.pc += 2; return 8; } };
 
     // CALL nn
     opcode[0xcd] = [&]() -> int { reg.sp -= 2; memory.writeWord(reg.sp, (reg.pc + 2)); reg.pc = memory.readWord(reg.pc); return 12; };

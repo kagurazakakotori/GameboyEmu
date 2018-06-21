@@ -75,6 +75,8 @@ private:
         word pc;
     } reg;
 
+	int instrCnt;
+
     bool interruptMasterEnable = false;
     bool halt                  = false;
 
