@@ -27,12 +27,16 @@ void CPU::init()
 
 void CPU::exec()
 {
+    word pc    = reg.pc;
     byte value = memory.readByte(reg.pc++);
     cycle += opcode[value]();
 
-	instrCnt++;
-    std::cout << "[INFO] " << std::dec << "[" << instrCnt << "] Executing " << std::showbase << std::hex << (int)value << std::endl;
+    /*  For debugging use
+    instrCnt++;
+    std::cout << "[INFO] " << std::dec << "[" << instrCnt << "] [Cycle:" << cycle << "] Executing " << std::showbase << std::hex << (int) value << " at " << pc << std::endl;
     std::cout << "[INFO] " << std::showbase << std::hex << "AF: " << reg.af << "   BC: " << reg.bc << "   DE: " << reg.de << "   HL: " << reg.hl << "   SP: " << reg.sp << "   PC: " << reg.pc << std::endl;
+    std::cout << "[INFO] Stack pointer value: " << std::showbase << std::hex << memory.readWord(reg.sp) << std::endl;
+    */
 }
 
 void CPU::handleInterrupt()
@@ -66,8 +70,8 @@ void CPU::serviceInterrupt(const int& interruptType)
     interruptMasterEnable = false;
 
     // Push current PC onto stack
-    memory.writeByte(--reg.sp, ((reg.pc & 0xf0) >> 8));
-    memory.writeByte(--reg.sp, (reg.pc & 0x0f));
+    memory.writeByte(--reg.sp, ((reg.pc & 0xff00) >> 8));
+    memory.writeByte(--reg.sp, (reg.pc & 0x00ff));
 
     // Set PC
     switch (interruptType) {
