@@ -159,10 +159,10 @@ void CPU::loadOpcode()
     opcode[0x08] = [&]() -> int { memory.writeWord(reg.pc, reg.sp); reg.pc += 2; return 20; };
 
     // PUSH nn
-    opcode[0xf5] = [&]() -> int { reg.sp--; memory.writeByte(reg.sp, reg.a); reg.sp--; memory.writeByte(reg.sp, reg.f); return 12; };
-    opcode[0xc5] = [&]() -> int { reg.sp--; memory.writeByte(reg.sp, reg.b); reg.sp--; memory.writeByte(reg.sp, reg.c); return 12; };
-    opcode[0xd5] = [&]() -> int { reg.sp--; memory.writeByte(reg.sp, reg.d); reg.sp--; memory.writeByte(reg.sp, reg.e); return 12; };
-    opcode[0xe5] = [&]() -> int { reg.sp--; memory.writeByte(reg.sp, reg.h); reg.sp--; memory.writeByte(reg.sp, reg.l); return 12; };
+    opcode[0xf5] = [&]() -> int { reg.sp--; memory.writeByte(reg.sp, reg.a); reg.sp--; memory.writeByte(reg.sp, reg.f); return 16; };
+    opcode[0xc5] = [&]() -> int { reg.sp--; memory.writeByte(reg.sp, reg.b); reg.sp--; memory.writeByte(reg.sp, reg.c); return 16; };
+    opcode[0xd5] = [&]() -> int { reg.sp--; memory.writeByte(reg.sp, reg.d); reg.sp--; memory.writeByte(reg.sp, reg.e); return 16; };
+    opcode[0xe5] = [&]() -> int { reg.sp--; memory.writeByte(reg.sp, reg.h); reg.sp--; memory.writeByte(reg.sp, reg.l); return 16; };
 
     // POP nn
     opcode[0xf1] = [&]() -> int { reg.f = memory.readByte(reg.sp); reg.sp++; reg.a = memory.readByte(reg.sp); reg.sp++; return 12; };
@@ -322,7 +322,7 @@ void CPU::loadOpcode()
     opcode[0xe9] = [&]() -> int { reg.pc = reg.hl; return 4; };
 
     // JR n
-    opcode[0x18] = [&]() -> int { reg.pc += (static_cast<int8_t>(memory.readByte(reg.pc)) + 1); return 8; };
+    opcode[0x18] = [&]() -> int { reg.pc += (static_cast<int8_t>(memory.readByte(reg.pc)) + 1); return 12; };
 
     // JR CC
     opcode[0x20] = [&]() -> int { if (getFlag(FLAG_Z) == 0) { reg.pc += (static_cast<int8_t>(memory.readByte(reg.pc)) + 1); return 12; } else { reg.pc++ ; return 8; } };
