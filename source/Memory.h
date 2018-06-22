@@ -29,9 +29,11 @@ public:
     void loadRom(std::string path);
     void init(Gamepad* _gamepad);
 
+    void writeDiv(const byte& value);  // Write divider/DIV at 0xff04
+
 private:
     Cartridge cart;
-    Gamepad* gamepad;
+    Gamepad*  gamepad;
 
     std::vector<byte> vram;  // Video RAM
     std::vector<byte> ram;   // Working RAM ( 8k internal RAM since it is not GameBoy Color )

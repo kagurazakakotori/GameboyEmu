@@ -169,6 +169,10 @@ void Memory::writeByte(const word& address, const byte value)
                         gamepad->writeByte(value);
                         return;
                     }
+                    else if (address == 0xff04) {  // DIV
+                        io[address & 0x00ff] = 0;
+                        return;
+                    }
                     else {
                         io[address & 0x00ff] = value;
                         return;
@@ -182,6 +186,10 @@ void Memory::writeWord(const word& address, const word value)
 {
     writeByte(address, value & 0x00ff);
     writeByte(address + 1, (value & 0xff00) >> 8);
+}
+
+void Memory::writeDiv(const byte& value){
+    io[0xff04 & 0x00ff] = value;
 }
 
 void Memory::boot()
