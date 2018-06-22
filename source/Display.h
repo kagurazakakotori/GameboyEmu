@@ -1,7 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <array>
-#include <iostream>
 #include "Common.h"
 #include "Memory.h"
 
@@ -11,11 +10,10 @@ namespace gb
 class Display
 {
 public:
-    int scanlineRendered = 0;
+    Display(Memory& memory);
 
-    Display(Memory& _memory);
-
-    void refresh(const int& cycle);
+    sf::Image renderFrame();
+    void      renderScanline(const int& scanline);
 
     sf::RenderWindow screen;
 
@@ -32,25 +30,26 @@ private:
 
     Memory& memory;
 
-    sf::Image background;
-    sf::Image window;
-    sf::Image sprite;
+    sf::Image frame;
+
+    std::array<sf::Color, 160 * 144> backgroundArray;
+    std::array<sf::Color, 160 * 144> windowArray;
+    std::array<sf::Color, 160 * 144> spriteArray;
+
+    std::array<bool, 160 * 144> backgroundEnable;
+    std::array<bool, 160 * 144> windowEnable;
+    std::array<bool, 160 * 144> spriteEnable;
 
     std::array<sf::Color, 4> colorSet;
 
-    int scanlineCount = 456;
-
-    void renderFrame();
-    void renderScanline(const int& scanline);
     void drawBackground(const int& scanline, const byte& lcdc);
     void drawWindow(const int& scanline, const byte& lcdc);
+    void drawBackgroundOrWindow(const int& scanline, const byte& lcdc, bool isBackground);
+
     void drawSprite(const int& scanline, const byte& lcdc);
 
-    sf::Color getColor(int bit, byte higher, byte lower, byte palette);
-
-    void updateStat();
-    void setMode(byte& stat, const bool& bit1, const bool& bit0);
-    void requestInterrupt(const int& interruptType);
+    std::array<sf::Color, 8> drawTile(const word& tileAddr, const byte& palette, int tileY, bool isSprite);
+    sf::Color                getColor(int bit, const byte& higher, const byte& lower, const byte& palette, bool isSprite);
 };
 
 }  // namespace gb
