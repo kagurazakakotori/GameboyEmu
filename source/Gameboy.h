@@ -22,8 +22,7 @@ public:
 
 private:
     static const int FREQUENCY = 4194304;
-    static const int CYCLE_PER_FRAME = 69905;
-    static const sf::Int64 FRAME_INTERVAL = 16667;
+    static const int CYCLE_PER_FRAME = FREQUENCY / 60;
 
     Memory  memory;
     CPU     cpu;

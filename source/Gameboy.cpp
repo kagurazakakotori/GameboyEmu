@@ -17,8 +17,6 @@ void Gameboy::init()
 
 void Gameboy::run()
 {
-    sf::Clock clock;
-
     while (display.screen.isOpen()) {
         int cycleElasped = 0;
         handleEvents();
@@ -33,14 +31,7 @@ void Gameboy::run()
         }
 
         cycleElasped = 0;
-
-		sf::Time realFrameTime = clock.getElapsedTime();
-        sf::Time timeDifference = sf::microseconds(FRAME_INTERVAL) - realFrameTime;
-        if (realFrameTime < sf::microseconds(FRAME_INTERVAL)) {
-            sf::sleep(timeDifference);
-        }
         display.scanlineRendered = 0;
-        clock.restart();
     }
 }
 

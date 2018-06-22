@@ -109,7 +109,7 @@ void Display::drawBackground(const int& scanline, const byte& lcdc)
 
     // For every 8 pixel (a line of tile) in current scanline
     int screenY = scanline;
-    for (int screenX = 0; screenX < 160; screenX += 8) {
+    for (int screenX = 0; screenX < 160; screenX ++) {
         int mapX = screenX + scollX;
         int mapY = screenX + scollY;
 
@@ -125,7 +125,7 @@ void Display::drawBackground(const int& scanline, const byte& lcdc)
         byte chrCode   = memory.readByte(blockAddr);
 
         // Get pixel position in tile
-        int tileX = 7;  // X always comes with 0, and its stored in reverse
+        int tileX = screenX % 8;  // X always comes with 0, and its stored in reverse
         int tileY = screenY % 8;
 
         // Get BG character area
@@ -143,10 +143,8 @@ void Display::drawBackground(const int& scanline, const byte& lcdc)
         byte lower  = memory.readByte(bgCharDataAddr + (tileY * 2));
 
         // draw!
-        for (int i = 0; i < 8; i++) {
-            sf::Color color = getColor(tileX - i, higher, lower, palette);
-            background.setPixel(screenX + i, screenY, color);
-        }
+        sf::Color color = getColor(7 - tileX, higher, lower, palette);
+        background.setPixel(screenX, screenY, color);
     }
 }
 
