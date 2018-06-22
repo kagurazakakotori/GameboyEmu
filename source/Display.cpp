@@ -5,6 +5,11 @@ namespace gb
 
 Display::Display(Memory& _memory) : memory(_memory)
 {
+    frame.create(160, 144);
+    backgroundArray.fill(sf::Color::White);
+    windowArray.fill(sf::Color::White);
+    //spriteArray.fill(sf::Color::White);
+
     // initialize colorset
     colorSet[0] = sf::Color(255, 255, 255);
     colorSet[1] = sf::Color(192, 192, 192);
@@ -16,7 +21,22 @@ Display::Display(Memory& _memory) : memory(_memory)
     std::cout << "[INFO] Display module initialized" << std::endl;
 }
 
-sf::Image Display::renderFrame()
+void Display::refresh()
+{
+    renderFrame();
+
+    screen.clear(sf::Color::Green);
+
+    sf::Texture frameTexture;
+    frameTexture.loadFromImage(frame);
+    sf::Sprite frameSprite;
+    frameSprite.setTexture(frameTexture);
+
+    screen.draw(frameSprite);
+    screen.display();
+}
+
+void Display::renderFrame()
 {
     byte lcdc = memory.readByte(LCDC_ADDR);
 
@@ -44,8 +64,6 @@ sf::Image Display::renderFrame()
     backgroundEnable.fill(false);
     windowEnable.fill(false);
     spriteEnable.fill(false);
-
-    return frame;
 }
 
 void Display::renderScanline(const int& scanline)
@@ -147,8 +165,10 @@ std::array<sf::Color, 8> Display::drawTile(const word& tileAddr, const byte& pal
 
     std::array<sf::Color, 8> tileLineArray;
     for (int bit = 7; bit >= 0; bit--) {
-        tileLineArray.at(bit) = getColor(bit, tileLineHigher, tileLineLower, palette, isSprite);
+        tileLineArray[bit] = getColor(bit, tileLineHigher, tileLineLower, palette, isSprite);
     }
+
+    return tileLineArray;
 }
 
 sf::Color Display::getColor(int bit, const byte& higher, const byte& lower, const byte& palette, bool isSprite)

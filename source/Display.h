@@ -12,8 +12,8 @@ class Display
 public:
     Display(Memory& _memory);
 
-    sf::Image renderFrame();
-    void      renderScanline(const int& scanline);
+    void refresh();
+    void renderScanline(const int& scanline);
 
     sf::RenderWindow screen;
 
@@ -38,6 +38,8 @@ private:
     std::array<bool, 160 * 144> spriteEnable;
 
     std::array<sf::Color, 4> colorSet;
+
+    void renderFrame();
 
     void drawBackground(const int& scanline, const byte& lcdc);
     void drawWindow(const int& scanline, const byte& lcdc);

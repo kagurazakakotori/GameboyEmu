@@ -97,6 +97,7 @@
     <ClCompile Include="source\main.cpp" />
     <ClCompile Include="source\Memory.cpp" />
     <ClCompile Include="source\Opcode.cpp" />
+    <ClCompile Include="source\Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\Cartridge.h" />
@@ -106,6 +107,7 @@
     <ClInclude Include="source\Gameboy.h" />
     <ClInclude Include="source\Gamepad.h" />
     <ClInclude Include="source\Memory.h" />
+    <ClInclude Include="source\Timer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

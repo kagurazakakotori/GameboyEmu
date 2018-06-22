@@ -4,15 +4,16 @@ namespace gb
 {
 
 Gameboy::Gameboy()
-    : memory(), cpu(memory), display(memory), gamepad(memory)
+    : memory(), cpu(memory), display(memory), gamepad(memory), timer(memory, display)
 {
-    std::cout << "[INFO] Gameboy Running!" << std::endl;
+    std::cout << "[INFO] Gameboy Started!" << std::endl;
 }
 
 void Gameboy::init()
 {
     cpu.init();
     memory.init(&gamepad);
+    std::cout << "[INFO] Gameboy Running!" << std::endl;
 }
 
 void Gameboy::run()
@@ -20,18 +21,20 @@ void Gameboy::run()
     while (display.screen.isOpen()) {
         int cycleElasped = 0;
         handleEvents();
-        while(cycleElasped < CYCLE_PER_FRAME){
+        while (cycleElasped < CYCLE_PER_FRAME) {
             cpu.exec();
             cycleElasped += cpu.cycle;
-
-            display.refresh(cpu.cycle);
             cpu.handleInterrupt();
 
-            cpu.cycle = 0; 
+            timer.updateTimer(cpu.cycle);
+            timer.updateDisplay(cpu.cycle);
+
+            cpu.cycle = 0;
         }
 
+        display.refresh();
+
         cycleElasped = 0;
-        display.scanlineRendered = 0;
     }
 }
 
