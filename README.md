@@ -13,16 +13,22 @@ Yet Another Gameboy Emulator
 ### Partial working
 
 * Memory Emulation (No MBC support)
+* Timer (working but untested)
+* Display (working but untested)
 
 ### To be done
 
 * Memory Bank Controllers support
-* Clock Emulation
-* Graphics
 * Input mapping
 * ROM loader
-* Friendly GUI Interface
+* CLI commands
 * and more...
+
+## Screenshots
+
+### Hello World!
+
+![Hello World Screenshot](/screenshots/helloworld.png)
 
 ## References
 
