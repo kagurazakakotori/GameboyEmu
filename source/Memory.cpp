@@ -12,6 +12,7 @@ Memory::Memory()
     hram.assign(0x80, 0x00);    // 127B HRAM + IE at 0xffff
 
     std::cout << "[INFO] MMU initialized" << std::endl;
+    std::cout << termcolor::yellow << "[WARN] Memory Bank Controllers(MBCs) are not supported" << termcolor::reset << std::endl;
 }
 
 void Memory::loadRom(std::string romPath)

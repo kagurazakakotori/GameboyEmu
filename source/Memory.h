@@ -18,7 +18,7 @@ class Memory
 public:
     Memory();
 
-    void dump();
+    //void dump();
 
     byte readByte(const word& address);
     word readWord(const word& address);

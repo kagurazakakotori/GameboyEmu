@@ -13,7 +13,7 @@ void Gameboy::init()
 {
     cpu.init();
     memory.init(&gamepad);
-    std::cout << "[INFO] Gameboy Running!" << std::endl;
+    std::cout << termcolor::green << "[INFO] Gameboy Running!" << termcolor::reset << std::endl;
 }
 
 void Gameboy::run()

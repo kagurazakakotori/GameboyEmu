@@ -1,5 +1,8 @@
 #pragma once
 #include <cstdint>
+#include <termcolor.hpp>
+#undef max
+#undef min
 
 namespace gb
 {

@@ -14,7 +14,7 @@ Gamepad::Gamepad(Memory& _memory) : memory(_memory)
     std::cout<< "[INFO] Current key mapping:" << std::endl;
     std::cout<< "[INFO] W-UP  A-LEFT  S-DOWN    D-RIGHT" << std::endl;
     std::cout<< "[INFO] J-A   K-B     B-SELECT  N-START" << std::endl;
-    std::cout<< "[INFO] This version does NOT support custom key mapping" << std::endl;
+    std::cout<< termcolor::yellow << "[WARN] This version does NOT support custom key mapping" << termcolor::reset <<std::endl;
 }
 
 /* Note: When both P14 & P15 set to 0, the joypad resets(maybe) */
