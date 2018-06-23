@@ -484,40 +484,226 @@ void CPU::loadCbcode()
     cbcode[0x36] = [&]() -> int { byte value = memory.readByte(reg.hl); _swap(value); memory.writeByte(reg.hl, value); return 16; };
 
     // BIT b,r
-    for (int i = 0; i < 8; i++) {
-        cbcode[0x47 + i * 8] = [&]() -> int { _bit(i, reg.a); return 8; };
-        cbcode[0x40 + i * 8] = [&]() -> int { _bit(i, reg.b); return 8; };
-        cbcode[0x41 + i * 8] = [&]() -> int { _bit(i, reg.c); return 8; };
-        cbcode[0x42 + i * 8] = [&]() -> int { _bit(i, reg.d); return 8; };
-        cbcode[0x43 + i * 8] = [&]() -> int { _bit(i, reg.e); return 8; };
-        cbcode[0x44 + i * 8] = [&]() -> int { _bit(i, reg.h); return 8; };
-        cbcode[0x45 + i * 8] = [&]() -> int { _bit(i, reg.l); return 8; };
-        cbcode[0x46 + i * 8] = [&]() -> int { _bit(i, memory.readByte(reg.hl)); return 16; };
-    }
-
-    // SET b,r
-    for (int i = 0; i < 8; i++) {
-        cbcode[0xc7 + i * 8] = [&]() -> int { reg.a |= 1 << i; return 8; };
-        cbcode[0xc0 + i * 8] = [&]() -> int { reg.b |= 1 << i; return 8; };
-        cbcode[0xc1 + i * 8] = [&]() -> int { reg.c |= 1 << i; return 8; };
-        cbcode[0xc2 + i * 8] = [&]() -> int { reg.d |= 1 << i; return 8; };
-        cbcode[0xc3 + i * 8] = [&]() -> int { reg.e |= 1 << i; return 8; };
-        cbcode[0xc4 + i * 8] = [&]() -> int { reg.h |= 1 << i; return 8; };
-        cbcode[0xc5 + i * 8] = [&]() -> int { reg.l |= 1 << i; return 8; };
-        cbcode[0xc6 + i * 8] = [&]() -> int { byte value = memory.readByte(reg.hl); value |= 1 << i; memory.writeByte(reg.hl, value); return 16; };
-    }
+    // 0
+    cbcode[0x47] = [&]() -> int { _bit(0, reg.a); return 8; };
+    cbcode[0x40] = [&]() -> int { _bit(0, reg.b); return 8; };
+    cbcode[0x41] = [&]() -> int { _bit(0, reg.c); return 8; };
+    cbcode[0x42] = [&]() -> int { _bit(0, reg.d); return 8; };
+    cbcode[0x43] = [&]() -> int { _bit(0, reg.e); return 8; };
+    cbcode[0x44] = [&]() -> int { _bit(0, reg.h); return 8; };
+    cbcode[0x45] = [&]() -> int { _bit(0, reg.l); return 8; };
+    cbcode[0x46] = [&]() -> int { _bit(0, memory.readByte(reg.hl)); return 16; };
+    // 1
+    cbcode[0x4f] = [&]() -> int { _bit(1, reg.a); return 8; };
+    cbcode[0x48] = [&]() -> int { _bit(1, reg.b); return 8; };
+    cbcode[0x49] = [&]() -> int { _bit(1, reg.c); return 8; };
+    cbcode[0x4a] = [&]() -> int { _bit(1, reg.d); return 8; };
+    cbcode[0x4b] = [&]() -> int { _bit(1, reg.e); return 8; };
+    cbcode[0x4c] = [&]() -> int { _bit(1, reg.h); return 8; };
+    cbcode[0x4d] = [&]() -> int { _bit(1, reg.l); return 8; };
+    cbcode[0x4e] = [&]() -> int { _bit(1, memory.readByte(reg.hl)); return 16; };
+    // 2
+    cbcode[0x57] = [&]() -> int { _bit(2, reg.a); return 8; };
+    cbcode[0x50] = [&]() -> int { _bit(2, reg.b); return 8; };
+    cbcode[0x51] = [&]() -> int { _bit(2, reg.c); return 8; };
+    cbcode[0x52] = [&]() -> int { _bit(2, reg.d); return 8; };
+    cbcode[0x53] = [&]() -> int { _bit(2, reg.e); return 8; };
+    cbcode[0x54] = [&]() -> int { _bit(2, reg.h); return 8; };
+    cbcode[0x55] = [&]() -> int { _bit(2, reg.l); return 8; };
+    cbcode[0x56] = [&]() -> int { _bit(2, memory.readByte(reg.hl)); return 16; };
+    // 3
+    cbcode[0x5f] = [&]() -> int { _bit(3, reg.a); return 8; };
+    cbcode[0x58] = [&]() -> int { _bit(3, reg.b); return 8; };
+    cbcode[0x59] = [&]() -> int { _bit(3, reg.c); return 8; };
+    cbcode[0x5a] = [&]() -> int { _bit(3, reg.d); return 8; };
+    cbcode[0x5b] = [&]() -> int { _bit(3, reg.e); return 8; };
+    cbcode[0x5c] = [&]() -> int { _bit(3, reg.h); return 8; };
+    cbcode[0x5d] = [&]() -> int { _bit(3, reg.l); return 8; };
+    cbcode[0x5e] = [&]() -> int { _bit(3, memory.readByte(reg.hl)); return 16; };
+    // 4
+    cbcode[0x67] = [&]() -> int { _bit(4, reg.a); return 8; };
+    cbcode[0x60] = [&]() -> int { _bit(4, reg.b); return 8; };
+    cbcode[0x61] = [&]() -> int { _bit(4, reg.c); return 8; };
+    cbcode[0x62] = [&]() -> int { _bit(4, reg.d); return 8; };
+    cbcode[0x63] = [&]() -> int { _bit(4, reg.e); return 8; };
+    cbcode[0x64] = [&]() -> int { _bit(4, reg.h); return 8; };
+    cbcode[0x65] = [&]() -> int { _bit(4, reg.l); return 8; };
+    cbcode[0x66] = [&]() -> int { _bit(4, memory.readByte(reg.hl)); return 16; };
+    // 5
+    cbcode[0x6f] = [&]() -> int { _bit(5, reg.a); return 8; };
+    cbcode[0x68] = [&]() -> int { _bit(5, reg.b); return 8; };
+    cbcode[0x69] = [&]() -> int { _bit(5, reg.c); return 8; };
+    cbcode[0x6a] = [&]() -> int { _bit(5, reg.d); return 8; };
+    cbcode[0x6b] = [&]() -> int { _bit(5, reg.e); return 8; };
+    cbcode[0x6c] = [&]() -> int { _bit(5, reg.h); return 8; };
+    cbcode[0x6d] = [&]() -> int { _bit(5, reg.l); return 8; };
+    cbcode[0x6e] = [&]() -> int { _bit(5, memory.readByte(reg.hl)); return 16; };
+    // 6
+    cbcode[0x77] = [&]() -> int { _bit(6, reg.a); return 8; };
+    cbcode[0x70] = [&]() -> int { _bit(6, reg.b); return 8; };
+    cbcode[0x71] = [&]() -> int { _bit(6, reg.c); return 8; };
+    cbcode[0x72] = [&]() -> int { _bit(6, reg.d); return 8; };
+    cbcode[0x73] = [&]() -> int { _bit(6, reg.e); return 8; };
+    cbcode[0x74] = [&]() -> int { _bit(6, reg.h); return 8; };
+    cbcode[0x75] = [&]() -> int { _bit(6, reg.l); return 8; };
+    cbcode[0x76] = [&]() -> int { _bit(6, memory.readByte(reg.hl)); return 16; };
+    // 7
+    cbcode[0x7f] = [&]() -> int { _bit(7, reg.a); return 8; };
+    cbcode[0x78] = [&]() -> int { _bit(7, reg.b); return 8; };
+    cbcode[0x79] = [&]() -> int { _bit(7, reg.c); return 8; };
+    cbcode[0x7a] = [&]() -> int { _bit(7, reg.d); return 8; };
+    cbcode[0x7b] = [&]() -> int { _bit(7, reg.e); return 8; };
+    cbcode[0x7c] = [&]() -> int { _bit(7, reg.h); return 8; };
+    cbcode[0x7d] = [&]() -> int { _bit(7, reg.l); return 8; };
+    cbcode[0x7e] = [&]() -> int { _bit(7, memory.readByte(reg.hl)); return 16; };
 
     // RES b,r
-    for (int i = 0; i < 8; i++) {
-        cbcode[0x87 + i * 8] = [&]() -> int { reg.a &= ~(1 << i); return 8; };
-        cbcode[0x80 + i * 8] = [&]() -> int { reg.b &= ~(1 << i); return 8; };
-        cbcode[0x81 + i * 8] = [&]() -> int { reg.c &= ~(1 << i); return 8; };
-        cbcode[0x82 + i * 8] = [&]() -> int { reg.d &= ~(1 << i); return 8; };
-        cbcode[0x83 + i * 8] = [&]() -> int { reg.e &= ~(1 << i); return 8; };
-        cbcode[0x84 + i * 8] = [&]() -> int { reg.h &= ~(1 << i); return 8; };
-        cbcode[0x85 + i * 8] = [&]() -> int { reg.l &= ~(1 << i); return 8; };
-        cbcode[0x86 + i * 8] = [&]() -> int { byte value = memory.readByte(reg.hl); value &= ~(1 << i); memory.writeByte(reg.hl, value); return 16; };
-    }
+    // 0
+    cbcode[0x87] = [&]() -> int { reg.a &= ~(1 << 0); return 8; };
+    cbcode[0x80] = [&]() -> int { reg.b &= ~(1 << 0); return 8; };
+    cbcode[0x81] = [&]() -> int { reg.c &= ~(1 << 0); return 8; };
+    cbcode[0x82] = [&]() -> int { reg.d &= ~(1 << 0); return 8; };
+    cbcode[0x83] = [&]() -> int { reg.e &= ~(1 << 0); return 8; };
+    cbcode[0x84] = [&]() -> int { reg.h &= ~(1 << 0); return 8; };
+    cbcode[0x85] = [&]() -> int { reg.l &= ~(1 << 0); return 8; };
+    cbcode[0x86] = [&]() -> int { byte value = memory.readByte(reg.hl); value &= ~(1 << 0); memory.writeByte(reg.hl, value); return 16; };
+    // 1
+    cbcode[0x8f] = [&]() -> int { reg.a &= ~(1 << 1); return 8; };
+    cbcode[0x88] = [&]() -> int { reg.b &= ~(1 << 1); return 8; };
+    cbcode[0x89] = [&]() -> int { reg.c &= ~(1 << 1); return 8; };
+    cbcode[0x8a] = [&]() -> int { reg.d &= ~(1 << 1); return 8; };
+    cbcode[0x8b] = [&]() -> int { reg.e &= ~(1 << 1); return 8; };
+    cbcode[0x8c] = [&]() -> int { reg.h &= ~(1 << 1); return 8; };
+    cbcode[0x8d] = [&]() -> int { reg.l &= ~(1 << 1); return 8; };
+    cbcode[0x8e] = [&]() -> int { byte value = memory.readByte(reg.hl); value &= ~(1 << 1); memory.writeByte(reg.hl, value); return 16; };
+    // 2
+    cbcode[0x97] = [&]() -> int { reg.a &= ~(1 << 2); return 8; };
+    cbcode[0x90] = [&]() -> int { reg.b &= ~(1 << 2); return 8; };
+    cbcode[0x91] = [&]() -> int { reg.c &= ~(1 << 2); return 8; };
+    cbcode[0x92] = [&]() -> int { reg.d &= ~(1 << 2); return 8; };
+    cbcode[0x93] = [&]() -> int { reg.e &= ~(1 << 2); return 8; };
+    cbcode[0x94] = [&]() -> int { reg.h &= ~(1 << 2); return 8; };
+    cbcode[0x95] = [&]() -> int { reg.l &= ~(1 << 2); return 8; };
+    cbcode[0x96] = [&]() -> int { byte value = memory.readByte(reg.hl); value &= ~(1 << 2); memory.writeByte(reg.hl, value); return 16; };
+    // 3
+    cbcode[0x9f] = [&]() -> int { reg.a &= ~(1 << 3); return 8; };
+    cbcode[0x98] = [&]() -> int { reg.b &= ~(1 << 3); return 8; };
+    cbcode[0x99] = [&]() -> int { reg.c &= ~(1 << 3); return 8; };
+    cbcode[0x9a] = [&]() -> int { reg.d &= ~(1 << 3); return 8; };
+    cbcode[0x9b] = [&]() -> int { reg.e &= ~(1 << 3); return 8; };
+    cbcode[0x9c] = [&]() -> int { reg.h &= ~(1 << 3); return 8; };
+    cbcode[0x9d] = [&]() -> int { reg.l &= ~(1 << 3); return 8; };
+    cbcode[0x9e] = [&]() -> int { byte value = memory.readByte(reg.hl); value &= ~(1 << 3); memory.writeByte(reg.hl, value); return 16; };
+    // 4
+    cbcode[0xa7] = [&]() -> int { reg.a &= ~(1 << 4); return 8; };
+    cbcode[0xa0] = [&]() -> int { reg.b &= ~(1 << 4); return 8; };
+    cbcode[0xa1] = [&]() -> int { reg.c &= ~(1 << 4); return 8; };
+    cbcode[0xa2] = [&]() -> int { reg.d &= ~(1 << 4); return 8; };
+    cbcode[0xa3] = [&]() -> int { reg.e &= ~(1 << 4); return 8; };
+    cbcode[0xa4] = [&]() -> int { reg.h &= ~(1 << 4); return 8; };
+    cbcode[0xa5] = [&]() -> int { reg.l &= ~(1 << 4); return 8; };
+    cbcode[0xa6] = [&]() -> int { byte value = memory.readByte(reg.hl); value &= ~(1 << 4); memory.writeByte(reg.hl, value); return 16; };
+    // 5
+    cbcode[0xaf] = [&]() -> int { reg.a &= ~(1 << 5); return 8; };
+    cbcode[0xa8] = [&]() -> int { reg.b &= ~(1 << 5); return 8; };
+    cbcode[0xa9] = [&]() -> int { reg.c &= ~(1 << 5); return 8; };
+    cbcode[0xaa] = [&]() -> int { reg.d &= ~(1 << 5); return 8; };
+    cbcode[0xab] = [&]() -> int { reg.e &= ~(1 << 5); return 8; };
+    cbcode[0xac] = [&]() -> int { reg.h &= ~(1 << 5); return 8; };
+    cbcode[0xad] = [&]() -> int { reg.l &= ~(1 << 5); return 8; };
+    cbcode[0xae] = [&]() -> int { byte value = memory.readByte(reg.hl); value &= ~(1 << 5); memory.writeByte(reg.hl, value); return 16; };
+    // 6
+    cbcode[0xb7] = [&]() -> int { reg.a &= ~(1 << 6); return 8; };
+    cbcode[0xb0] = [&]() -> int { reg.b &= ~(1 << 6); return 8; };
+    cbcode[0xb1] = [&]() -> int { reg.c &= ~(1 << 6); return 8; };
+    cbcode[0xb2] = [&]() -> int { reg.d &= ~(1 << 6); return 8; };
+    cbcode[0xb3] = [&]() -> int { reg.e &= ~(1 << 6); return 8; };
+    cbcode[0xb4] = [&]() -> int { reg.h &= ~(1 << 6); return 8; };
+    cbcode[0xb5] = [&]() -> int { reg.l &= ~(1 << 6); return 8; };
+    cbcode[0xb6] = [&]() -> int { byte value = memory.readByte(reg.hl); value &= ~(1 << 6); memory.writeByte(reg.hl, value); return 16; };
+    // 7
+    cbcode[0xbf] = [&]() -> int { reg.a &= ~(1 << 7); return 8; };
+    cbcode[0xb8] = [&]() -> int { reg.b &= ~(1 << 7); return 8; };
+    cbcode[0xb9] = [&]() -> int { reg.c &= ~(1 << 7); return 8; };
+    cbcode[0xba] = [&]() -> int { reg.d &= ~(1 << 7); return 8; };
+    cbcode[0xbb] = [&]() -> int { reg.e &= ~(1 << 7); return 8; };
+    cbcode[0xbc] = [&]() -> int { reg.h &= ~(1 << 7); return 8; };
+    cbcode[0xbd] = [&]() -> int { reg.l &= ~(1 << 7); return 8; };
+    cbcode[0xbe] = [&]() -> int { byte value = memory.readByte(reg.hl); value &= ~(1 << 7); memory.writeByte(reg.hl, value); return 16; };
+
+    // SET b,r
+    // 0
+    cbcode[0xc7] = [&]() -> int { reg.a |= (1 << 0); return 8; };
+    cbcode[0xc0] = [&]() -> int { reg.b |= (1 << 0); return 8; };
+    cbcode[0xc1] = [&]() -> int { reg.c |= (1 << 0); return 8; };
+    cbcode[0xc2] = [&]() -> int { reg.d |= (1 << 0); return 8; };
+    cbcode[0xc3] = [&]() -> int { reg.e |= (1 << 0); return 8; };
+    cbcode[0xc4] = [&]() -> int { reg.h |= (1 << 0); return 8; };
+    cbcode[0xc5] = [&]() -> int { reg.l |= (1 << 0); return 8; };
+    cbcode[0xc6] = [&]() -> int { byte value = memory.readByte(reg.hl); value |= (1 << 0); memory.writeByte(reg.hl, value); return 16; };
+    // 1
+    cbcode[0xcf] = [&]() -> int { reg.a |= (1 << 1); return 8; };
+    cbcode[0xc8] = [&]() -> int { reg.b |= (1 << 1); return 8; };
+    cbcode[0xc9] = [&]() -> int { reg.c |= (1 << 1); return 8; };
+    cbcode[0xca] = [&]() -> int { reg.d |= (1 << 1); return 8; };
+    cbcode[0xcb] = [&]() -> int { reg.e |= (1 << 1); return 8; };
+    cbcode[0xcc] = [&]() -> int { reg.h |= (1 << 1); return 8; };
+    cbcode[0xcd] = [&]() -> int { reg.l |= (1 << 1); return 8; };
+    cbcode[0xce] = [&]() -> int { byte value = memory.readByte(reg.hl); value |= (1 << 1); memory.writeByte(reg.hl, value); return 16; };
+    // 2
+    cbcode[0xd7] = [&]() -> int { reg.a |= (1 << 2); return 8; };
+    cbcode[0xd0] = [&]() -> int { reg.b |= (1 << 2); return 8; };
+    cbcode[0xd1] = [&]() -> int { reg.c |= (1 << 2); return 8; };
+    cbcode[0xd2] = [&]() -> int { reg.d |= (1 << 2); return 8; };
+    cbcode[0xd3] = [&]() -> int { reg.e |= (1 << 2); return 8; };
+    cbcode[0xd4] = [&]() -> int { reg.h |= (1 << 2); return 8; };
+    cbcode[0xd5] = [&]() -> int { reg.l |= (1 << 2); return 8; };
+    cbcode[0xd6] = [&]() -> int { byte value = memory.readByte(reg.hl); value |= (1 << 2); memory.writeByte(reg.hl, value); return 16; };
+    // 3
+    cbcode[0xdf] = [&]() -> int { reg.a |= (1 << 3); return 8; };
+    cbcode[0xd8] = [&]() -> int { reg.b |= (1 << 3); return 8; };
+    cbcode[0xd9] = [&]() -> int { reg.c |= (1 << 3); return 8; };
+    cbcode[0xda] = [&]() -> int { reg.d |= (1 << 3); return 8; };
+    cbcode[0xdb] = [&]() -> int { reg.e |= (1 << 3); return 8; };
+    cbcode[0xdc] = [&]() -> int { reg.h |= (1 << 3); return 8; };
+    cbcode[0xdd] = [&]() -> int { reg.l |= (1 << 3); return 8; };
+    cbcode[0xde] = [&]() -> int { byte value = memory.readByte(reg.hl); value |= (1 << 3); memory.writeByte(reg.hl, value); return 16; };
+    // 4
+    cbcode[0xe7] = [&]() -> int { reg.a |= (1 << 4); return 8; };
+    cbcode[0xe0] = [&]() -> int { reg.b |= (1 << 4); return 8; };
+    cbcode[0xe1] = [&]() -> int { reg.c |= (1 << 4); return 8; };
+    cbcode[0xe2] = [&]() -> int { reg.d |= (1 << 4); return 8; };
+    cbcode[0xe3] = [&]() -> int { reg.e |= (1 << 4); return 8; };
+    cbcode[0xe4] = [&]() -> int { reg.h |= (1 << 4); return 8; };
+    cbcode[0xe5] = [&]() -> int { reg.l |= (1 << 4); return 8; };
+    cbcode[0xe6] = [&]() -> int { byte value = memory.readByte(reg.hl); value |= (1 << 4); memory.writeByte(reg.hl, value); return 16; };
+    // 5
+    cbcode[0xef] = [&]() -> int { reg.a |= (1 << 5); return 8; };
+    cbcode[0xe8] = [&]() -> int { reg.b |= (1 << 5); return 8; };
+    cbcode[0xe9] = [&]() -> int { reg.c |= (1 << 5); return 8; };
+    cbcode[0xea] = [&]() -> int { reg.d |= (1 << 5); return 8; };
+    cbcode[0xeb] = [&]() -> int { reg.e |= (1 << 5); return 8; };
+    cbcode[0xec] = [&]() -> int { reg.h |= (1 << 5); return 8; };
+    cbcode[0xed] = [&]() -> int { reg.l |= (1 << 5); return 8; };
+    cbcode[0xee] = [&]() -> int { byte value = memory.readByte(reg.hl); value |= (1 << 5); memory.writeByte(reg.hl, value); return 16; };
+    // 6
+    cbcode[0xf7] = [&]() -> int { reg.a |= (1 << 6); return 8; };
+    cbcode[0xf0] = [&]() -> int { reg.b |= (1 << 6); return 8; };
+    cbcode[0xf1] = [&]() -> int { reg.c |= (1 << 6); return 8; };
+    cbcode[0xf2] = [&]() -> int { reg.d |= (1 << 6); return 8; };
+    cbcode[0xf3] = [&]() -> int { reg.e |= (1 << 6); return 8; };
+    cbcode[0xf4] = [&]() -> int { reg.h |= (1 << 6); return 8; };
+    cbcode[0xf5] = [&]() -> int { reg.l |= (1 << 6); return 8; };
+    cbcode[0xf6] = [&]() -> int { byte value = memory.readByte(reg.hl); value |= (1 << 6); memory.writeByte(reg.hl, value); return 16; };
+    // 7
+    cbcode[0xff] = [&]() -> int { reg.a |= (1 << 7); return 8; };
+    cbcode[0xf8] = [&]() -> int { reg.b |= (1 << 7); return 8; };
+    cbcode[0xf9] = [&]() -> int { reg.c |= (1 << 7); return 8; };
+    cbcode[0xfa] = [&]() -> int { reg.d |= (1 << 7); return 8; };
+    cbcode[0xfb] = [&]() -> int { reg.e |= (1 << 7); return 8; };
+    cbcode[0xfc] = [&]() -> int { reg.h |= (1 << 7); return 8; };
+    cbcode[0xfd] = [&]() -> int { reg.l |= (1 << 7); return 8; };
+    cbcode[0xfe] = [&]() -> int { byte value = memory.readByte(reg.hl); value |= (1 << 7); memory.writeByte(reg.hl, value); return 16; };
 }
 
 void CPU::_add(const byte& value)
