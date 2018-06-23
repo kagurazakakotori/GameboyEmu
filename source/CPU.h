@@ -97,10 +97,10 @@ private:
     void _inc(byte& target);
     void _dec(byte& target);
     void _addhl(const word& value);
-    void _rlc(byte& target);
-    void _rl(byte& target);
-    void _rrc(byte& target);
-    void _rr(byte& target);
+    void _rlc(byte& target, bool ignoreZeroFlag = false);
+    void _rl(byte& target, bool ignoreZeroFlag = false);
+    void _rrc(byte& target, bool ignoreZeroFlag = false);
+    void _rr(byte& target, bool ignoreZeroFlag = false);
     void _sla(byte& target);
     void _sra(byte& target);
     void _srl(byte& target);

@@ -299,16 +299,16 @@ void CPU::loadOpcode()
     opcode[0x3b] = [&]() -> int { reg.sp--; return 8; };
 
     // RLCA
-    opcode[0x07] = [&]() -> int { _rlc(reg.a); return 4; };
+    opcode[0x07] = [&]() -> int { _rlc(reg.a, true); return 4; };
 
     // RLA
-    opcode[0x17] = [&]() -> int { _rl(reg.a); return 4; };
+    opcode[0x17] = [&]() -> int { _rl(reg.a, true); return 4; };
 
     // RRCA
-    opcode[0x0f] = [&]() -> int { _rrc(reg.a); return 4; };
+    opcode[0x0f] = [&]() -> int { _rrc(reg.a, true); return 4; };
 
     // RRA
-    opcode[0x1f] = [&]() -> int { _rr(reg.a); return 4; };
+    opcode[0x1f] = [&]() -> int { _rr(reg.a, true); return 4; };
 
     // JP, nn
     opcode[0xc3] = [&]() -> int { reg.pc = memory.readWord(reg.pc); return 16; };
@@ -621,44 +621,44 @@ void CPU::_addhl(const word& value)
     reg.hl = (result & 0xffff);
 }
 
-void CPU::_rlc(byte& target)
+void CPU::_rlc(byte& target, bool ignoreZeroFlag)
 {
     byte bit    = (target & 0x80) >> 7;
     byte result = (target << 1) | bit;
-    setFlag(FLAG_Z, (result == 0));
+    setFlag(FLAG_Z, (ignoreZeroFlag) ? 0 : (result == 0));
     setFlag(FLAG_N, 0);
     setFlag(FLAG_H, 0);
     setFlag(FLAG_C, bit);
     target = result;
 }
 
-void CPU::_rl(byte& target)
+void CPU::_rl(byte& target, bool ignoreZeroFlag)
 {
     byte bit    = getFlag(FLAG_C);
     byte result = (target << 1) | bit;
-    setFlag(FLAG_Z, (result == 0));
+    setFlag(FLAG_Z, (ignoreZeroFlag) ? 0 : (result == 0));
     setFlag(FLAG_N, 0);
     setFlag(FLAG_H, 0);
     setFlag(FLAG_C, ((target & 0x80) >> 7));
     target = result;
 }
 
-void CPU::_rrc(byte& target)
+void CPU::_rrc(byte& target, bool ignoreZeroFlag)
 {
     byte bit    = (target & 0x01);
     byte result = (target >> 1) | (bit << 7);
-    setFlag(FLAG_Z, (result == 0));
+    setFlag(FLAG_Z, (ignoreZeroFlag) ? 0 : (result == 0));
     setFlag(FLAG_N, 0);
     setFlag(FLAG_H, 0);
     setFlag(FLAG_C, bit);
     target = result;
 }
 
-void CPU::_rr(byte& target)
+void CPU::_rr(byte& target, bool ignoreZeroFlag)
 {
     byte bit    = getFlag(FLAG_C);
     byte result = (target >> 1) | (bit << 7);
-    setFlag(FLAG_Z, (result == 0));
+    setFlag(FLAG_Z, (ignoreZeroFlag) ? 0 : (result == 0));
     setFlag(FLAG_N, 0);
     setFlag(FLAG_H, 0);
     setFlag(FLAG_C, (target & 0x01));
