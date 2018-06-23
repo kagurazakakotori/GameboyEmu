@@ -8,18 +8,19 @@ Yet Another Gameboy Emulator
 
 ### Fully working
 
-* Gameboy CPU (LR35902) Emulation
+Sadly, nothing is fully working
 
 ### Partial working
 
+* Gameboy CPU Emulation
 * Memory Emulation (No MBC support)
-* Timer (working but untested)
-* Display (working but untested)
+* Timer (working but cant pass test)
+* Display (No sprites)
+* Input mapping (without customize)
 
 ### To be done
 
 * Memory Bank Controllers support
-* Input mapping
 * ROM loader
 * CLI commands
 * and more...
@@ -29,6 +30,22 @@ Yet Another Gameboy Emulator
 ### Hello World!
 
 ![Hello World Screenshot](/screenshots/helloworld.png)
+
+## CPU tests results
+
+| Test No.              | Result                             |
+| --------------------- | ---------------------------------- |
+| 01-special            | Passed                             |
+| 02-interrupts         | Test #4 failed, Timer doesn't work |
+| 03-op sp,hl           | Failed (Stuck)                     |
+| 04-op r,imm           | Failed (Stuck)                     |
+| 05-op rp              | Passed                             |
+| 06-ld r,r             | Passed                             |
+| 07-jr,jp,call,ret,rst | Failed (Stuck)                     |
+| 08-misc instrs        | Failed (Stuck)                     |
+| 09-op r,r             | Passed                             |
+| 10-bit ops            | Passed                             |
+| 11-op a,(hl)          | Passed                             |
 
 ## References
 
