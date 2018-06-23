@@ -165,7 +165,8 @@ void CPU::loadOpcode()
     opcode[0xe5] = [&]() -> int { reg.sp--; memory.writeByte(reg.sp, reg.h); reg.sp--; memory.writeByte(reg.sp, reg.l); return 16; };
 
     // POP nn
-    opcode[0xf1] = [&]() -> int { reg.f = memory.readByte(reg.sp); reg.sp++; reg.a = memory.readByte(reg.sp); reg.sp++; return 12; };
+    // The lower 4 bit of reg.f can't be written
+    opcode[0xf1] = [&]() -> int { reg.f = (memory.readByte(reg.sp) & 0xf0); reg.sp++; reg.a = memory.readByte(reg.sp); reg.sp++; return 12; };
     opcode[0xc1] = [&]() -> int { reg.c = memory.readByte(reg.sp); reg.sp++; reg.b = memory.readByte(reg.sp); reg.sp++; return 12; };
     opcode[0xd1] = [&]() -> int { reg.e = memory.readByte(reg.sp); reg.sp++; reg.d = memory.readByte(reg.sp); reg.sp++; return 12; };
     opcode[0xe1] = [&]() -> int { reg.l = memory.readByte(reg.sp); reg.sp++; reg.h = memory.readByte(reg.sp); reg.sp++; return 12; };
@@ -716,36 +717,36 @@ void CPU::_bit(const int& bit, const byte& target)
 
 void CPU::_daa()
 {
-    // NOTE: Maybe the document is wrong
-    int  result = reg.a;
-    byte higher = (reg.a & 0xf0) >> 4;
-    byte lower  = (reg.a & 0x0f);
+    // NOTE: My original implementation is wrong
+    // This inplementation is based on mehcode/wadatsumi
+    // https://github.com/mehcode/wadatsumi
 
-    if (!getFlag(FLAG_N)) {
-        // +06h
-        if ((lower > 0x9) || getFlag(FLAG_H)) {
-            result += 0x06;
-        }
-        // +60h
-        if ((higher > 0x9) || getFlag(FLAG_C)) {
-            result += 0x60;
-        }
-    }
-    else if (getFlag(FLAG_N) && getFlag(FLAG_H)) {
-        result += 0xfa;
-    }
-    else if (getFlag(FLAG_N) && getFlag(FLAG_C)) {
-        result += 0xa0;
-    }
-    else if (getFlag(FLAG_N) && getFlag(FLAG_C) && getFlag(FLAG_H)) {
-        result += 0x9a;
+    unsigned int result     = reg.a;
+    unsigned int correction = (getFlag(FLAG_C)) ? 0x60 : 0x00;
+
+    if (getFlag(FLAG_H) || (!getFlag(FLAG_N)) && ((result & 0x0f) > 0x09)) {
+        correction |= 0x06;
     }
 
+    if (getFlag(FLAG_C) || (!getFlag(FLAG_N)) && (result > 0x99)) {
+        correction |= 0x60;
+    }
+
+    if (getFlag(FLAG_N)) {
+        result -= correction;
+    }
+    else {
+        result += correction;
+    }
+
+    if (((correction << 2) & 0x100) != 0) {
+        setFlag(FLAG_C, true);
+    }
+
+    setFlag(FLAG_H, false);
     setFlag(FLAG_Z, ((result & 0xff) == 0));
-    setFlag(FLAG_N, 0);
-    setFlag(FLAG_C, (result > 0xff));
 
     reg.a = (result & 0xff);
 }
 
-}
+}  // namespace gb

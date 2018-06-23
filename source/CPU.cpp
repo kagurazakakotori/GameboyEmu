@@ -31,12 +31,11 @@ void CPU::exec()
     byte value = memory.readByte(reg.pc++);
     cycle += opcode[value]();
 
-    /*  For debugging use
-    instrCnt++;
-    std::cout << "[INFO] " << std::dec << "[" << instrCnt << "] [Cycle:" << cycle << "] Executing " << std::showbase << std::hex << (int) value << " at " << pc << std::endl;
-    std::cout << "[INFO] " << std::showbase << std::hex << "AF: " << reg.af << "   BC: " << reg.bc << "   DE: " << reg.de << "   HL: " << reg.hl << "   SP: " << reg.sp << "   PC: " << reg.pc << std::endl;
-    std::cout << "[INFO] Stack pointer value: " << std::showbase << std::hex << memory.readWord(reg.sp) << std::endl;
-    */
+    // For debugging use
+    //instrCnt++;
+    //std::cout << "[INFO] " << std::dec << "[" << instrCnt << "] [Cycle:" << cycle << "] Executing " << std::showbase << std::hex << (int) value << " at " << pc << std::endl;
+    //std::cout << "[INFO] " << std::showbase << std::hex << "AF: " << reg.af << "   BC: " << reg.bc << "   DE: " << reg.de << "   HL: " << reg.hl << "   SP: " << reg.sp << "   PC: " << reg.pc << std::endl;
+    //std::cout << "[INFO] Stack pointer value: " << std::showbase << std::hex << memory.readWord(reg.sp) << std::endl;
 }
 
 void CPU::handleInterrupt()
