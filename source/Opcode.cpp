@@ -204,6 +204,17 @@ void CPU::loadOpcode()
     opcode[0x96] = [&]() -> int { _sub(memory.readByte(reg.hl)); return 8; };
     opcode[0xd6] = [&]() -> int { _sub(memory.readByte(reg.pc)); reg.pc++; return 8; };
 
+    // SBC A,n
+    opcode[0x9f] = [&]() -> int { _sbc(reg.a); return 4; };
+    opcode[0x98] = [&]() -> int { _sbc(reg.b); return 4; };
+    opcode[0x99] = [&]() -> int { _sbc(reg.c); return 4; };
+    opcode[0x9a] = [&]() -> int { _sbc(reg.d); return 4; };
+    opcode[0x9b] = [&]() -> int { _sbc(reg.e); return 4; };
+    opcode[0x9c] = [&]() -> int { _sbc(reg.h); return 4; };
+    opcode[0x9d] = [&]() -> int { _sbc(reg.l); return 4; };
+    opcode[0x9e] = [&]() -> int { _sbc(memory.readByte(reg.hl)); return 8; };
+    opcode[0xde] = [&]() -> int { _sbc(memory.readByte(reg.pc)); reg.pc++; return 8; };
+
     // AND n
     opcode[0xa7] = [&]() -> int { _and(reg.a); return 4; };
     opcode[0xa0] = [&]() -> int { _and(reg.b); return 4; };
