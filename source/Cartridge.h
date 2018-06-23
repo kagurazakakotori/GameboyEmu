@@ -53,7 +53,7 @@ private:
     bool         ramEnable = false;
 
     // ROM/RAM Banking Mode Select for MBC1
-    bool mbc1_mode = false;  // false for ROM, true for RAM
+    bool mbc1RamBankingMode = false;  // false for ROM, true for RAM
 
     // Clock counter registers for MBC3
     struct RTC

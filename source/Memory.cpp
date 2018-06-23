@@ -24,7 +24,7 @@ void Memory::loadRom(std::string romPath)
     while (file.get(b)) {
         cart.rom.push_back(static_cast<byte>(b));
     }
-
+    romLoaded = true;
     std::cout << "[INFO] ROM loaded successfully" << std::endl;
 }
 
@@ -68,7 +68,7 @@ byte Memory::readByte(const word& address)
             return vram[address & 0x1fff];
         case 0xa000:
         case 0xb000:
-            return cart.ram[address & 0x1fff];
+            return cart.ram[(address & 0x1fff) + cart.ramOffset];
         case 0xc000:
         case 0xd000:
         case 0xe000:
@@ -126,6 +126,44 @@ void Memory::writeByte(const word& address, const byte value)
         case 0x5000:
         case 0x6000:
         case 0x7000:
+            if (cart.mbc1) {             // MBC1 banking
+                if (address < 0x2000) {  // RAM Enable
+                    if (0x0a == (value & 0x0f)) {
+                        cart.ramEnable = true;
+                    }
+                    else {
+                        cart.ramEnable = false;
+                    }
+                }
+                else if (address < 0x4000) {  // ROM Bank Number (lower 5 bits)
+                    cart.romBank = ((value & 0x1f) | (cart.romBank & 0x60));
+                    if (0x00 == cart.romBank && 0x20 == cart.romBank && 0x40 == cart.romBank && 0x60 == cart.romBank) {
+                        cart.romBank += 1;
+                    }
+                    cart.romOffset = cart.romBank * 0x4000;
+                }
+                else if (address < 0x6000) {
+                    if (cart.mbc1RamBankingMode == false) {  // ROM Bank Number (bit 5-6)
+                        cart.romBank = (((value & 0x03) << 5) | (cart.romBank & 0x1f));
+                        if (0x00 == cart.romBank && 0x20 == cart.romBank && 0x40 == cart.romBank && 0x60 == cart.romBank) {
+                            cart.romBank += 1;
+                        }
+                        cart.romOffset = cart.romBank * 0x4000;
+                    }
+                    else {  //  RAM Bank Number
+                        cart.ramBank   = (value & 0x03);
+                        cart.ramOffset = cart.ramBank * 0x2000;
+                    }
+                }
+                else {  // ROM/RAM Mode Select
+                    if ((value & 0x01) == 0x00) {
+                        cart.mbc1RamBankingMode = false;
+                    }
+                    else {
+                        cart.mbc1RamBankingMode = true;
+                    }
+                }
+            }
             return;
         case 0x8000:
         case 0x9000:
@@ -133,7 +171,7 @@ void Memory::writeByte(const word& address, const byte value)
             return;
         case 0xa000:
         case 0xb000:
-            cart.ram[address & 0x1fff] = value;
+            cart.ram[(address & 0x1fff) + cart.ramOffset] = value;
             return;
         case 0xc000:
         case 0xd000:
@@ -189,7 +227,8 @@ void Memory::writeWord(const word& address, const word value)
     writeByte(address + 1, (value & 0xff00) >> 8);
 }
 
-void Memory::writeDiv(const byte& value){
+void Memory::writeDiv(const byte& value)
+{
     io[0xff04 & 0x00ff] = value;
 }
 
