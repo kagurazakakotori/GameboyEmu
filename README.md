@@ -38,10 +38,10 @@ Sadly, nothing is fully working
 | 01-special            | Passed                             |
 | 02-interrupts         | Test #4 failed, Timer doesn't work |
 | 03-op sp,hl           | Failed (Stuck)                     |
-| 04-op r,imm           | Failed (Stuck)                     |
+| 04-op r,imm           | Passed                             |
 | 05-op rp              | Passed                             |
 | 06-ld r,r             | Passed                             |
-| 07-jr,jp,call,ret,rst | Failed (Stuck)                     |
+| 07-jr,jp,call,ret,rst | Passed                             |
 | 08-misc instrs        | Failed (Stuck)                     |
 | 09-op r,r             | Passed                             |
 | 10-bit ops            | Passed                             |
