@@ -26,8 +26,8 @@ void Gameboy::run()
             cycleElasped += cpu.cycle;
             cpu.handleInterrupt();
 
-            timer.updateTimer(cpu.cycle);
-            timer.updateDisplay(cpu.cycle);
+            timer.sync(cpu.cycle);
+            display.sync(cpu.cycle);
 
             cpu.cycle = 0;
         }

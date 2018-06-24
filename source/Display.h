@@ -13,17 +13,20 @@ public:
     Display(Memory& _memory);
 
     void refresh();
-    void renderScanline(const int& scanline);
+    void sync(const int& cycles);
 
     sf::RenderWindow screen;
 
 private:
     static const word LCDC_ADDR = 0xff40;
+    static const word STAT_ADDR = 0xff41;
     static const word SCX_ADDR  = 0xff43;
     static const word SCY_ADDR  = 0xff42;
     static const word BGP_ADDR  = 0xff47;
     static const word WX_ADDR   = 0xff4b;
     static const word WY_ADDR   = 0xff4a;
+    static const word LY_ADDR   = 0xff44;
+    static const word LYC_ADDR  = 0xff45;
 
     Memory& memory;
 
@@ -50,8 +53,12 @@ private:
     std::array<sf::Color, 8> drawTile(const word& tileAddr, const byte& palette, int tileY, bool isSprite);
     sf::Color                getColor(int bit, const byte& higher, const byte& lower, const byte& palette, bool isSprite);
 
-    // void updateStat();
-    // Moved to timer for better timer sync
+    // Timing (Sync cycles with CPU)
+    unsigned int scanlineTracker;
+    bool         vblank;
+
+    void renderScanline(const int& scanline);
+    void requestInterrupt(const int& interruptType);
 };
 
 }  // namespace gb

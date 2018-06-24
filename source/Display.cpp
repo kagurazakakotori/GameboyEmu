@@ -192,4 +192,74 @@ sf::Color Display::getColor(int bit, const byte& higher, const byte& lower, cons
     }
 }
 
+void Display::sync(const int& cycles)
+{
+    byte scanline = memory.readByte(LY_ADDR);
+    byte lcdc     = memory.readByte(LCDC_ADDR);
+
+    if (lcdc & 0x80) {  // LCDC Enable
+        scanlineTracker += cycles;
+        if (scanlineTracker >= 456) {
+            scanline++;
+            scanlineTracker -= 456;
+
+            if (scanline < 144) {
+                renderScanline(scanline);
+            }
+        }
+        if (scanline > 153) {
+            scanline = 0;
+            vblank   = false;
+        }
+    }
+    else {  // Reset if disables
+        scanline        = 0;
+        scanlineTracker = 0;
+    }
+
+    // Update STAT
+    byte stat = memory.readByte(STAT_ADDR);
+    if (scanline >= 144) {  // 01: V-Blank
+        setBit(stat, 1, 0);
+        setBit(stat, 0, 1);
+        if (!vblank) {
+            requestInterrupt(INTERRUPT_VBLANK);
+            vblank = true;
+        }
+    }
+    else if (scanlineTracker > (80 + 172)) {  // 00: H-Blank
+        setBit(stat, 1, 0);
+        setBit(stat, 0, 0);
+    }
+    else if (scanlineTracker > 80) {  // 11: VRAM
+        setBit(stat, 1, 1);
+        setBit(stat, 0, 1);
+    }
+    else {  // 10: OAM
+        setBit(stat, 1, 1);
+        setBit(stat, 0, 0);
+    }
+
+    // Check LYC
+    byte lyc = memory.readByte(LYC_ADDR);
+    if (lyc == scanline) {
+        setBit(lcdc, 2, 1);
+        requestInterrupt(INTERRUPT_STAT);
+    }
+    else {
+        setBit(lcdc, 2, 0);
+    }
+
+    // Finally write back;
+    memory.writeByte(LCDC_ADDR, lcdc);
+    memory.writeByte(LY_ADDR, scanline);
+}
+
+void Display::requestInterrupt(const int& interruptType)
+{
+    byte interruptFlag = memory.readByte(IF_ADDR);
+    setBit(interruptFlag, interruptType, 1);
+    memory.writeByte(IF_ADDR, interruptFlag);
+}
+
 }  // namespace gb
