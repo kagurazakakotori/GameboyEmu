@@ -3,12 +3,10 @@
 namespace gb
 {
 
-Timer::Timer(Memory& _memory, Display& _display) : memory(_memory), display(_display)
+void Timer::init()
 {
-    dividerTracker  = 0;
-    counterTracker  = 0;
-    //scanlineTracker = 0;
-    //vblank          = false;
+    dividerTracker = 0;
+    counterTracker = 0;
 }
 
 void Timer::sync(const int& cycles)

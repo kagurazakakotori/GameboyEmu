@@ -4,17 +4,17 @@ namespace gb
 {
 
 /* Note: In gamepad, 0 is pressed! */
-
-Gamepad::Gamepad(Memory& _memory) : memory(_memory)
+void Gamepad::init()
 {
     col = 0x00;
     row.fill(0x0f);
-    
+
     // Print key mapping info
-    std::cout<< "[INFO] Current key mapping:" << std::endl;
-    std::cout<< "[INFO] W-UP  A-LEFT  S-DOWN    D-RIGHT" << std::endl;
-    std::cout<< "[INFO] J-A   K-B     B-SELECT  N-START" << std::endl;
-    std::cout<< termcolor::yellow << "[WARN] This version does NOT support custom key mapping" << termcolor::reset <<std::endl;
+    std::cout << "[INFO] Gamepad initialized" << std::endl;
+    std::cout << "[INFO] Current key mapping:" << std::endl;
+    std::cout << "[INFO] W-UP  A-LEFT  S-DOWN    D-RIGHT" << std::endl;
+    std::cout << "[INFO] J-A   K-B     B-SELECT  N-START" << std::endl;
+    std::cout << termcolor::yellow << "[WARN] This version does NOT support custom key mapping" << termcolor::reset << std::endl;
 }
 
 /* Note: When both P14 & P15 set to 0, the joypad resets(maybe) */
@@ -40,7 +40,7 @@ void Gamepad::writeByte(const byte& value)
 void Gamepad::keyDown(sf::Keyboard::Key key)
 {
     requestInterrupt();
-    
+
     switch (key) {
         case sf::Keyboard::D:  // P14+P10 RIGHT
             row[0] &= 0b1110;
@@ -99,7 +99,8 @@ void Gamepad::keyUp(sf::Keyboard::Key key)
     }
 }
 
-void Gamepad::requestInterrupt(){
+void Gamepad::requestInterrupt()
+{
     byte interruptFlag = memory.readByte(IF_ADDR);
     setBit(interruptFlag, 4, 1);
     memory.writeByte(IF_ADDR, interruptFlag);

@@ -10,7 +10,9 @@ namespace gb
 class Display
 {
 public:
-    Display(Memory& _memory);
+    Display(Memory& _memory) : memory(_memory) {}
+
+    void init();
 
     void refresh();
     void sync(const int& cycles);

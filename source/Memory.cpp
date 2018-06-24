@@ -10,9 +10,6 @@ Memory::Memory()
     oam.assign(0x100, 0x00);    // 256B OAM
     io.assign(0x80, 0x00);      // MMIO
     hram.assign(0x80, 0x00);    // 127B HRAM + IE at 0xffff
-
-    std::cout << "[INFO] MMU initialized" << std::endl;
-    std::cout << termcolor::yellow << "[WARN] Memory Bank Controllers(MBCs) are not supported" << termcolor::reset << std::endl;
 }
 
 void Memory::loadRom(std::string romPath)
@@ -32,9 +29,13 @@ void Memory::init(Gamepad* _gamepad)
 {
     gamepad = _gamepad;
 
+    // Check if the game is CGB only
     cart.checkCgbFlag();
+
     // Emulate BIOS operations on boot
     boot();
+    std::cout << "[INFO] MMU initialized" << std::endl;
+    std::cout << termcolor::yellow << "[WARN] Memory Bank Controllers(MBCs) are not supported" << termcolor::reset << std::endl;
 
     // Read cartridge type from ROM header
     cart.getType();

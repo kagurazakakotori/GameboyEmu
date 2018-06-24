@@ -14,7 +14,7 @@ class CPU
 public:
     int cycle;
 
-    CPU(Memory& _memory);
+    CPU(Memory& _memory) : memory(_memory) {}
 
     void init();
     void exec();

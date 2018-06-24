@@ -4,15 +4,18 @@ namespace gb
 {
 
 Gameboy::Gameboy()
-    : memory(), cpu(memory), display(memory), gamepad(memory), timer(memory, display)
+    : memory(), cpu(memory), display(memory), gamepad(memory), timer(memory)
 {
-    std::cout << "[INFO] Gameboy Started!" << std::endl;
+    std::cout << "[INFO] Emulator Started!" << std::endl;
 }
 
 void Gameboy::init()
 {
-    cpu.init();
     memory.init(&gamepad);
+    cpu.init();
+    display.init();
+    gamepad.init();
+    timer.init();
     std::cout << termcolor::green << "[INFO] Gameboy Running!" << termcolor::reset << std::endl;
 }
 

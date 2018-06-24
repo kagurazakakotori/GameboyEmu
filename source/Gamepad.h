@@ -11,7 +11,9 @@ namespace gb
 class Gamepad
 {
 public:
-    Gamepad(Memory& _memory);
+    Gamepad(Memory& _memory) : memory(_memory) {}
+
+    void init();
 
     byte readByte();
     void writeByte(const byte& value);

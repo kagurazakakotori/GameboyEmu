@@ -3,8 +3,7 @@
 namespace gb
 {
 
-Display::Display(Memory& _memory) : memory(_memory)
-{
+void Display::init(){
     frame.create(160, 144);
     backgroundArray.fill(sf::Color::White);
     windowArray.fill(sf::Color::White);
@@ -18,7 +17,7 @@ Display::Display(Memory& _memory) : memory(_memory)
 
     screen.create(sf::VideoMode(160, 144), "screen");
 
-    std::cout << "[INFO] Display module initialized" << std::endl;
+    std::cout << "[INFO] Display initialized" << std::endl;
 }
 
 void Display::refresh()

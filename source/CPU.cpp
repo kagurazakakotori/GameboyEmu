@@ -3,17 +3,12 @@
 namespace gb
 {
 
-CPU::CPU(Memory& _memory) : memory(_memory)
+void CPU::init()
 {
     // Load instruction codes
     loadOpcode();
     loadCbcode();
 
-    std::cout << "[INFO] CPU initialized" << std::endl;
-}
-
-void CPU::init()
-{
     // Initialize registers
     reg.a  = 0x01;
     reg.f  = 0xb0;
@@ -23,6 +18,8 @@ void CPU::init()
     reg.pc = 0x0100;
     reg.sp = 0xfffe;
     cycle  = 0;
+
+    std::cout << "[INFO] CPU initialized" << std::endl;
 }
 
 void CPU::exec()
