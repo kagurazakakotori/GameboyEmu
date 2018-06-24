@@ -12,7 +12,7 @@ void Cartridge::checkCgbFlag()
     }
     catch (const char* errorMsg) {
         std::cout << termcolor::red << "[ERROR] " << errorMsg << " Exiting..." << termcolor::reset << std::endl;
-        std::exit(0);
+        std::exit(EXIT_FAILURE);
     }
 }
 
