@@ -12,7 +12,7 @@ Yet Another Gameboy Emulator
 
 ### Partial working
 
-* Memory Emulation (No MBC support)
+* Memory Emulation (ROM only and MBC1)
 * Timer (working but cant pass test)
 * Display (No sprites)
 * Input mapping (without customize)
@@ -20,15 +20,18 @@ Yet Another Gameboy Emulator
 ### To be done
 
 * Memory Bank Controllers support
-* ROM loader
-* CLI commands
+* Sprite
 * and more...
 
 ## Screenshots
 
 ### Hello World!
 
-![Hello World Screenshot](/screenshots/helloworld.png)
+![Hello World screenshot](/screenshots/helloworld.png)
+
+### CPU instruction test
+
+![CPU instruction test screenshot](/screenshots/cpu_instr.png)
 
 ## CPU tests results
 
