@@ -3,9 +3,17 @@
 namespace gb
 {
 
-Cartridge::Cartridge()
+void Cartridge::checkCgbFlag()
 {
-    ram.assign(0x20000, 0x00);  // Maxmium 128K External RAM (MBC5)
+    try {
+        if (rom[0x0143] == 0xc0) {
+            throw "CGB only games are not supported";
+        }
+    }
+    catch (const char* errorMsg) {
+        std::cout << termcolor::red << "[ERROR] " << errorMsg << termcolor::reset << std::endl;
+        std::exit(0);
+    }
 }
 
 void Cartridge::getType()
@@ -175,34 +183,39 @@ void Cartridge::getRamSize()
         case 0x00:       // None
             if (mbc2) {  // MBC2 has a built-in 512*4bit RAM
                 ramSize = 1;
+                ram.assign(0x200, 0x00);
             }
             return;
         case 0x01:  // 2KB
+            ramSize = 1;
+            ram.assign(0x800, 0x00);
+            return;
         case 0x02:  // 8KB
             ramSize = 1;
+            ram.assign(0x2000, 0x00);
             return;
         case 0x03:  // 32KB
             ramSize = 4;
+            ram.assign(0x8000, 0x00);
             return;
         case 0x04:  // 128KB
             ramSize = 16;
+            ram.assign(0x20000, 0x00);
             return;
         case 0x05:  // 64KB
             ramSize = 8;
+            ram.assign(0x10000, 0x00);
             return;
     }
 }
 
 void Cartridge::getTitle()
 {
-    for(int i = 0x0134 ; i < 0x0143; i++)
-    {
-       if(rom[i] != 0x00){
-           _title += rom[i];
-       }
+    for (int i = 0x0134; i < 0x0143; i++) {
+        if (rom[i] != 0x00) {
+            title += rom[i];
+        }
     }
-
-	std::cout << "[INFO] Cartridge title: " << _title << std::endl;
 }
 
 }  // namespace gb

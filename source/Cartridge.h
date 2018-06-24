@@ -1,4 +1,5 @@
 #pragma once
+#include <cstdlib>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -11,12 +12,6 @@ class Cartridge
 {
     friend class Memory;
 
-public:
-    Cartridge();
-
-    std::string title() const { return _title; }
-
-private:
     std::vector<byte> rom;  // ROM
     std::vector<byte> ram;  // External RAM in cartridge
 
@@ -65,8 +60,9 @@ private:
         byte dayH   = 0;
     } rtc;
 
-    std::string _title;
+    std::string title;
 
+    void checkCgbFlag();
     void getType();
     void getRomSize();
     void getRamSize();

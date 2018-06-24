@@ -31,6 +31,8 @@ void Memory::loadRom(std::string romPath)
 void Memory::init(Gamepad* _gamepad)
 {
     gamepad = _gamepad;
+
+    cart.checkCgbFlag();
     // Emulate BIOS operations on boot
     boot();
 
@@ -45,6 +47,7 @@ void Memory::init(Gamepad* _gamepad)
 
     // Get game title
     cart.getTitle();
+    std::cout << "[INFO] Cartridge title: " << cart.title << std::endl;
 }
 
 byte Memory::readByte(const word& address)
