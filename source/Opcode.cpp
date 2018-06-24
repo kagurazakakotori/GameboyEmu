@@ -145,13 +145,13 @@ void CPU::loadOpcode()
 
     // LD HL,SP+e(signed int8)
     opcode[0xf8] = [&]() -> int { 
-        int16_t e = static_cast<int8_t>(memory.readByte(reg.pc));
+        int8_t e = memory.readByte(reg.pc);
         reg.pc++;
         word result = reg.sp + e;
         setFlag(FLAG_Z, 0);
         setFlag(FLAG_N, 0);
-        setFlag(FLAG_H, (((reg.sp & 0xfff) + (e & 0xfff)) & 0x1000));
-        setFlag(FLAG_C, (((reg.sp & 0xffff) + (e & 0xffff)) & 0x10000));
+        setFlag(FLAG_H, ((reg.sp & 0xf) + (e & 0xf)) & 0xf0);
+        setFlag(FLAG_C, ((reg.sp & 0xff) + (e & 0xff)) & 0xf00);
         reg.hl = result;
         return 12; };
 
@@ -287,13 +287,13 @@ void CPU::loadOpcode()
 
     // ADD SP,e
     opcode[0xe8] = [&]() -> int {
-        int16_t e = static_cast<int8_t>(memory.readByte(reg.pc));
+        int8_t e = memory.readByte(reg.pc);
         reg.pc++;
         word result = reg.sp + e;
         setFlag(FLAG_Z, 0);
         setFlag(FLAG_N, 0);
-        setFlag(FLAG_H, (((reg.sp & 0xfff) + (e & 0xfff)) & 0x1000));
-        setFlag(FLAG_C, (((reg.sp & 0xffff) + (e & 0xffff)) & 0x10000));
+        setFlag(FLAG_H, ((reg.sp & 0xf) + (e & 0xf)) & 0xf0);
+        setFlag(FLAG_C, ((reg.sp & 0xff) + (e & 0xff)) & 0xf00);
         reg.sp = result; 
         return 16; };
 

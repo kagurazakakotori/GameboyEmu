@@ -8,11 +8,10 @@ Yet Another Gameboy Emulator
 
 ### Fully working
 
-Sadly, nothing is fully working
+* Gameboy CPU (LR35902) Emulation
 
 ### Partial working
 
-* Gameboy CPU Emulation
 * Memory Emulation (No MBC support)
 * Timer (working but cant pass test)
 * Display (No sprites)
@@ -33,19 +32,19 @@ Sadly, nothing is fully working
 
 ## CPU tests results
 
-| Test No.              | Result                             |
-| --------------------- | ---------------------------------- |
-| 01-special            | Passed                             |
-| 02-interrupts         | Test #4 failed, Timer doesn't work |
-| 03-op sp,hl           | Failed (Stuck)                     |
-| 04-op r,imm           | Passed                             |
-| 05-op rp              | Passed                             |
-| 06-ld r,r             | Passed                             |
-| 07-jr,jp,call,ret,rst | Passed                             |
-| 08-misc instrs        | Failed (Stuck)                     |
-| 09-op r,r             | Passed                             |
-| 10-bit ops            | Passed                             |
-| 11-op a,(hl)          | Passed                             |
+| Test No.              | Result                 |
+| --------------------- | ---------------------- |
+| 01-special            | Passed                 |
+| 02-interrupts         | 04, Timer doesn't work |
+| 03-op sp,hl           | Passed                 |
+| 04-op r,imm           | Passed                 |
+| 05-op rp              | Passed                 |
+| 06-ld r,r             | Passed                 |
+| 07-jr,jp,call,ret,rst | Passed                 |
+| 08-misc instrs        | Passed                 |
+| 09-op r,r             | Passed                 |
+| 10-bit ops            | Passed                 |
+| 11-op a,(hl)          | Passed                 |
 
 ## References
 
