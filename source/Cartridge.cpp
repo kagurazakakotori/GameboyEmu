@@ -7,11 +7,11 @@ void Cartridge::checkCgbFlag()
 {
     try {
         if (rom[0x0143] == 0xc0) {
-            throw "CGB only games are not supported";
+            throw "CGB only games are not supported.";
         }
     }
     catch (const char* errorMsg) {
-        std::cout << termcolor::red << "[ERROR] " << errorMsg << termcolor::reset << std::endl;
+        std::cout << termcolor::red << "[ERROR] " << errorMsg << " Exiting..." << termcolor::reset << std::endl;
         std::exit(0);
     }
 }
