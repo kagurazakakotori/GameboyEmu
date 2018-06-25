@@ -139,7 +139,7 @@ void Display::drawBackgroundOrWindow(const int& scanline, const byte& lcdc, bool
         for (auto&& pixel : tileLineArray) {
             int scrollX = (isBackground) ? memory.readByte(SCX_ADDR) : memory.readByte(WX_ADDR);
 
-            unsigned int x = (isBackground) ? ((tileX * 8) + bit + (256 - scrollX) % 256) : ((tileX * 8) + bit + scrollX - 7);
+            unsigned int x = (isBackground) ? (((tileX * 8) + bit + (256 - scrollX)) % 256) : ((tileX * 8) + bit + scrollX - 7);
             unsigned int y = (isBackground) ? scanline : (scanline + scrollY);
             if (x < 160 && y < 144) {
                 if (isBackground) {
