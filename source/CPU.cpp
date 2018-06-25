@@ -24,7 +24,7 @@ void CPU::init()
 
 void CPU::exec()
 {
-    word pc    = reg.pc;
+    // word pc = reg.pc;  // Debugging use
     byte value = memory.readByte(reg.pc++);
     cycle += opcode[value]();
 

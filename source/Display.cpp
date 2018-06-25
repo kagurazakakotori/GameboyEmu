@@ -15,7 +15,7 @@ void Display::init(){
     colorSet[2] = sf::Color(96, 96, 96);
     colorSet[3] = sf::Color(0, 0, 0);
 
-    screen.create(sf::VideoMode(160, 144), "screen");
+    screen.create(sf::VideoMode(160, 144), "screen",(sf::Style::Titlebar | sf::Style::Close));
 
     std::cout << "[INFO] Display initialized" << std::endl;
 }
@@ -136,7 +136,7 @@ void Display::drawBackgroundOrWindow(const int& scanline, const byte& lcdc, bool
 
         // Write back to background array
         int bit = 7;
-        for (auto pixel : tileLineArray) {
+        for (auto&& pixel : tileLineArray) {
             int scrollX = (isBackground) ? memory.readByte(SCX_ADDR) : memory.readByte(WX_ADDR);
 
             unsigned int x = (isBackground) ? ((tileX * 8) + bit + (256 - scrollX) % 256) : ((tileX * 8) + bit + scrollX - 7);
