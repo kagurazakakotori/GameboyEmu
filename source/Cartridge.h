@@ -12,6 +12,8 @@ class Cartridge
 {
     friend class Memory;
 
+    Cartridge();
+
     std::vector<byte> rom;  // ROM
     std::vector<byte> ram;  // External RAM in cartridge
 

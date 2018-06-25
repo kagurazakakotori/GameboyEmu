@@ -3,6 +3,13 @@
 namespace gb
 {
 
+Cartridge::Cartridge()
+{
+    // Set default external RAM size to 0x2000 
+    // Some games may read/write addresses out of range
+    ram.assign(0x2000, 0x00);
+}
+
 void Cartridge::checkCgbFlag()
 {
     try {
@@ -183,16 +190,13 @@ void Cartridge::getRamSize()
         case 0x00:       // None
             if (mbc2) {  // MBC2 has a built-in 512*4bit RAM
                 ramSize = 1;
-                ram.assign(0x200, 0x00);
             }
             return;
         case 0x01:  // 2KB
             ramSize = 1;
-            ram.assign(0x800, 0x00);
             return;
         case 0x02:  // 8KB
             ramSize = 1;
-            ram.assign(0x2000, 0x00);
             return;
         case 0x03:  // 32KB
             ramSize = 4;

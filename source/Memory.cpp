@@ -18,7 +18,7 @@ void Memory::loadRom(std::string romPath)
     if (!file) {
         std::cout << termcolor::red << "[ERROR] ROM not found. Exiting..." << termcolor::reset << std::endl;
         std::exit(EXIT_FAILURE);
-	}
+    }
     char b;
     int  i = 0;
     while (file.get(b)) {
