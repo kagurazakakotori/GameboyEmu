@@ -17,9 +17,9 @@ void CPU::loadOpcode()
 {
     // Opcode returns the clock cycles of a command
     // Initialize Opcodes
-    // for (auto&& i : opcode) {
-    //     i = [&]() -> int { return 4; };
-    // }
+    for (auto&& i : opcode) {
+        i = [&]() -> int { return 4; };
+    }
 
     // CB code mapping
     opcode[0xcb] = [&]() -> int { uint8_t value = memory.readByte(reg.pc++); return cbcode[value](); };
@@ -395,10 +395,10 @@ void CPU::loadOpcode()
     opcode[0xfb] = [&]() -> int { interruptMasterEnable = true; return 4; };
 
     // HALT
-    opcode[0x76] = [&]() -> int { halt = true; return 4; };
+    opcode[0x76] = [&]() -> int { halt = true; reg.pc--; return 4; };  // keep halting until interrupt
 
     // STOP
-    opcode[0x10] = [&]() -> int { halt = true; return 4; };
+    opcode[0x10] = [&]() -> int { halt = true; reg.pc--; return 4; };  // Stop also halts the gameboy, so handle it as HALT
 }
 
 void CPU::loadCbcode()
