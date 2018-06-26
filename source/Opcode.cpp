@@ -398,7 +398,8 @@ void CPU::loadOpcode()
     opcode[0x76] = [&]() -> int { halt = true; reg.pc--; return 4; };  // keep halting until interrupt
 
     // STOP
-    opcode[0x10] = [&]() -> int { halt = true; reg.pc--; return 4; };  // Stop also halts the gameboy, so handle it as HALT
+    opcode[0x10] = [&]() -> int { halt = true; return 4; };  
+	// Stop also halts the gameboy, but just halt once since keep halting cause bugs
 }
 
 void CPU::loadCbcode()
