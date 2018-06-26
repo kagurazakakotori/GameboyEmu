@@ -22,40 +22,42 @@ void Timer::updateDivider(const int& cycles)
     dividerTracker += cycles;
     if (dividerTracker >= 256) {
         divider++;
-        dividerTracker -= 256;
-        //dividerTracker = 0;
+        //dividerTracker -= 256;
+        dividerTracker = 0;
     }
     memory.writeDiv(divider);
 }
 
 void Timer::updateTimer(const int& cycles)
 {
-    byte counter = memory.readByte(TIMA_ADDR);
-    byte tac     = memory.readByte(TAC_ADDR);
+    byte counter        = memory.readByte(TIMA_ADDR);
+    byte tac            = memory.readByte(TAC_ADDR);
+    int  frequencyToSet = tac & 0x03;
 
-    if (tac & 0x04) {  // Timer Enable
-        unsigned int inputClock;
-        switch (tac & 0x03) {
+    if (getBit(tac, 2)) {  // Timer Enable
+        if (counterFrequency != frequencyToSet) {
+            counterFrequency = frequencyToSet;
+            switch (frequencyToSet) {
             case 0x0:
-                inputClock = 1024;
+                    counterTracker = 1024;
             case 0x1:
-                inputClock = 16;
+                    counterTracker = 16;
             case 0x2:
-                inputClock = 64;
+                    counterTracker = 64;
             case 0x3:
-                inputClock = 256;
+                    counterTracker = 256;
+            }
         }
 
-        counterTracker += cycles;
-        if (counterTracker > inputClock) {
+        counterTracker -= cycles;
+        
+        if (counterTracker <= 0) {
             if (0xff == counter) {
                 requestInterrupt();
                 counter = memory.readByte(TMA_ADDR);
             }
             else {
                 counter++;
-                counterTracker -= inputClock;
-                //counterTracker = 0;
             }
         }
     }

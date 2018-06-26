@@ -23,8 +23,9 @@ private:
 
     Memory& memory;
 
-    unsigned int dividerTracker;
-    unsigned int counterTracker;
+    int dividerTracker;
+    int counterTracker;
+    int counterFrequency;
 
     void updateDivider(const int& cycles);
     void updateTimer(const int& cycles);
