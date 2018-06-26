@@ -3,7 +3,8 @@
 namespace gb
 {
 
-void Display::init(){
+void Display::init()
+{
     frame.create(160, 144);
     backgroundArray.fill(sf::Color::White);
     windowArray.fill(sf::Color::White);
@@ -15,7 +16,7 @@ void Display::init(){
     colorSet[2] = sf::Color(96, 96, 96);
     colorSet[3] = sf::Color(0, 0, 0);
 
-    screen.create(sf::VideoMode(160, 144), "screen",(sf::Style::Titlebar | sf::Style::Close));
+    screen.create(sf::VideoMode(160, 144), "screen", (sf::Style::Titlebar | sf::Style::Close));
 
     std::cout << "[INFO] Display initialized" << std::endl;
 }
@@ -196,54 +197,67 @@ void Display::sync(const int& cycles)
     byte scanline = memory.readByte(LY_ADDR);
     byte lcdc     = memory.readByte(LCDC_ADDR);
 
-    if (lcdc & 0x80) {  // LCDC Enable
-        scanlineTracker += cycles;
-        if (scanlineTracker >= 456) {
-            scanline++;
-            scanlineTracker -= 456;
+    scanlineTracker += cycles;
+    if (scanlineTracker >= 456) {
+        scanline++;
+        //scanlineTracker -= 456;
+        scanlineTracker = 0;
 
-            if (scanline < 144) {
-                renderScanline(scanline);
-            }
-        }
-        if (scanline > 153) {
-            scanline = 0;
-            vblank   = false;
+        if (scanline < 144) {
+            renderScanline(scanline);
         }
     }
-    else {  // Reset if disables
-        scanline        = 0;
-        scanlineTracker = 0;
+    if (scanline > 153) {
+        scanline = 0;
+        vblank   = false;
     }
 
     // Update STAT
-    byte stat = memory.readByte(STAT_ADDR);
+    byte stat        = memory.readByte(STAT_ADDR);
+    int  modeCurrent = stat & 0x03;
+    int  modeToSet   = 0;
+    bool interrupt   = false;
+    
     if (scanline >= 144) {  // 01: V-Blank
+        modeToSet = 1;
         setBit(stat, 1, 0);
         setBit(stat, 0, 1);
         if (!vblank) {
             requestInterrupt(INTERRUPT_VBLANK);
             vblank = true;
         }
+        interrupt = getBit(stat, 4);
     }
     else if (scanlineTracker > (80 + 172)) {  // 00: H-Blank
+        modeToSet = 0;
         setBit(stat, 1, 0);
         setBit(stat, 0, 0);
+        interrupt = getBit(stat, 3);
     }
     else if (scanlineTracker > 80) {  // 11: VRAM
+        modeToSet = 3;
         setBit(stat, 1, 1);
         setBit(stat, 0, 1);
     }
     else {  // 10: OAM
+        modeToSet = 2;
         setBit(stat, 1, 1);
         setBit(stat, 0, 0);
+        interrupt = getBit(stat, 5);
+    }
+
+    // Request interrupt
+    if (interrupt && (modeToSet != modeCurrent)) {
+        requestInterrupt(INTERRUPT_STAT);
     }
 
     // Check LYC
     byte lyc = memory.readByte(LYC_ADDR);
     if (lyc == scanline) {
         setBit(lcdc, 2, 1);
-        requestInterrupt(INTERRUPT_STAT);
+        if (getBit(stat, 6)) {
+            requestInterrupt(INTERRUPT_STAT);
+        }
     }
     else {
         setBit(lcdc, 2, 0);
@@ -251,6 +265,7 @@ void Display::sync(const int& cycles)
 
     // Finally write back;
     memory.writeByte(LCDC_ADDR, lcdc);
+    memory.writeByte(STAT_ADDR, stat);
     memory.writeByte(LY_ADDR, scanline);
 }
 
