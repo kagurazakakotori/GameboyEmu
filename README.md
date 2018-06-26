@@ -6,16 +6,13 @@ Yet Another Gameboy Emulator
 
 ## Development Progress
 
-### Fully working
+### What's working
 
 * Gameboy CPU (LR35902) Emulation
-
-### Partial working
-
+* Timer (working, probably)
+* Input (without customize)
 * Memory Emulation (ROM only and MBC1)
-* Timer (working but cant pass test)
 * Display (No sprites)
-* Input mapping (without customize)
 
 ### To be done
 
@@ -33,21 +30,22 @@ Yet Another Gameboy Emulator
 
 ![CPU instruction test screenshot](/screenshots/cpu_instr.png)
 
-## CPU tests results
+## Blargg's CPU tests results
 
-| Test No.              | Result                 |
-| --------------------- | ---------------------- |
-| 01-special            | Passed                 |
-| 02-interrupts         | 04, Timer doesn't work |
-| 03-op sp,hl           | Passed                 |
-| 04-op r,imm           | Passed                 |
-| 05-op rp              | Passed                 |
-| 06-ld r,r             | Passed                 |
-| 07-jr,jp,call,ret,rst | Passed                 |
-| 08-misc instrs        | Passed                 |
-| 09-op r,r             | Passed                 |
-| 10-bit ops            | Passed                 |
-| 11-op a,(hl)          | Passed                 |
+| Test No.              | Result | Remark           |
+| --------------------- | ------ | ---------------- |
+| 01-special            | ✅      | Passed           |
+| 02-interrupts         | ✅      | Passed           |
+| 03-op sp,hl           | ✅      | Passed           |
+| 04-op r,imm           | ✅      | Passed           |
+| 05-op rp              | ✅      | Passed           |
+| 06-ld r,r             | ✅      | Passed           |
+| 07-jr,jp,call,ret,rst | ✅      | Passed           |
+| 08-misc instrs        | ✅      | Passed           |
+| 09-op r,r             | ✅      | Passed           |
+| 10-bit ops            | ✅      | Passed           |
+| 11-op a,(hl)          | ✅      | Passed           |
+| all-cpu_instrs        | ✅      | Passed all tests |
 
 ## References
 
@@ -76,3 +74,7 @@ Yet Another Gameboy Emulator
 
 * [Two9A/jsGB on GitHub](https://github.com/Two9A/jsGB)
 * [eidos06/Gameboy-Simulator on GitHub](https://github.com/eidos06/Gameboy-Simulator)
+
+### Test roms
+
+* [Blargg's Gameboy hardware test ROMs](https://github.com/retrio/gb-test-roms)
