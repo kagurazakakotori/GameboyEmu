@@ -26,6 +26,8 @@ private:
     unsigned int dividerTracker;
     unsigned int counterTracker;
 
+    void updateDivider(const int& cycles);
+    void updateTimer(const int& cycles);
     void requestInterrupt();
 };
 

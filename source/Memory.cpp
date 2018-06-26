@@ -236,7 +236,7 @@ void Memory::writeWord(const word& address, const word value)
 
 void Memory::writeDiv(const byte& value)
 {
-    io[0xff04 & 0x00ff] = value;
+    io[0xff04 & 0xff] = value;
 }
 
 void Memory::boot()
