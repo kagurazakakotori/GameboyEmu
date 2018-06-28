@@ -21,6 +21,8 @@ void Gameboy::init()
 
 void Gameboy::run()
 {
+    auto startTime = std::chrono::steady_clock::now();
+    auto nextFrame = startTime + FRAME_INTERVAL;
     while (display.screen.isOpen()) {
         int cycleElasped = 0;
         handleEvents();
@@ -38,6 +40,9 @@ void Gameboy::run()
         display.refresh();
 
         cycleElasped = 0;
+
+        std::this_thread::sleep_until(nextFrame);
+        nextFrame += FRAME_INTERVAL;
     }
 }
 
