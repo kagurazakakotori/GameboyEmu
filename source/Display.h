@@ -43,6 +43,8 @@ private:
     static const word WY_ADDR   = 0xff4a;
     static const word LY_ADDR   = 0xff44;
     static const word LYC_ADDR  = 0xff45;
+    static const word OBP0_ADDR = 0xff48;
+    static const word OBP1_ADDR = 0xff49;
 
     Memory& memory;
 
@@ -67,9 +69,9 @@ private:
     // Sprite
     std::array<Sprite, 40> spriteCache;
 
-    void   parseSpriteAttribute(Sprite& sprite, const byte& attribute);
-    Sprite readSprite(const word& spriteAddr);
-    void   drawSprite(const int& scanline, const byte& lcdc);
+    void                 parseSpriteAttribute(Sprite& sprite, const byte& attribute);
+    std::vector<Sprite*> loadSprite();  // load sprites to be drawn from cache, use pointer for better performance
+    void                 drawSprite(const int& scanline, const byte& lcdc, std::vector<Sprite*> sprite);
 
     // Common
     std::array<sf::Color, 8> drawTile(const word& tileAddr, const byte& palette, int tileY, bool isSprite);

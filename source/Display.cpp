@@ -51,11 +51,9 @@ void Display::renderFrame()
                     frame.setPixel(x, y, windowArray[y * 160 + x]);
                 }
 
-                /* TODO: Sprite
                 if (spriteEnable[y * 160 + x]) {
                     frame.setPixel(x, y, spriteArray[y * 160 + x]);
                 }
-                */
             }
         }
     }
@@ -78,11 +76,10 @@ void Display::renderScanline(const int& scanline)
         drawWindow(scanline, lcdc);
     }
 
-    /* TODO: Sprite
     if (getBit(lcdc, 1)) {  // Sprite on flag
-        drawSprite(scanline, lcdc);
+        auto sprites = loadSprite();
+        drawSprite(scanline, lcdc, sprites);
     }
-    */
 }
 
 // Background and Window are drawn in the same way
@@ -185,6 +182,62 @@ void Display::parseSpriteAttribute(Sprite& sprite, const byte& attribute)
     sprite.yFlip     = attribute & 0x40;
     sprite.priority  = attribute & 0x80;
     sprite.height    = (memory.readByte(LCDC_ADDR) & 0x04) ? 16 : 8;
+}
+
+std::vector<Sprite*> Display::loadSprite()
+{
+    std::vector<Sprite*> spritePointers;
+    for (auto&& sprite : spriteCache) {
+        if (sprite.x >= 0 && sprite.x < 160 && sprite.y >= 0 && sprite.y < 144) {
+            spritePointers.push_back(&sprite);
+        }
+    }
+
+    // Sort the pointer vector by x from low to high
+    std::sort(spritePointers.begin(), spritePointers.end(), [](Sprite* first, Sprite* second) -> bool { return first->x < second->x; });
+
+    return spritePointers;
+}
+
+void Display::drawSprite(const int& scanline, const byte& lcdc, std::vector<Sprite*> sprite)
+{
+    word tileSetAddr = 0x8000;
+
+    // The sprite with small x have priority, and only 10 sprites per scanline
+    // If more than 10, lower priority sprite wont be displayed
+    // Draw from lower priority to higher priority
+    for (int i = (sprite.size() > 10) ? 9 : (sprite.size() - 1); i >= 0; i--) {
+        if ((sprite[i]->y + sprite[i]->height) > scanline && sprite[i]->y < scanline) {
+            word tileAddr = tileSetAddr + (sprite[i]->tileNumber * 16);
+            int  tileLine = scanline - sprite[i]->y;
+            if (sprite[i]->yFlip) {
+                tileLine = sprite[i]->y - scanline - 1;
+            }
+
+            byte palette       = (sprite[i]->tileNumber) ? memory.readByte(OBP1_ADDR) : memory.readByte(OBP0_ADDR);
+            auto tileLineArray = drawTile(tileAddr, palette, tileLine, true);
+
+            // Write back to sprite array
+            int bit = 7;
+            for (auto&& pixel : tileLineArray) {
+                unsigned int x = (sprite[i]->xFlip) ? (sprite[i]->x + 7 - bit) : (sprite[i]->x + bit);
+                unsigned int y = scanline;
+                if (pixel != sf::Color::Transparent) {
+                    if (sprite[i]->priority) {  // Draw over background
+                        if (backgroundEnable[y * 160 + x] && backgroundArray[y * 160 + x] == colorSet[0]) {
+                            spriteArray[y * 160 + x]  = pixel;
+                            spriteEnable[y * 160 + x] = true;
+                        }
+                    }
+                    else {
+                        spriteArray[y * 160 + x]  = pixel;
+                        spriteEnable[y * 160 + x] = true;
+                    }
+                }
+                bit--;
+            }
+        }
+    }
 }
 
 std::array<sf::Color, 8> Display::drawTile(const word& tileAddr, const byte& palette, int tileLine, bool isSprite)
