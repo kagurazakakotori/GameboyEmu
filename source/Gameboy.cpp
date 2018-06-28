@@ -11,7 +11,7 @@ Gameboy::Gameboy()
 
 void Gameboy::init()
 {
-    memory.init(&gamepad);
+    memory.init(&gamepad, &display);
     cpu.init();
     display.init();
     gamepad.init();

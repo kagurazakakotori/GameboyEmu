@@ -157,6 +157,27 @@ void Display::drawBackgroundOrWindow(const int& scanline, const byte& lcdc, bool
     }
 }
 
+void Display::updateSpriteCache(const word& address, const byte& value)
+{
+    int   index  = address / 4;
+    auto& sprite = spriteCache[index];
+    int   sector = address % 4;
+    switch (sector) {
+        case 0:
+            sprite.y = value;
+            break;
+        case 1:
+            sprite.x = value;
+            break;
+        case 2:
+            sprite.tileNumeber = value;
+            break;
+        case 3:
+            sprite.attribute = value;
+            break;
+    }
+}
+
 std::array<sf::Color, 8> Display::drawTile(const word& tileAddr, const byte& palette, int tileLine, bool isSprite)
 {
     word tileLineAddr   = tileAddr + 2 * tileLine;
@@ -217,7 +238,7 @@ void Display::sync(const int& cycles)
     int  modeCurrent = stat & 0x03;
     int  modeToSet   = 0;
     bool interrupt   = false;
-    
+
     if (scanline >= 144) {  // 01: V-Blank
         modeToSet = 1;
         setBit(stat, 1, 0);

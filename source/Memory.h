@@ -6,11 +6,13 @@
 #include <vector>
 #include "Cartridge.h"
 #include "Common.h"
+#include "Display.h"
 #include "Gamepad.h"
 
 namespace gb
 {
 
+class Display;
 class Gamepad;
 
 class Memory
@@ -27,13 +29,14 @@ public:
     void writeWord(const word& address, const word value);
 
     void loadRom(std::string path);
-    void init(Gamepad* _gamepad);
+    void init(Gamepad* _gamepad, Display* _display);
 
     void writeDiv(const byte& value);  // Write divider/DIV at 0xff04
 
 private:
     Cartridge cart;
     Gamepad*  gamepad;
+    Display*  display;
 
     std::vector<byte> vram;  // Video RAM
     std::vector<byte> ram;   // Working RAM ( 8k internal RAM since it is not GameBoy Color )
@@ -43,6 +46,7 @@ private:
 
     bool romLoaded = false;
 
+    void transferToOAM(const byte& addrPrefix);
     void boot();
 };
 

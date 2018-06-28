@@ -7,6 +7,18 @@
 namespace gb
 {
 
+struct Sprite
+{
+    byte x;
+    byte y;
+    byte tileNumeber;
+    byte attribute;
+    int  paletteId;
+    bool xFlip;
+    bool yFlip;
+    bool priority;
+};
+
 class Display
 {
 public:
@@ -18,6 +30,8 @@ public:
     void sync(const int& cycles);
 
     sf::RenderWindow screen;
+
+    void updateSpriteCache(const word& address, const byte& value);
 
 private:
     static const word LCDC_ADDR = 0xff40;
@@ -50,8 +64,13 @@ private:
     void drawWindow(const int& scanline, const byte& lcdc);
     void drawBackgroundOrWindow(const int& scanline, const byte& lcdc, bool isBackground);
 
-    void drawSprite(const int& scanline, const byte& lcdc);
+    // Sprite
+    std::array<Sprite, 40> spriteCache;
 
+    Sprite readSprite(const word& spriteAddr);
+    void   drawSprite(const int& scanline, const byte& lcdc);
+
+    // Common
     std::array<sf::Color, 8> drawTile(const word& tileAddr, const byte& palette, int tileY, bool isSprite);
     sf::Color                getColor(int bit, const byte& higher, const byte& lower, const byte& palette, bool isSprite);
 

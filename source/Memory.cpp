@@ -28,9 +28,10 @@ void Memory::loadRom(std::string romPath)
     std::cout << "[INFO] ROM loaded successfully" << std::endl;
 }
 
-void Memory::init(Gamepad* _gamepad)
+void Memory::init(Gamepad* _gamepad, Display* _display)
 {
     gamepad = _gamepad;
+    display = _display;
 
     // Check if the game is CGB only
     cart.checkCgbFlag();
@@ -219,6 +220,11 @@ void Memory::writeByte(const word& address, const byte value)
                         io[address & 0x00ff] = 0;
                         return;
                     }
+                    else if (address == 0xff46) {  // DMA
+                        io[address & 0x00ff] = value;
+                        transferToOAM(value);
+                        return;
+                    }
                     else {
                         io[address & 0x00ff] = value;
                         return;
@@ -237,6 +243,17 @@ void Memory::writeWord(const word& address, const word value)
 void Memory::writeDiv(const byte& value)
 {
     io[0xff04 & 0xff] = value;
+}
+
+void Memory::transferToOAM(const byte& addrPrefix)
+{
+    word addrHighByte = addrPrefix << 8;
+    for (byte addrLowByte = 0; addrLowByte < 0xa0; addrLowByte++) {
+        word address     = addrLowByte | addrHighByte;
+        byte value       = readByte(address);
+        oam[addrLowByte] = value;  // (address & 0x00ff) == addrLowByte
+        display->updateSpriteCache(addrLowByte, value);
+    }
 }
 
 void Memory::boot()
