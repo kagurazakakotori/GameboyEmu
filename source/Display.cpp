@@ -206,7 +206,7 @@ void Display::drawSprite(const int& scanline, const byte& lcdc, std::vector<Spri
     // The sprite with small x have priority, and only 10 sprites per scanline
     // If more than 10, lower priority sprite wont be displayed
     // Draw from lower priority to higher priority
-    for (int i = (sprite.size() > 10) ? 9 : (sprite.size() - 1); i >= 0; i--) {
+    for (int i = sprite.size() - 1; i >= 0; i--) {
         if ((sprite[i]->y + sprite[i]->height) > scanline && sprite[i]->y < scanline) {
             word tileAddr = tileSetAddr + (sprite[i]->tileNumber * 16);
             int  tileLine = scanline - sprite[i]->y;
@@ -214,7 +214,7 @@ void Display::drawSprite(const int& scanline, const byte& lcdc, std::vector<Spri
                 tileLine = sprite[i]->y - scanline - 1;
             }
 
-            byte palette       = (sprite[i]->tileNumber) ? memory.readByte(OBP1_ADDR) : memory.readByte(OBP0_ADDR);
+            byte palette       = (sprite[i]->paletteId) ? memory.readByte(OBP1_ADDR) : memory.readByte(OBP0_ADDR);
             auto tileLineArray = drawTile(tileAddr, palette, tileLine, true);
 
             // Write back to sprite array
