@@ -9,14 +9,14 @@ namespace gb
 
 struct Sprite
 {
-    byte x;
-    byte y;
-    byte tileNumeber;
-    byte attribute;
+    int  x;
+    int  y;
+    int  tileNumber;
     int  paletteId;
     bool xFlip;
     bool yFlip;
     bool priority;
+    int  height;
 };
 
 class Display
@@ -67,6 +67,7 @@ private:
     // Sprite
     std::array<Sprite, 40> spriteCache;
 
+    void   parseSpriteAttribute(Sprite& sprite, const byte& attribute);
     Sprite readSprite(const word& spriteAddr);
     void   drawSprite(const int& scanline, const byte& lcdc);
 

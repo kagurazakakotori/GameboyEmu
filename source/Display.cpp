@@ -164,18 +164,27 @@ void Display::updateSpriteCache(const word& address, const byte& value)
     int   sector = address % 4;
     switch (sector) {
         case 0:
-            sprite.y = value;
+            sprite.y = value - 16;
             break;
         case 1:
-            sprite.x = value;
+            sprite.x = value - 8;
             break;
         case 2:
-            sprite.tileNumeber = value;
+            sprite.tileNumber = value;
             break;
         case 3:
-            sprite.attribute = value;
+            parseSpriteAttribute(sprite, value);
             break;
     }
+}
+
+void Display::parseSpriteAttribute(Sprite& sprite, const byte& attribute)
+{
+    sprite.paletteId = attribute & 0x10;
+    sprite.xFlip     = attribute & 0x20;
+    sprite.yFlip     = attribute & 0x40;
+    sprite.priority  = attribute & 0x80;
+    sprite.height    = (memory.readByte(LCDC_ADDR) & 0x04) ? 16 : 8;
 }
 
 std::array<sf::Color, 8> Display::drawTile(const word& tileAddr, const byte& palette, int tileLine, bool isSprite)
