@@ -8,7 +8,7 @@ void Display::init()
     frame.create(160, 144);
     backgroundArray.fill(sf::Color::White);
     windowArray.fill(sf::Color::White);
-    //spriteArray.fill(sf::Color::White);
+    spriteArray.fill(sf::Color::White);
 
     // initialize colorset
     colorSet[0] = sf::Color(255, 255, 255);
@@ -207,7 +207,7 @@ void Display::drawSprite(const int& scanline, const byte& lcdc, std::vector<Spri
     // If more than 10, lower priority sprite wont be displayed
     // Draw from lower priority to higher priority
     for (int i = sprite.size() - 1; i >= 0; i--) {
-        if ((sprite[i]->y + sprite[i]->height) > scanline && sprite[i]->y < scanline) {
+        if ((sprite[i]->y + sprite[i]->height) > scanline && sprite[i]->y <= scanline) {
             word tileAddr = tileSetAddr + (sprite[i]->tileNumber * 16);
             int  tileLine = scanline - sprite[i]->y;
             if (sprite[i]->yFlip) {
