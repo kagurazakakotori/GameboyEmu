@@ -24,7 +24,7 @@ class Display
 public:
     Display(Memory& _memory) : memory(_memory) {}
 
-    void init();
+    void init(float scale);
 
     void refresh();
     void sync(const int& cycles);

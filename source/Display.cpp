@@ -3,7 +3,7 @@
 namespace gb
 {
 
-void Display::init()
+void Display::init(float scale)
 {
     frame.create(160, 144);
     backgroundArray.fill(sf::Color::White);
@@ -17,6 +17,7 @@ void Display::init()
     colorSet[3] = sf::Color(0, 0, 0);
 
     screen.create(sf::VideoMode(160, 144), "screen", (sf::Style::Titlebar | sf::Style::Close));
+    screen.setSize(sf::Vector2u(160 * scale, 144 * scale));
 
     std::cout << "[INFO] Display initialized" << std::endl;
 }

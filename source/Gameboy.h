@@ -20,7 +20,7 @@ public:
     Gameboy();
 
     void loadRom(std::string path);
-    void init();
+    void init(float scale = 1);
     void run();
 
 private:

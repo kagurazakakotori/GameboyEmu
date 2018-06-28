@@ -9,11 +9,11 @@ Gameboy::Gameboy()
     std::cout << "[INFO] Emulator Started!" << std::endl;
 }
 
-void Gameboy::init()
+void Gameboy::init(float scale)
 {
     memory.init(&gamepad, &display);
     cpu.init();
-    display.init();
+    display.init(scale);
     gamepad.init();
     timer.init();
     std::cout << termcolor::green << "[INFO] Gameboy Running!" << termcolor::reset << std::endl;
