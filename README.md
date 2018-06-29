@@ -2,7 +2,7 @@
 
 Yet Another Gameboy Emulator
 
-<!-- Object Oriented Programming Course Project, SSE, Tongji University, 2018. -->
+Object Oriented Programming Course Project, SSE, Tongji University, 2018. 
 
 ## Development Progress
 
@@ -12,12 +12,11 @@ Yet Another Gameboy Emulator
 * Timer (working, probably)
 * Input (without customize)
 * Memory Emulation (ROM only and MBC1)
-* Display (No sprites)
+* Display
 
 ### To be done
 
 * Memory Bank Controllers support
-* Sprite
 * and more...
 
 ## Screenshots
@@ -46,6 +45,66 @@ Yet Another Gameboy Emulator
 | 10-bit ops            | ✅      | Passed           |
 | 11-op a,(hl)          | ✅      | Passed           |
 | all-cpu_instrs        | ✅      | Passed all tests |
+
+## Dependencies
+
+* [SFML](https://www.sfml-dev.org/)
+* [termcolor](https://github.com/ikalnytskyi/termcolor)
+
+## Build
+
+### Linux
+
+Ubuntu 18.04
+
+```bash
+# Install dependencies
+sudo apt update
+sudo apt install -y git build-essentials cmake
+sudo apt install -y libsfml-dev libudev-dev libfreetype6-dev libxcb-image0-dev
+
+# Download files
+git clone https://github.com/kagurazakakotori/GameboyEmu.git
+wget -N -P ./include/termcolor/ https://raw.githubusercontent.com/ikalnytskyi/termcolor/master/include/termcolor/termcolor.hpp
+
+# Compile
+cmake ./ -DCMAKE_PREFIX_PATH=./include/sfml/
+cmake --build ./ --config Debug    # build debug
+cmake --build ./ --config Release  # build release
+
+# Run!
+cd bin
+./GameboyEmu
+
+```
+
+### Windows
+
+You need install CMake and MSVC15 Compiler(included in Visual Studio 2017) first mamually.
+
+Script Following is for PowerShell use
+
+```powershell
+# Download files
+Set-Location include
+Invoke-WebRequest -Uri https://www.sfml-dev.org/files/SFML-2.5.0-windows-vc15-32-bit.zip -Outfile sfml.zip
+Expand-Archive -Path sfml.zip -DestinationPath .\
+Remove-Item .\sfml\
+Remove-Item .\sfml.zip
+Rename-Item .\SFML-2.5.0 .\sfml
+Invoke-WebRequest -Uri https://raw.githubusercontent.com/ikalnytskyi/termcolor/master/include/termcolor/termcolor.hpp -Outfile .\termcolor\termcolor.hpp
+Set-Location ..
+
+# Compile
+cmake ./ -DCMAKE_PREFIX_PATH=".\include\sfml"
+cmake --build ./ --config Debug    # build debug
+cmake --build ./ --config Release  # build release
+
+# Run!
+Set-Location bin\Release
+.\GameboyEmu.exe
+
+```
 
 ## References
 
