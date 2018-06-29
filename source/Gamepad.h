@@ -8,6 +8,8 @@
 namespace gb
 {
 
+class Memory;
+
 class Gamepad
 {
 public:

@@ -7,6 +7,8 @@
 namespace gb
 {
 
+class Memory;
+
 struct Sprite
 {
     int  x;
@@ -34,18 +36,6 @@ public:
     void updateSpriteCache(const word& address, const byte& value);
 
 private:
-    static const word LCDC_ADDR = 0xff40;
-    static const word STAT_ADDR = 0xff41;
-    static const word SCX_ADDR  = 0xff43;
-    static const word SCY_ADDR  = 0xff42;
-    static const word BGP_ADDR  = 0xff47;
-    static const word WX_ADDR   = 0xff4b;
-    static const word WY_ADDR   = 0xff4a;
-    static const word LY_ADDR   = 0xff44;
-    static const word LYC_ADDR  = 0xff45;
-    static const word OBP0_ADDR = 0xff48;
-    static const word OBP1_ADDR = 0xff49;
-
     Memory& memory;
 
     sf::Image frame;

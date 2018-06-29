@@ -9,6 +9,8 @@
 namespace gb
 {
 
+class Memory;
+
 class CPU
 {
 public:
