@@ -80,13 +80,14 @@ cd bin
 
 ### Windows
 
-You need install CMake and MSVC15 Compiler(included in Visual Studio 2017) first mamually.
+You need install CMake and MSVC15 Compiler(included in Visual Studio 2017) first manually.
 
 Script Following is for PowerShell use
 
 ```powershell
 # Download files
-Set-Location include
+git clone https://github.com/kagurazakakotori/GameboyEmu.git
+Set-Location GameboyEmu\include
 Invoke-WebRequest -Uri https://www.sfml-dev.org/files/SFML-2.5.0-windows-vc15-32-bit.zip -Outfile sfml.zip
 Expand-Archive -Path sfml.zip -DestinationPath .\
 Remove-Item .\sfml\
