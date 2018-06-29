@@ -4,6 +4,15 @@ set(EXECUTABLE_NAME "GameboyEmu")
 
 aux_source_directory(./source source_list)
 
+set(VERSION_MAJOR 0)
+set(VERSION_MINOR 1)
+set(VERSION_BUILD 0)
+
+configure_file(
+    "source/version.h.in"
+    "source/version.h"
+)
+
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin")
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules")
 include_directories("${CMAKE_SOURCE_DIR}/include/termcolor")

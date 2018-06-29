@@ -1,11 +1,10 @@
 #include <iostream>
 #include "Gameboy.h"
-
-#define VERSION "0.0.2"
+#include "version.h"
 
 static void showVersion()
 {
-    std::cout << "GameboyEmu version: " << VERSION << std::endl;
+    std::cout << "GameboyEmu version: " << VERSION_MAJOR << "." << VERSION_MINOR<< "." << VERSION_BUILD << std::endl;
 }
 
 static void showUsage(char* name)
@@ -77,7 +76,7 @@ int main(int argc, char* argv[])
         }
     }
 
-    std::cout << "[INFO] GameboyEmu ver " << VERSION << std::endl;
+    std::cout << "[INFO] GameboyEmu ver " << VERSION_MAJOR << "." << VERSION_MINOR<< "." << VERSION_BUILD << std::endl;
     std::cout << "[INFO] 2018 Kagurazaka Kotori <kagurazakakotori@gmail.com>" << std::endl;
     std::cout << termcolor::yellow << "[WARN] This is a unstable version. Use at your own risk" << termcolor::reset << std::endl;
     std::cout << "[INFO] Emulator window zoom level: " << zoomLevel << "x" << std::endl;
