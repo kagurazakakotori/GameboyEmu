@@ -23,7 +23,7 @@ static void showUsage(char* name)
 int main(int argc, char* argv[])
 {
     std::string romPath;
-    float       zoomLevel;
+    float       zoomLevel = 1;
     bool        open = false;
 
     if (argc < 2) {
@@ -59,7 +59,7 @@ int main(int argc, char* argv[])
                 if (i + 1 < argc) {
                     i++;  // get next argument
                     zoomLevel = atof(argv[i]);
-                    if (zoomLevel == 0) {
+                    if (zoomLevel < 1) {
                         zoomLevel = 1;
                         std::cout << termcolor::yellow << "[WARN] Invalid zoom option, using 1x instead" << termcolor::reset << std::endl;
                     }
