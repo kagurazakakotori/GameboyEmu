@@ -145,7 +145,7 @@ void Memory::writeByte(const word& address, const byte value)
                 }
                 else if (address < 0x4000) {  // ROM Bank Number (lower 5 bits)
                     cart.romBank = ((value & 0x1f) | (cart.romBank & 0x60));
-                    if (0x00 == cart.romBank && 0x20 == cart.romBank && 0x40 == cart.romBank && 0x60 == cart.romBank) {
+                    if (0x00 == cart.romBank || 0x20 == cart.romBank || 0x40 == cart.romBank || 0x60 == cart.romBank) {
                         cart.romBank += 1;
                     }
                     cart.romOffset = cart.romBank * 0x4000;
@@ -153,7 +153,7 @@ void Memory::writeByte(const word& address, const byte value)
                 else if (address < 0x6000) {
                     if (cart.mbc1RamBankingMode == false) {  // ROM Bank Number (bit 5-6)
                         cart.romBank = (((value & 0x03) << 5) | (cart.romBank & 0x1f));
-                        if (0x00 == cart.romBank && 0x20 == cart.romBank && 0x40 == cart.romBank && 0x60 == cart.romBank) {
+                        if (0x00 == cart.romBank || 0x20 == cart.romBank || 0x40 == cart.romBank || 0x60 == cart.romBank) {
                             cart.romBank += 1;
                         }
                         cart.romOffset = cart.romBank * 0x4000;
